@@ -1,0 +1,10 @@
+/* 중앙 메뉴의 크기 설정 */
+.custom-menu .nav-link {
+    width: 100px;         /* 메뉴 항목의 고정 크기 */
+    text-align: center;   /* 텍스트를 중앙 정렬 */
+}
+
+/* 메뉴 항목들 간 간격 조정 */
+.custom-menu .nav-item {
+    margin: 0 5px; /* 항목들 간의 간격 */
+}
