@@ -9,6 +9,7 @@ public class BaseController {
 
     @GetMapping("/")
     public String mainPage(Model model) {
+        // TODO: 로그인 여부는 임시로 false를 줌. 추후 수정 예정
         boolean isLoggedIn = false;
         model.addAttribute("isLoggedIn", isLoggedIn);
         return "main";
