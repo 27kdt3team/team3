@@ -1,0 +1,103 @@
+/* 기존 전체 화면 설정 유지 */
+.container-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f5f5f5;
+}
+
+/* 기존 컨테이너 설정 유지 */
+.container-signup {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 500px;
+}
+
+/* 기존 제목 설정 유지 */
+h1, h3 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* 기존 입력 필드 설명 유지 */
+label {
+    display: block;
+    text-align: left;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+/* 기존 입력 필드 스타일 유지 */
+input {
+    width: 80%;
+    padding: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    box-sizing: border-box;
+    background-color: #dedede;
+}
+
+
+input::placeholder {
+    color: #aaa;
+}
+
+/* 기존 버튼 스타일에서 제출 버튼 분리 */
+button[type="submit"] {
+    width: 80%;
+    padding: 5px;
+    border: none;
+    background-color: black;
+    color: white;
+    font-size: 16px;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #333;
+}
+
+/* 중복확인 버튼 */
+button.check-nickname-duplicate {
+    padding: 5px 10px;
+    border: 1px solid #007bff;
+    background-color: white;
+    color: #007bff;
+    font-size: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    white-space: nowrap; /* 버튼 글자 줄바꿈 방지 */
+}
+
+button.duplicate-check:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+/* 중복 확인 메시지 스타일 추가 */
+.validation-message {
+    font-size: 0.5rem;
+    margin-top: -10px; /* 입력 필드와 간격 조정 */
+    margin-bottom: 15px; /* 다음 필드와 간격 조정 */
+}
+
+/* p태그 글자 전체 작게 */
+p {
+    font-size: 0.8rem; /* 글자 크기 작게 */
+    color: gray; /* 기본 글자 색상 */
+}
+
+/* 로그인 링크 스타일 */
+.login-link {
+    text-decoration: underline; /* 밑줄 */
+}
+
+.login-link:hover {
+    color: darkgray; /* 마우스를 올리면 더 진한 회색 */
+}
