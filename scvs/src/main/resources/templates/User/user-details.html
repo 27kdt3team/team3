@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head th:replace="~{layouts/head :: head}"></head>
+<body>
+<!-- Header Part -->
+<div th:replace="~{layouts/header :: header}"></div>
+
+<!-- Main Body Contents -->
+<th:block layout:fragment="MainBodyContents">
+    <section>
+        <h2>상세정보 편집</h2>
+
+        <!-- 에러 메시지 출력 -->
+        <p th:if="${error}" th:text="${error}"></p>
+
+        <!-- 사용자 정보 수정 폼 -->
+        <form th:action="@{/user/update}" method="post">
+            <input type="hidden" name="id" th:value="${user?.userId}" />
+
+            <div>
+                <label for="email">Email:</label>
+                <div>
+                    <input type="email" id="email" name="email" th:value="${user?.email}" />
+                    <button class="btn btn-dark" type="button">중복확인</button>
+                </div>
+                <span th:if="${emailError}" th:text="${emailError}"></span>
+            </div>
+
+            <div>
+                <label for="nickname">Nickname:</label>
+                <div>
+                    <input type="text" id="nickname" name="nickname" th:value="${user?.nickname}" />
+                    <button class="btn btn-dark" type="button">중복확인</button>
+                </div>
+                <span th:if="${nicknameError}" th:text="${nicknameError}"></span>
+            </div>
+
+            <div>
+                <button class="btn btn-dark" type="submit">회원수정</button>
+            </div>
+        </form>
+    </section>
+</th:block>
+
+<!-- Footer Part -->
+<div th:replace="~{layouts/footer :: footer}"></div>
+
+<!-- Bootstrap Script -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
