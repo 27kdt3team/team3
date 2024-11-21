@@ -1,4 +1,4 @@
-package com.team3.scvs.baseController;
+package com.team3.scvs.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,7 +12,7 @@ public class BaseController {
         // TODO: 로그인 여부는 임시로 false를 줌. 추후 수정 예정
         boolean isLoggedIn = false;
         model.addAttribute("isLoggedIn", isLoggedIn);
-        return "main";
+        return "index";
     }
 
     @GetMapping("/domestic")
