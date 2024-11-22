@@ -72,6 +72,7 @@ public class UserController {
         return "profile";
     }
      */
+    // 아직 로그인 구현이 안되서 임의로 사용하고 있음
     @GetMapping("/profile")
     public String profile(Model model) {
         // 이미 로그인된 사용자라고 가정하고 더미 데이터 생성
@@ -85,6 +86,14 @@ public class UserController {
         model.addAttribute("isLoggedIn", true);
 
         return "user/profile";
+    }
+    @GetMapping("/password-check")
+    public String profile(){
+        return "user/password-check";
+    }
+    @GetMapping("/sign-out")
+    public String signout(){
+        return "user/sign-out";
     }
 
 
