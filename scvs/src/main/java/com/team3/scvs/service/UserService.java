@@ -2,13 +2,16 @@ package com.team3.scvs.service;
 
 import com.team3.scvs.dto.UserDTO;
 import com.team3.scvs.entity.UserEntity;
+import com.team3.scvs.entity.UserWatchlistEntity;
 import com.team3.scvs.repository.UserRepository;
+import com.team3.scvs.repository.UserWatchlistRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -80,5 +83,12 @@ public class UserService {
         log.info(userEntity.getEmail());
         userRepository.save(userEntity);
 
+    }
+    @Autowired
+    private UserWatchlistRepository userWatchlistRepository;
+
+    // 사용자의 관심 목록 조회
+    public List<UserWatchlistEntity> getUserWatchlists(Long userId) {
+        return userWatchlistRepository.findByUserId(userId);
     }
 }
