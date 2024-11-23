@@ -77,20 +77,7 @@ public class UserService {
         userEntity.setEmail(userDTO.getEmail());
         userEntity.setPassword(passwordEncoder.encode(userDTO.getPassword())); // 비밀번호 암호화
         userEntity.setNickname(userDTO.getNickname());
-        log.info(userEntity.getEmail());
         userRepository.save(userEntity);
 
     }
-    public UserDTO getUserByEmail(String email) {
-        UserEntity userEntity = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
-        // UserEntity를 UserDTO로 변환
-        UserDTO userDTO = new UserDTO();
-        userDTO.setEmail(userEntity.getEmail());
-        userDTO.setNickname(userEntity.getNickname());
-        // 비밀번호는 보안 상 포함하지 않음
-        return userDTO;
-    }
-
-
 }
