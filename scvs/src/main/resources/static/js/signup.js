@@ -7,8 +7,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const emailValidation = document.getElementById("email-validation");
         emailValidation.textContent = "";  // 경고 메시지 초기화
         document.getElementById("email").dataset.isValid = false; // 이메일 검증 상태 초기화
-        console.log("이메일 수정댐!");
-
     });
 
     // 닉네임 입력 시 검증 초기화 (중복확인하고 수정시 제출방지)
@@ -111,8 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const nicknameInput = document.getElementById("nickname").value; // 닉네임 입력값
       const nicknameValidation = document.getElementById("nickname-validation"); //입력란 밑 경고메세지
       const nicknameInputElement = document.getElementById("nickname");     // nickname을 받아옴 나중에 제출할때 검증할때 사용
-
-
+      let isNicknameValid = false; // 이메일 검증 상태 변수
 
       // 닉네임이 비어있으면
       if (nicknameInput === "") {
@@ -130,7 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
           isNicknameValid = false;
           return;
       } else {
-      isNicknameValid = await checkEmailDuplicate(emailInput); // 중복체크 함수 > 서버 호출 || 중복이면 isNicknameValid = false
+      isNicknameValid = await checkNicknameDuplicate(nicknameInput); // 중복체크 함수 > 서버 호출 || 중복이면 isNicknameValid = false
       }
 
       // 닉네임 상태 변수 설정( 회원가입 제출시 닉네임란 검증)
@@ -162,7 +159,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         if(!isNicknameValid) {
             event.preventDefault(); // 제출 중단
-            console.log("제출시" + isNicknameValid.toString())
             alert("닉네임 중복검사를 진행해 주세요!");
             return;
         }

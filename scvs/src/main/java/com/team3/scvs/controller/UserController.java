@@ -39,7 +39,7 @@ public class UserController {
     }
     @GetMapping("/signupSuccess")
     public String showLoginSuccessPage() {
-        return "Account/signupSuccess";  // loginSuccessView.html을 반환
+        return "Account/signupSuccess";  // loginSuccess.html을 반환
     }
 
     @PostMapping("/signup")
