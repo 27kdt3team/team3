@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base}">
+<th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/watchlist.css}">
+</th:block>
+<body>
+<th:block layout:fragment="MainBodyContents">
+    <div class="container">
+        <!-- 왼쪽: 관심 목록 테이블 -->
+        <div class="watchlist">
+            <h3>내 관심 종목</h3>
+            <table>
+                <thead>
+                <tr>
+                    <th>Company</th>
+                    <th>Code</th>
+                    <th>Edit</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- 관심 목록 비었을 때 안내 메시지 표시 -->
+                <tr th:if="${watchlistStocks.isEmpty()}">
+                    <td colspan="3" style="text-align: center;">전체 관심 종목 리스트에서 관심 있는 종목들을 추가하세요.</td>
+                </tr>
+                <!-- 관심 목록에 종목이 있을 때 목록을 표시 -->
+                <tr th:each="stock : ${watchlistStocks}">
+                    <td th:text="${stock.ticker.company}">Company</td>
+                    <td th:text="${stock.ticker.symbol}">Symbol</td>
+                    <td>
+                        <form th:action="@{/watchlist/delete}" method="post">
+                            <input type="hidden" name="userId" th:value="${userId}">
+                            <input type="hidden" name="watchlistId" th:value="${stock.userWatchlist.userWatchlistId}">
+                            <input type="hidden" name="tickerId" th:value="${stock.ticker.tickerId}">
+                            <button type="submit">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 오른쪽: 전체 티커 목록 테이블 -->
+        <div class="all-tickers">
+            <h3>전체 종목 목록</h3>
+            <table>
+                <thead>
+                <tr>
+                    <th>Company</th>
+                    <th>Code</th>
+                    <th>Edit</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- 전체 티커 목록 반복 -->
+                <tr th:each="ticker : ${allTickers}">
+                    <td th:text="${ticker.company}">Company</td>
+                    <td th:text="${ticker.symbol}">Symbol</td>
+                    <td>
+                        <form th:action="@{/watchlist/add}" method="post">
+                            <input type="hidden" name="userId" th:value="${userId}">
+                            <input type="hidden" name="watchlistId" th:value="${watchlistId}">
+                            <input type="hidden" name="tickerId" th:value="${ticker.tickerId}">
+                            <button type="submit">Add</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</th:block>
+
+</body>
+</html>

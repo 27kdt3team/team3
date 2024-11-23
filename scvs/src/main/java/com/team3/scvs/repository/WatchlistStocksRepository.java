@@ -1,10 +1,17 @@
 package com.team3.scvs.repository;
 
+import com.team3.scvs.entity.TickerEntity;
+import com.team3.scvs.entity.UserWatchlistEntity;
 import com.team3.scvs.entity.WatchlistStocksEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.util.List;
+import java.util.Optional;
 
 public interface WatchlistStocksRepository extends JpaRepository<WatchlistStocksEntity, Long> {
-    List<WatchlistStocksEntity> findByWatchlistId(Long watchlistId);
+
+    Optional<WatchlistStocksEntity> findByUserWatchlistUserWatchlistIdAndTickerTickerId(Long userWatchlistId, Long tickerId);
+
+    Optional<WatchlistStocksEntity> findByUserWatchlistAndTicker(UserWatchlistEntity userWatchlist, TickerEntity ticker);
+
+    boolean existsByUserWatchlistAndTicker(UserWatchlistEntity userWatchlist, TickerEntity ticker);
 }

@@ -2,22 +2,25 @@ package com.team3.scvs.entity;
 
 import jakarta.persistence.*;
 import jakarta.persistence.Entity;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.List;
 
 @Entity
-@Table(name = "user_watchlist") // DB 테이블 이름 user_watchlist
+@Table(name = "user_watchlist")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class UserWatchlistEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userWatchlistId; // user_watchlist_id와 같습니다.
+    private Long userWatchlistId;
 
-    private Long userId; // users 테이블의 user_id와 연결
+    private Long userId;
+
+    @OneToMany(mappedBy = "userWatchlist", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WatchlistStocksEntity> stocks;
 }
