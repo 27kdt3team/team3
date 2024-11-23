@@ -37,11 +37,15 @@ public class UserController {
         model.addAttribute("userDTO", userDTO); // 회원
         return "Account/signup";
     }
+    @GetMapping("/signupSuccess")
+    public String showLoginSuccessPage() {
+        return "Account/signupSuccess";  // loginSuccessView.html을 반환
+    }
 
     @PostMapping("/signup")
     public String signup(UserDTO userDTO) {
         userService.registerUser(userDTO); // 회원가입서비스 호출
-        return "redirect:/";
+        return "redirect:/signupSuccess";
     }
 
     @PostMapping("/api/check-email")

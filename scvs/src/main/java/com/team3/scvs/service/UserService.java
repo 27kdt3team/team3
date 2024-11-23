@@ -77,7 +77,6 @@ public class UserService {
         userEntity.setEmail(userDTO.getEmail());
         userEntity.setPassword(passwordEncoder.encode(userDTO.getPassword())); // 비밀번호 암호화
         userEntity.setNickname(userDTO.getNickname());
-        log.info(userEntity.getEmail());
         userRepository.save(userEntity);
 
     }

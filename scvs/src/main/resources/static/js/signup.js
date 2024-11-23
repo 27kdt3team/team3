@@ -1,7 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("nickname").dataset.isValid = true;
-    console.log("DOMContentLoaded 이벤트 발생!");
-    console.log(document.getElementById("nickname").dataset.isValid.toString());
 
 
     // 이메일 입력 시 검증 초기화 (중복확인하고 수정시 제출방지)
@@ -17,9 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("nickname").addEventListener("input", () => {
         const nicknameValidation = document.getElementById("nickname-validation");
         nicknameValidation.textContent = "";  // 경고 메시지 초기화
-        console.log("닉네임 입력 이벤트 발생!");
         document.getElementById("nickname").dataset.isValid = false; // 닉네임 검증 상태 초기화
-        console.log(document.getElementById("nickname").dataset.isValid.toString());
     });
 
     // 이메일 중복 확인 버튼 이벤트 리스너
@@ -28,7 +24,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const emailValidation = document.getElementById("email-validation"); // 입력란 밑 경고메세지
         const emailInputElement = document.getElementById("email");     // email을 받아옴 나중에 제출할때 검증할때 사용
         let isEmailValid = false; // 이메일 검증 상태 변수
-        console.log("이메일 중복확인!");
         // 이메일 필수 항목 체크
         if (emailInput === "") { // 입력값이 없으면 실행
             emailValidation.textContent = "이메일은 필수 항목입니다.";
