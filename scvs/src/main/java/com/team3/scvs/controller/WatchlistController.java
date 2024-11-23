@@ -21,7 +21,9 @@ public class WatchlistController {
 
     // 관심 목록 페이지
     @GetMapping("/watchlist")
-    public String viewWatchlist(@RequestParam("userId") Long userId, Model model) {
+    public String viewWatchlist(@RequestParam("userId") Long userId,
+                                @RequestParam(value = "watchlistId", required = false) Long watchlistId,
+                                        Model model) {
         // 사용자 관심 목록 리스트 가져오기
         List<UserWatchlistEntity> watchlists = watchlistService.getUserWatchlists(userId);
 
@@ -32,9 +34,6 @@ public class WatchlistController {
 
         // 전체 종목 리스트 가져오기
         List<TickerEntity> allTickers = watchlistService.getAllTickers();
-
-        // 다음 사용할 관심 목록 ID 계산
-        Long watchlistId = watchlistService.getNextWatchlistId(userId);
 
         // 모델에 관심 목록 리스트와 전체 종목 리스트 추가
         model.addAttribute("watchlistStocks", watchlistStocks);
@@ -52,17 +51,24 @@ public class WatchlistController {
     // 관심 목록에 종목 추가
     @PostMapping("/watchlist/add")
     public String addToWatchlist(@RequestParam("userId") Long userId,
-                                 @RequestParam("watchlistId") Long watchlistId,
                                  @RequestParam("tickerId") Long tickerId) {
-        // 관심 목록이 있는지 확인하고 없으면 새로 생성
-        UserWatchlistEntity watchlist = watchlistService.getOrCreateWatchlist(userId, watchlistId);
+        try {
+            // 관심 목록이 있는지 확인하고 없으면 새로 생성
+            UserWatchlistEntity watchlist = watchlistService.getOrCreateWatchlist(userId);
 
-        // 지정된 관심 목록에 종목 추가
-        watchlistService.addStockToWatchlist(watchlist.getUserWatchlistId(), tickerId);
+            // 지정된 관심 목록에 종목 추가
+            watchlistService.addStockToWatchlist(watchlist.getUserWatchlistId(), tickerId);
 
-        // 관심 목록 페이지로 리다이렉트
-        return "redirect:/watchlist?userId=" + userId;
+            // 관심 목록 페이지로 리다이렉트
+            return "redirect:/watchlist?userId=" + userId;
+        } catch (Exception e) {
+            // 500 에러 발생 시 관심 목록 페이지로 리다이렉트
+            return "redirect:/watchlist?userId=" + userId;
+        }
     }
+
+
+
 
 
 

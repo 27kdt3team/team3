@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,14 +29,23 @@ public class WatchlistService {
         return userWatchlistRepository.findByUserId(userId);
     }
 
-    public UserWatchlistEntity getOrCreateWatchlist(Long userId, Long watchlistId) {
-        return userWatchlistRepository.findById(watchlistId)
-                .orElseGet(() -> {
-                    UserWatchlistEntity newWatchlist = new UserWatchlistEntity();
-                    newWatchlist.setUserId(userId);
-                    return userWatchlistRepository.save(newWatchlist);
-                });
+    public UserWatchlistEntity getOrCreateWatchlist(Long userId) {
+        // userId로 기존 관심 목록 조회
+        List<UserWatchlistEntity> watchlists = userWatchlistRepository.findByUserId(userId);
+
+        // 사용자가 가진 관심 목록 중 첫 번째 항목을 반환
+        if (!watchlists.isEmpty()) {
+            return watchlists.get(0);
+        }
+
+        // 관심 목록이 없는 경우 새로 생성
+        UserWatchlistEntity newWatchlist = new UserWatchlistEntity();
+        newWatchlist.setUserId(userId);
+        return userWatchlistRepository.save(newWatchlist);
     }
+
+
+
 
     public void addStockToWatchlist(Long userWatchlistId, Long tickerId) {
         // 관심 목록 조회
@@ -78,17 +86,5 @@ public class WatchlistService {
         WatchlistStocksEntity watchlistStock = (WatchlistStocksEntity) watchlistStocksRepository.findByUserWatchlistUserWatchlistIdAndTickerTickerId(watchlistId, tickerId)
                 .orElseThrow(() -> new IllegalArgumentException("Watchlist or Ticker not found"));
         watchlistStocksRepository.delete(watchlistStock);
-    }
-    //watchlistId 설정
-    public Long getNextWatchlistId(Long userId) {
-        List<UserWatchlistEntity> watchlists = userWatchlistRepository.findByUserId(userId);
-        if (watchlists.isEmpty()) {
-            return 1L; // 관심 목록이 없으면 기본값으로 1
-        } else {
-            return watchlists.stream()
-                    .mapToLong(UserWatchlistEntity::getUserWatchlistId)
-                    .max()
-                    .orElse(0L) + 1L; // 가장 큰 ID에 1을 더해 반환
-        }
     }
 }
