@@ -14,6 +14,7 @@ import lombok.*;
 public class TickerEntity {
 
     @Id
+    //id 필드가 자동으로 증가된 값으로 설정
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tickerId;
 

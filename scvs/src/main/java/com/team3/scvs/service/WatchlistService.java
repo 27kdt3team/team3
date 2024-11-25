@@ -19,7 +19,7 @@ public class WatchlistService {
     private final WatchlistStocksRepository watchlistStocksRepository;
     private final TickerRepository tickerRepository;
 
-    //전체 리스트
+    //전체 종목 리스트
     public List<TickerEntity> getAllTickers() {
         return tickerRepository.findAll();
     }
@@ -29,11 +29,12 @@ public class WatchlistService {
         return userWatchlistRepository.findByUserId(userId);
     }
 
+    //관심 목록 리스트 조회 후 없으면 새로생성
     public UserWatchlistEntity getOrCreateWatchlist(Long userId) {
         // userId로 기존 관심 목록 조회
         List<UserWatchlistEntity> watchlists = userWatchlistRepository.findByUserId(userId);
 
-        // 사용자가 가진 관심 목록 중 첫 번째 항목을 반환
+        // 사용자가 가진 관심 목록 중 첫 번째 항목을 반환(수정 할 필요있으면 수정함)
         if (!watchlists.isEmpty()) {
             return watchlists.get(0);
         }
@@ -71,15 +72,6 @@ public class WatchlistService {
         watchlistStocksRepository.save(watchlistStock);
     }
 
-
-    //관심 목록 정보 가져오기
-    public List<TickerEntity> getTickersByUserId(Long userId) {
-        List<UserWatchlistEntity> watchlists = userWatchlistRepository.findByUserId(userId);
-        return watchlists.stream()
-                .flatMap(watchlist -> watchlist.getStocks().stream())
-                .map(WatchlistStocksEntity::getTicker)
-                .toList();
-    }
     //관심 목록 제거
     public void deleteStockFromWatchlist(Long watchlistId, Long tickerId) {
         // 특정 관심 목록에서 지정된 티커 삭제
