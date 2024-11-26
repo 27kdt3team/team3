@@ -9,6 +9,7 @@ body {
 
 .container {
     display: grid;
+    place-items: center; /* 가로 및 세로 모두 가운데 정렬 */
     grid-template-columns: 2fr 1fr; /* 좌측 뉴스(2/3)와 우측 섹션(1/3) */
     grid-template-rows: auto auto; /* 상단과 하단 */
     gap: 20px;
@@ -21,7 +22,7 @@ body {
     grid-column: 1 / 2; /* 좌측 전체 차지 */
     grid-row: 1 / 3; /* 상단과 하단 모두 포함 */
     background: #fff;
-    padding: 20px;
+    padding: 40px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -33,11 +34,15 @@ body {
     padding-bottom: 8px;
 }
 
+.domestic h4 {
+    font-weight: bold;
+}
+
 .news-item {
-    display: flex;
-    align-items: center;
+    display: flex; /* 이미지와 텍스트를 가로로 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
     margin-bottom: 20px;
-    gap: 10px;
+    gap: 10px; /* 텍스트와 이미지 간 간격 */
     border-bottom: 1px solid #ccc; /* 중간 회색 */
     padding-bottom: 10px;
 }
@@ -46,18 +51,36 @@ body {
     border-bottom: none;
 }
 
-.news-item img {
-    border-radius: 4px;
-    width: 120px;
-    height: 70px;
-    object-fit: cover;
-    background-color: #ccc; /* 이미지 자리 회색 */
+/* 텍스트 컨테이너 */
+.news-item .text-content {
+    display: flex;
+    flex-direction: column; /* 텍스트를 세로로 정렬 */
+    justify-content: flex-start; /* 위쪽 정렬 */
+    flex-grow: 1; /* 남은 공간을 차지하도록 설정 */
 }
 
+.news-item .text-content .media-date {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px; /* media와 date 간 간격 */
+    font-size: 10px;
+    color: #777; /* 연한 회색 */
+}
+
+.media {
+    color: #555; /* 중간 회색 */
+    font-weight: bold;
+}
+
+.date {
+    color: #777; /* 연한 회색 */
+}
+
+/* 제목 스타일 */
 .news-item h4 {
-    font-size: 18px;
+    font-size: 18px; /* 큰 글씨 */
     color: #333; /* 어두운 회색 */
-    margin: 5px 0;
+    margin: 5px 0 0 0;
     cursor: pointer;
     transition: color 0.3s;
 }
@@ -66,15 +89,43 @@ body {
     color: #000; /* 검정색 강조 */
 }
 
-.media-company-color {
-    font-size: 14px;
-    font-weight: bold;
-    color: #555; /* 중간 회색 */
+/* 이미지 스타일 */
+.news-item img {
+    border-radius: 4px;
+    width: 80px; /* 정사각형 크기 */
+    height: 80px;
+    object-fit: cover;
+    background-color: #ccc; /* 이미지 자리 회색 */
 }
 
-.date-color {
-    font-size: 12px;
-    color: #777; /* 연한 회색 */
+/* 페이징 */
+.pagination {
+    display: flex; /* Flexbox 사용 */
+    justify-content: center; /* 가로 방향 가운데 정렬 */
+    align-items: center; /* 세로 방향 중앙 정렬 */
+    gap: 10px; /* 페이지 링크 간 간격 */
+    margin-top: 20px; /* 위쪽 간격 */
+}
+
+.page-link {
+    display: inline-block; /* 링크를 인라인 블록으로 설정 */
+    padding: 8px 12px; /* 내부 여백 추가 */
+    text-decoration: none; /* 밑줄 제거 */
+    color: #333; /* 기본 글자 색상 */
+    border: 1px solid #ccc; /* 회색 테두리 */
+    border-radius: 4px; /* 약간의 모서리 둥글기 */
+    transition: background-color 0.3s, color 0.3s; /* 마우스 오버 효과 부드럽게 */
+}
+
+.page-link:hover {
+    background-color: #f0f0f0; /* 밝은 회색 배경 */
+    color: #000; /* 글자 색상 검정 */
+}
+
+.page-link.active {
+    background-color: #333; /* 활성화된 링크의 배경색 */
+    color: #fff; /* 활성화된 링크의 글자색 */
+    font-weight: bold; /* 강조 */
 }
 
 /* 환율 정보 */
@@ -85,33 +136,26 @@ body {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 300px; /* 가로 최대 크기 제한 */
+    width: 300px;
     margin-right: auto; /* 좌측 여백으로 축소 */
-}
-
-.exchange-rate h3 {
-    font-size: 20px;
-    color: #000; /* 검정색 */
-    margin-bottom: 10px;
-    border-bottom: 2px solid #333; /* 어두운 회색 */
-    padding-bottom: 5px;
 }
 
 .rate {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
+    flex-direction: column; /* 요소를 세로로 정렬 */
+    align-items: center; /* 가로 방향 중앙 정렬 */
+    gap: 10px; /* 요소 간 10px 간격 */
 }
 
+
 .currency-symbol {
-    font-size: 20px;
+    font-size: 50px;
     color: #333; /* 어두운 회색 */
     font-weight: bold;
 }
 
 .currency-value {
-    font-size: 18px;
+    font-size: 40px;
     font-weight: bold;
     color: #000; /* 검정색 */
 }
@@ -126,15 +170,16 @@ body {
     grid-column: 2 / 3; /* 우측 하단 */
     grid-row: 2 / 3; /* 하단만 포함 */
     background: #fff;
-    padding: 20px;
+    padding: 40px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 300px; /* 가로 최대 크기 제한 */
+    width: 300px;
     margin-right: auto; /* 좌측 여백으로 축소 */
 }
 
 .trending h3 {
     font-size: 20px;
+    font-weight: bold;
     color: #000; /* 검정색 */
     margin-bottom: 10px;
     border-bottom: 2px solid #333; /* 어두운 회색 */
