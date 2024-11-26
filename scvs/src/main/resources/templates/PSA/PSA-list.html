@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base}">
+<head>
+    <meta charset="UTF-8">
+    <title>공지사항</title>
+    <link rel="stylesheet" th:href="@{/css/PSA.css}">
+</head>
+<body>
+<th:block layout:fragment="MainBodyContents">
+    <div class="PSA-container">
+        <h1 class="PSA-title">공지사항</h1>
+
+        <!-- 검색 폼 -->
+        <form class="PSA-search-form" action="#!">
+            <input type="text" name="query" placeholder="제목으로 검색">
+            <button type="submit">검색</button>
+        </form>
+
+        <!-- 공지사항 목록 -->
+        <table class="PSA-table">
+            <thead>
+            <tr>
+                <th>번호</th>
+                <th>제목</th>
+                <th>작성일</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="psa : ${psas}">
+                <td th:text="${psa.id}">1</td>
+                <td>
+                    <a th:href="@{/PSA-detail/{id}(id=${psa.id})}" th:text="${psa.title}">공지사항 제목</a>
+                </td>
+                <td th:text="${#temporals.format(psa.publishedAt, 'yyyy-MM-dd HH:mm')}">2024-11-20</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- 로그인 상태 확인 -->
+        <div th:if="${isLoggedIn != null ? isLoggedIn : false}">
+            <p>로그인 상태입니다.</p>
+        </div>
+        <div th:if="${isLoggedIn == null || !isLoggedIn}">
+            <p>로그인이 필요합니다.</p>
+        </div>
+
+        <!-- 페이지네이션 -->
+        <div class="PSA-pagination">
+            <a href="#" class="active">1</a>
+            <a href="#">2</a>
+            <a href="#">3</a>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>
+
+
+
+
+
+
+
+

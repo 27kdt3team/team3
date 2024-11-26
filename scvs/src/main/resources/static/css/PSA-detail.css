@@ -1,0 +1,79 @@
+/* 공지사항 상세 페이지 스타일 */
+
+/* 전체 컨테이너 */
+.PSA-detail-container {
+    width: 80%;
+    margin: 30px auto;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+/* 제목 */
+.PSA-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+/* 작성일 */
+.PSA-date {
+    font-size: 0.9rem;
+    color: #555;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+/* 내용 */
+.PSA-content {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    padding: 10px 15px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+/* 다음글/이전글 */
+.PSA-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.PSA-navigation a {
+    text-decoration: none;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.PSA-navigation a:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+/* 뒤로가기 버튼 */
+.back-button {
+    display: block;
+    margin: 0 auto;
+    width: fit-content;
+    text-align: center;
+    padding: 10px 20px;
+    border: none;
+    background-color: #1C1C1C;
+    color: #fff;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.back-button:hover {
+    background-color: #0056b3;
+}

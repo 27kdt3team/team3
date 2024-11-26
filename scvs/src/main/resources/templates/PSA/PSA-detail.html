@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base}">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}">공지사항 상세</title>
+    <link rel="stylesheet" th:href="@{/css/PSA-detail.css}">
+</head>
+<body>
+<th:block layout:fragment="MainBodyContents">
+    <!-- 공지사항 상세 -->
+    <div class="PSA-detail-container">
+        <h1 th:text="'공지사항 제목'">공지사항 제목</h1>
+        <p th:text="'작성일: 2024-11-20'">작성일: 2024-11-20</p>
+        <p th:text="'공지사항 내용이 여기에 표시됩니다.'">공지사항 내용이 여기에 표시됩니다.</p>
+
+        <!-- 다음글/이전글 -->
+        <div class="PSA-navigation">
+            <a href="/PSAs/prev" class="btn btn-secondary">이전글</a>
+            <a href="/PSAs/next" class="btn btn-secondary">다음글</a>
+        </div>
+
+        <!-- 관리자 권한일 경우 수정/삭제 버튼 표시 -->
+        <div th:if="false">
+            <a href="/psa/edit" class="btn btn-warning">수정</a>
+            <a href="/psa/delete" class="btn btn-danger">삭제</a>
+        </div>
+
+        <a href="/PSA-list" class="btn btn-primary">목록</a>
+    </div>
+</th:block>
+</body>
+</html>
+
