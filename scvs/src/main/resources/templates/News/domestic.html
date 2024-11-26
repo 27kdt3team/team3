@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<!-- head part -->
+<head th:replace="~{layouts/head :: head}">
+    <title>Domestic</title>
+</head>
+<body>
+<!-- header part -->
+<div th:replace="~{layouts/header :: header}"></div>
+
+<th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/domestic.css}">
+</th:block>
+
+<!-- Main Body Contents -->
+<th:block layout:fragment = "MainBodyContents">
+    <!-- 국내 경제 뉴스 -->
+    <main class="container">
+        <section class="domestic">
+            <div class="news-column">
+                <h2>국내 경제 뉴스</h2>
+                <br>
+
+                <!-- 뉴스 항목 -->
+                <div class="news-item">
+                    <p class="media-company-color">News한국</p>
+                    <p class="date-color">27 Nov 2024</p>
+                    <h4>Penn's Expanding Political Climate Gears Up For 2020 Election</h4>
+                    <img src="image-placeholder.jpg" alt="News Image" width="180" height="90" class="news images">
+                </div>
+
+                <div class="news-item">
+                    <p class="media-company-color">서울경제</p>
+                    <p class="date-color">27 Nov 2024</p>
+                    <h4>Things To Look For In A Financial Trading Platform</h4>
+                    <img src="image-placeholder.jpg" alt="News Image" width="180" height="90" class="news images">
+                </div>
+
+                <div class="news-item">
+                    <p class="media-company-color">한국경제</p>
+                    <p class="date-color">27 Nov 2024</p>
+                    <h4>The Only Thing That Overcomes Hard Luck Is Hard Work</h4>
+                    <img src="image-placeholder.jpg" alt="News Image" width="180" height="90" class="news images">
+                </div>
+
+                <div class="news-item">
+                    <p class="media-company-color">이데일리</p>
+                    <p class="date-color">27 Nov 2024</p>
+                    <h4>Success Is Not A Good Teacher Failure Makes You Humble</h4>
+                    <img src="image-placeholder.jpg" alt="News Image" width="180" height="90" class="news images">
+                </div>
+
+                <div class="news-item">
+                    <p class="media-company-color">중앙일보</p>
+                    <p class="date-color">27 Nov 2024</p>
+                    <h4>Success Is Not A Good Teacher Failure Makes You Humble</h4>
+                    <img src="image-placeholder.jpg" alt="News Image" width="180" height="90" class="news images">
+                </div>
+
+                <!-- 페이징 버튼 -->
+                <div class="pagination">
+                    <a th:href="@{/domestic(page=${currentPage - 1})}" th:if="${currentPage > 1}">이전</a>
+                    <a href="#" class="page-link">1</a>
+                    <a href="#" class="page-link">2</a>
+                    <a href="#" class="page-link">3</a>
+                    <a href="#" class="page-link">4</a>
+                    <a href="#" class="page-link">5</a>
+                    <a th:href="@{/domestic(page=${currentPage + 1})}" th:if="${currentPage < totalPages}">다음</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 환율 정보 -->
+        <aside class="exchange-rate-container">
+            <div class="exchange-rate">
+                <h3>환율 정보</h3>
+                <div class="rate">
+                    <div class="currency-symbol">$ / ₩</div>
+                    <div class="currency-value">1411</div>
+                    <div class="currency-change">▼ 2.70 (-0.19%)</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 트렌드 순위 -->
+        <aside class="trending-container">
+            <div class="trending">
+                <h3>국내 트렌드 순위</h3>
+                <ol>
+                    <li>삼성전자 <span class="volume">50</span></li>
+                    <li>LG에너지솔루션 <span class="volume">55</span></li>
+                    <li>현대차 <span class="volume">40</span></li>
+                    <li>SK하이닉스 <span class="volume">10</span></li>
+                    <li>네이버 <span class="volume">20</span></li>
+                    <li>기아 <span class="volume">20</span></li>
+                    <li>셀트리온 <span class="volume">20</span></li>
+                    <li>KB금융 <span class="volume">20</span></li>
+                    <li>하나금융지주 <span class="volume">20</span></li>
+                    <li>한국전력 <span class="volume">20</span></li>
+                </ol>
+            </div>
+        </aside>
+
+
+    </main>
+</th:block>
+
+<!-- footer part -->
+<div th:replace="~{layouts/footer :: footer}"></div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</html>
