@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // 비밀번호 공백체크
         if (passwordInput === ""){
            loginValidation.textContent = "비밀번호를 입력하세요.";
+           loginValidation.style.color = "red";
            return;
         }
 
