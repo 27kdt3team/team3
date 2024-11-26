@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<!-- head part -->
+<head th:replace="~{layouts/head :: head}">
+    <title>Usa</title>
+</head>
+<body>
+<!-- header part -->
+<div th:replace="~{layouts/header :: header}"></div>
+
+<th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/usa.css}">
+</th:block>
+
+<!-- Main Body Contents -->
+<th:block layout:fragment = "MainBodyContents">
+    <!-- 미국 경제 뉴스 -->
+    <main class="container">
+        <section class="usa">
+            <div class="news-column">
+                <h2>미국 경제 뉴스</h2>
+                <br>
+
+                <!-- 뉴스 항목 -->
+                <div class="news-item">
+                    <div class="text-content">
+                        <div class="media-date">
+                            <p class="media">THOMSON REUTERS</p>
+                            <p class="date">2024.11.26</p>
+                        </div>
+                        <h4>화웨이, 미국의 새로운 칩 규제가 다가옴에 따라 메이트 70 스마트폰 출시</h4>
+                    </div>
+                    <img src="image-placeholder.jpg" alt="News Image" width="180" height="90" class="news images">
+                </div>
+
+                <div class="news-item">
+                    <div class="text-content">
+                        <div class="media-date">
+                            <p class="media">THOMSON REUTERS</p>
+                            <p class="date">2024.11.26</p>
+                        </div>
+                        <h4>애플, 중국에서 자체 AI 출시 '어려운' 과정에 직면 - FT</h4>
+                    </div>
+                    <img src="image-placeholder.jpg" alt="News Image" width="180" height="90" class="news images">
+                </div>
+
+                <div class="news-item">
+                    <div class="text-content">
+                        <div class="media-date">
+                            <p class="media">THOMSON REUTERS</p>
+                            <p class="date">2024.11.26</p>
+                        </div>
+                        <h4>트럼프가 약속한 관세의 영향을 받을 수 있는 기업들</h4>
+                    </div>
+                    <img src="image-placeholder.jpg" alt="News Image" width="180" height="90" class="news images">
+                </div>
+
+                <div class="news-item">
+                    <div class="text-content">
+                        <div class="media-date">
+                            <p class="media">THOMSON REUTERS</p>
+                            <p class="date">2024.11.26</p>
+                        </div>
+                        <h4>일본 경쟁 당국이 아마존 재팬을 급습했다고 소식통이 밝혔습니다.</h4>
+                    </div>
+                    <img src="image-placeholder.jpg" alt="News Image" width="180" height="90" class="news images">
+                </div>
+
+                <div class="news-item">
+                    <div class="text-content">
+                        <div class="media-date">
+                            <p class="media">THOMSON REUTERS</p>
+                            <p class="date">2024.11.25</p>
+                        </div>
+                        <h4>EU, 예약은 디지털 시장법을 준수해야 합니다.</h4>
+                    </div>
+                    <img src="image-placeholder.jpg" alt="News Image" width="180" height="90" class="news images">
+                </div>
+
+                <!-- 페이징 버튼 -->
+                <div class="pagination">
+                    <a th:href="@{/usa(page=${currentPage - 1})}" th:if="${currentPage > 1}">이전</a>
+                    <a href="#" class="page-link active">1</a>
+                    <a href="#" class="page-link">2</a>
+                    <a href="#" class="page-link">3</a>
+                    <a href="#" class="page-link">4</a>
+                    <a href="#" class="page-link">5</a>
+                    <a th:href="@{/usa(page=${currentPage + 1})}" th:if="${currentPage < totalPages}">다음</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 환율 정보 -->
+        <aside class="exchange-rate-container">
+            <div class="exchange-rate">
+                <div class="rate">
+                    <div class="currency-symbol">$ / ₩</div>
+                    <div class="currency-value">1411</div>
+                    <div class="currency-change">▼ 2.70 (-0.19%)</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 트렌드 순위 -->
+        <aside class="trending-container">
+            <div class="trending">
+                <h3>미국 트렌드 순위</h3>
+                <ol>
+                    <li>1. AAPL <span class="volume">50</span></li>
+                    <li>2. NVDA <span class="volume">55</span></li>
+                    <li>3. MSFT <span class="volume">40</span></li>
+                    <li>4. AMZN <span class="volume">10</span></li>
+                    <li>5. META <span class="volume">20</span></li>
+                    <li>6. GOOGL <span class="volume">20</span></li>
+                    <li>7. TSLA <span class="volume">20</span></li>
+                    <li>8. AMGN <span class="volume">20</span></li>
+                    <li>9. COST <span class="volume">20</span></li>
+                    <li>10. NFLX <span class="volume">20</span></li>
+                </ol>
+            </div>
+        </aside>
+
+    </main>
+</th:block>
+
+<!-- footer part -->
+<div th:replace="~{layouts/footer :: footer}"></div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</html>

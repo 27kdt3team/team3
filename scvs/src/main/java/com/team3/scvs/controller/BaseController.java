@@ -18,16 +18,6 @@ public class BaseController {
         return "index";
     }
 
-    @GetMapping("/domestic")
-    public String domesticPage() {
-        return "domestic";
-    }
-
-    @GetMapping("/usa")
-    public String usaPage() {
-        return "usa";
-    }
-
     @GetMapping("/login")
     public String loginPage(Model model) {
         return "login";
