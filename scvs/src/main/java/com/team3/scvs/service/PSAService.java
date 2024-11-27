@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -57,4 +58,11 @@ public class PSAService {
         Pageable pageable = PageRequest.of(page, size);
         return psaRepository.findAllByOrderByPublishedAtDesc(pageable);
     }
+
+    // 페이징을 지원하는 검색 기능
+    public Page<PSA> searchPSAsByTitlePaginated(String query, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("publishedAt").descending());
+        return psaRepository.findByTitleContaining(query, pageable);
+    }
+
 }

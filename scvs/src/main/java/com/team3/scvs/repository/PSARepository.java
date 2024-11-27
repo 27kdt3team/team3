@@ -28,4 +28,7 @@ public interface PSARepository extends JpaRepository<PSA, Long> {
 
     // 페이지 단위로 공지사항 가져오기
     Page<PSA> findAllByOrderByPublishedAtDesc(Pageable pageable);
+
+    // 페이징 가능한 검색 메서드
+    Page<PSA> findByTitleContaining(String title, Pageable pageable);
 }

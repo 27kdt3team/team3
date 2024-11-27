@@ -13,8 +13,8 @@
         <h1 class="PSA-title">공지사항</h1>
 
         <!-- 검색 폼 -->
-        <form class="PSA-search-form" action="#!">
-            <input type="text" name="query" placeholder="제목으로 검색">
+        <form class="PSA-search-form" th:action="@{/PSA-list}" method="get">
+            <input type="text" name="query" placeholder="제목으로 검색" th:value="${query}">
             <button type="submit">검색</button>
         </form>
 
@@ -35,22 +35,26 @@
                 </td>
                 <td th:text="${#temporals.format(psa.publishedAt, 'yyyy-MM-dd HH:mm')}">2024-11-20</td>
             </tr>
+            <!-- 검색 결과가 없을 경우 -->
+            <tr th:if="${psas.isEmpty()}">
+                <td colspan="3" style="text-align: center;">검색 결과가 없습니다.</td>
+            </tr>
             </tbody>
         </table>
 
         <!-- 로그인 상태 확인 -->
         <div th:if="${isLoggedIn != null ? isLoggedIn : false}">
-            <p>로그인 상태입니다.</p>
-        </div>
-        <div th:if="${isLoggedIn == null || !isLoggedIn}">
-            <p>로그인이 필요합니다.</p>
+            <a href="/psa/add" class="btn btn-primary">공지 추가</a>
         </div>
 
         <!-- 페이지네이션 -->
-        <div class="PSA-pagination">
-            <a href="#" class="active">1</a>
-            <a href="#">2</a>
-            <a href="#">3</a>
+        <div class="PSA-pagination" th:if="${totalPages > 1}">
+            <span th:each="pageNum : ${#numbers.sequence(1, totalPages)}">
+                <a th:href="@{/PSA-list(page=${pageNum}, query=${query})}"
+                   th:classappend="${currentPage == pageNum} ? 'active' : ''">
+                   <span th:text="${pageNum}">1</span>
+                </a>
+            </span>
         </div>
     </div>
 </th:block>

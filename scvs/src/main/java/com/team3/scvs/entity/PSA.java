@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 
 import java.time.LocalDateTime;
@@ -31,8 +32,11 @@ public class PSA {
     private LocalDateTime publishedAt; // 공지사항 작성 시간
 
     @PrePersist
-    protected void onCreate() {
-        this.publishedAt = LocalDateTime.now();
+    protected void onCreate() {this.publishedAt = LocalDateTime.now();}
+
+    public LocalDateTime getPublishedAt() {
+        return publishedAt;
     }
+
 }
 
