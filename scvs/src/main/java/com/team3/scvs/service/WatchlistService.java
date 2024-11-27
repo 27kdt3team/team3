@@ -45,9 +45,6 @@ public class WatchlistService {
         return userWatchlistRepository.save(newWatchlist);
     }
 
-
-
-
     public void addStockToWatchlist(Long userWatchlistId, Long tickerId) {
         // 관심 목록 조회
         UserWatchlistEntity userWatchlist = userWatchlistRepository.findById(userWatchlistId)

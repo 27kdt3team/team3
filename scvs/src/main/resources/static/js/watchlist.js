@@ -4,6 +4,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const watchlistTable = document.getElementById("watchlistTable");
     const cancelSearchBtn = document.getElementById("cancelSearchBtn"); // "Cancel" 버튼 참조
 
+    const watchlistSearchForm = document.getElementById("watchlistSearchForm");
+        watchlistSearchForm.addEventListener("submit", function (event) {
+            event.preventDefault(); // 폼 제출을 방지하여 Enter 키를 눌러도 페이지가 새로고침되지 않도록 함
+        });
+    const allTickerSearchForm = document.getElementById("allTickerSearchForm");
+       allTickerSearchForm.addEventListener("submit",function(event){
+            event.preventDefault();
+       })
+
     watchlistSearchInput.addEventListener("input", function () {
         filterTable(watchlistTable, watchlistSearchInput.value);
     });
