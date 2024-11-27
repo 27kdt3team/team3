@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light" th:fragment="header">
     <div class="container">
@@ -30,19 +31,19 @@
             </ul>
             <ul class="d-flex navbar-nav mx-right account-menu">
                 <!-- 로그아웃 상태 -->
-                <li class="nav-item" th:if="${!isLoggedIn}" th:href="@{/logout}">
-                    <a class="nav-link btn btn-account-sign" th:if="${!isLoggedIn}" th:href="@{/register}">회원가입</a>
+                <li class="nav-item" sec:authorize ="isAnonymous()" th:href="@{/signup}">
+                    <a class="nav-link btn btn-account-sign" sec:authorize ="isAnonymous()" th:href="@{/signup}">회원가입</a>
                 </li>
-                <li class="nav-item" th:if="${!isLoggedIn}" th:href="@{/logout}">
-                    <a class="nav-link btn btn-login-out" th:if="${!isLoggedIn}" th:href="@{/login}">로그인</a>
+                <li class="nav-item" sec:authorize ="isAnonymous()" th:href="@{/login}">
+                    <a class="nav-link btn btn-login-out" sec:authorize ="isAnonymous()" th:href="@{/login}">로그인</a>
                 </li>
 
                 <!-- 로그인 상태 -->
-                <li class="nav-item" th:if="${isLoggedIn}" th:href="@{/profile}">
-                    <a class="nav-link btn btn-account-sign" th:if="${isLoggedIn}" th:href="@{/profile}">내 정보</a>
+                <li class="nav-item" sec:authorize ="isAuthenticated()" th:href="@{/user/profile}">
+                    <a class="nav-link btn btn-account-sign" sec:authorize ="isAuthenticated()" th:href="@{/user/profile}">내 정보</a>
                 </li>
-                <li class="nav-item" th:if="${isLoggedIn}" th:href="@{/logout}">
-                    <a class="nav-link btn btn-login-out" th:if="${isLoggedIn}" th:href="@{/logout}">로그아웃</a>
+                <li class="nav-item" sec:authorize ="isAuthenticated()" th:href="@{/logout}">
+                    <a class="nav-link btn btn-login-out" sec:authorize ="isAuthenticated()" th:href="@{/logout}">로그아웃</a>
                 </li>
             </ul>
         </div>
