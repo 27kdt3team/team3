@@ -16,6 +16,7 @@ public class UsaDto {
         this.source = source;
         this.publishedAt = publishedAt;
         this.imageLink = imageLink;
+
     }
 
 }

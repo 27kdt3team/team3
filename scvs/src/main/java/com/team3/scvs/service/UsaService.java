@@ -16,6 +16,7 @@ public class UsaService {
         return usaRepository.findAll(pageRequest).map(usa ->
                 new UsaDto(usa.getTitle(), usa.getSource(), usa.getPublishedAt(), usa.getImageLink())
         );
+
     }
 
 }

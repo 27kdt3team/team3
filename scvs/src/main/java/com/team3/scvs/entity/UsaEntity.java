@@ -14,11 +14,8 @@ public class UsaEntity {
     private Long usaEconNewsId;
 
     private String title;
-
     private String source;
-
     private String publishedAt;
-
     private String imageLink;
 
     public UsaEntity(String title, String source, String publishedAt, String imageLink) {
@@ -26,6 +23,7 @@ public class UsaEntity {
         this.source = source;
         this.publishedAt = publishedAt;
         this.imageLink = imageLink;
+
     }
 
 }
