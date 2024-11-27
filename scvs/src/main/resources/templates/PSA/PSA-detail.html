@@ -2,12 +2,12 @@
     <html xmlns:th="http://www.thymeleaf.org"
           xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
           layout:decorate="~{layouts/base}">
-    <head>
-        <meta charset="UTF-8">
-        <title th:text="${title}">공지사항 상세</title>
-        <link rel="stylesheet" th:href="@{/css/PSA-detail.css}">
-    </head>
+
     <body>
+    <th:block layout:fragment="css">
+        <link rel="stylesheet" th:href="@{/css/PSA-detail.css}">
+    </th:block>
+
     <th:block layout:fragment="MainBodyContents">
         <div class="PSA-detail-container">
             <!-- 공지사항 제목 -->
