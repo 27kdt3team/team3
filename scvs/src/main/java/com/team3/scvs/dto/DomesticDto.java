@@ -16,5 +16,7 @@ public class DomesticDto {
         this.source = source;
         this.publishedAt = publishedAt;
         this.imageLink = imageLink;
+
     }
+
 }

@@ -1,28 +1,37 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
 <!-- head part -->
 <head th:replace="~{layouts/head :: head}">
     <title>Domestic</title>
+    <!-- 구글 폰트 '나눔 고딕' 링크 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
 </head>
-<body>
-<!-- header part -->
-<div th:replace="~{layouts/header :: header}"></div>
 
+<body>
+<!-- css part -->
 <th:block layout:fragment="css">
     <link rel="stylesheet" th:href="@{/css/domestic.css}">
 </th:block>
 
+<!-- header part -->
+<div th:replace="~{layouts/header :: header}"></div>
+
 <!-- Main Body Contents -->
 <th:block layout:fragment = "MainBodyContents">
-    <!-- 국내 경제 뉴스 -->
     <main class="container">
+
+        <!-- 국내 경제 뉴스 리스트 -->
         <section class="domestic">
             <div class="news-column">
+
                 <h2>국내 경제 뉴스</h2>
                 <br>
 
-                <!-- 뉴스 항목 -->
+                <!-- 기사 -->
                 <div class="news-item">
                     <div class="text-content">
                         <div class="media-date">
@@ -31,7 +40,7 @@
                         </div>
                         <h4>거래소, 회원사 대표 간담회…정은보 "밸류업 노력할 것"</h4>
                     </div>
-                    <img src="image-placeholder.jpg" alt="News Image" width="180" height="90" class="news images">
+                    <img src="image-placeholder.jpg" alt="Domestic Image" width="180" height="90" class="news images">
                 </div>
 
                 <div class="news-item">
@@ -42,7 +51,7 @@
                         </div>
                         <h4>[단독]종투사 차등보험료 기준 은행 수준으로 강화한다</h4>
                     </div>
-                    <img src="image-placeholder.jpg" alt="News Image" width="180" height="90" class="news images">
+                    <img src="image-placeholder.jpg" alt="Domestic Image" width="180" height="90" class="news images">
                 </div>
 
                 <div class="news-item">
@@ -53,7 +62,7 @@
                         </div>
                         <h4>내년 1% 성장 전망에 ··· 골드만삭스 “美시장서 韓기업이 중국 몫 뺏어와야”</h4>
                     </div>
-                    <img src="image-placeholder.jpg" alt="News Image" width="180" height="90" class="news images">
+                    <img src="image-placeholder.jpg" alt="Domestic Image" width="180" height="90" class="news images">
                 </div>
 
                 <div class="news-item">
@@ -64,7 +73,7 @@
                         </div>
                         <h4>이스라엘-헤즈볼라 휴전 임박에 파랗게 질린 방산株···현대로템 13% 넘게 하락 [투자360]</h4>
                     </div>
-                    <img src="image-placeholder.jpg" alt="News Image" width="180" height="90" class="news images">
+                    <img src="image-placeholder.jpg" alt="Domestic Image" width="180" height="90" class="news images">
                 </div>
 
                 <div class="news-item">
@@ -75,30 +84,29 @@
                         </div>
                         <h4>신영證, ‘더드림플러스 기부신탁’ 출시</h4>
                     </div>
-                    <img src="image-placeholder.jpg" alt="News Image" width="180" height="90" class="news images">
+                    <img src="image-placeholder.jpg" alt="Domestic Image" width="180" height="90" class="news images">
                 </div>
 
                 <!-- 페이징 버튼 -->
                 <div class="pagination">
                     <a th:href="@{/domestic(page=${currentPage - 1})}" th:if="${currentPage > 1}">이전</a>
-                    <a href="#" class="page-link active">1</a>
-                    <a href="#" class="page-link">2</a>
-                    <a href="#" class="page-link">3</a>
-                    <a href="#" class="page-link">4</a>
-                    <a href="#" class="page-link">5</a>
+                    <span th:each="pageNum : ${#numbers.sequence(1, totalPages)}">
+                        <a th:href="@{/domestic(page=${pageNum})}"
+                           th:classappend="${pageNum == currentPage} ? 'active'"
+                           th:text="${pageNum}"></a>
+                    </span>
                     <a th:href="@{/domestic(page=${currentPage + 1})}" th:if="${currentPage < totalPages}">다음</a>
                 </div>
+
             </div>
         </section>
 
         <!-- 환율 정보 -->
         <aside class="exchange-rate-container">
-            <div class="exchange-rate">
-                <div class="rate">
-                    <div class="currency-symbol">$ / ₩</div>
-                    <div class="currency-value">1411</div>
-                    <div class="currency-change">▼ 2.70 (-0.19%)</div>
-                </div>
+            <div class="rate">
+                <div class="currency-symbol">$ / ₩</div>
+                <div class="currency-value">1411</div>
+                <div class="currency-change">▼ 2.70 (-0.19%)</div>
             </div>
         </aside>
 

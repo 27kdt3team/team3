@@ -16,6 +16,7 @@ public class DomesticService {
         return domesticRepository.findAll(pageRequest).map(domestic ->
                 new DomesticDto(domestic.getTitle(), domestic.getSource(), domestic.getPublishedAt(), domestic.getImageLink())
         );
+
     }
 
 }

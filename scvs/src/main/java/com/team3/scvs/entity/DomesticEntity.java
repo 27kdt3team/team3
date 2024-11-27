@@ -15,11 +15,8 @@ public class DomesticEntity {
     private Long korEconNewsId;
 
     private String title;
-
     private String source;
-
     private String publishedAt;
-
     private String imageLink;
 
     public DomesticEntity(String title, String source, String publishedAt, String imageLink) {
@@ -27,5 +24,7 @@ public class DomesticEntity {
         this.source = source;
         this.publishedAt = publishedAt;
         this.imageLink = imageLink;
+
     }
+
 }

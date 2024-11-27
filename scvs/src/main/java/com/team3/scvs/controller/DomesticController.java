@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class DomesticController {
-
-    @ModelAttribute("isLoggedIn") // 자동으로 설정
+    @ModelAttribute("isLoggedIn") //자동으로 설정
     public boolean setDefaultIsLoggedIn() {
-        return false; // 기본값 설정
+        return false; //기본값 설정
+
     }
 
     @Autowired
@@ -24,8 +24,16 @@ public class DomesticController {
 
     @GetMapping("/domestic")
     public String getDomesticList(@RequestParam(value = "page", required = false, defaultValue = "1") int page, Model model) {
-        Page<DomesticDto> currentPage = domesticService.getDomesticList(PageRequest.of(page - 1, 3));
+        int pageSize = 10; //한 페이지 내 기사의 최대 갯수
+
+        Page<DomesticDto> currentPage = domesticService.getDomesticList(PageRequest.of(page, pageSize));
+
+        model.addAttribute("domesticList", currentPage.getContent());
         model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", currentPage.getTotalPages());
+
         return "News/domestic";
+
     }
+
 }
