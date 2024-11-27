@@ -1,18 +1,21 @@
-package com.team3.scvs.baseController;
+package com.team3.scvs.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 @Controller
 public class BaseController {
 
+    @ModelAttribute("isLoggedIn") // 자동으로 설정
+    public boolean setDefaultIsLoggedIn() {
+        return false; // 기본값 설정
+    }
+
     @GetMapping("/")
     public String mainPage(Model model) {
-        // TODO: 로그인 여부는 임시로 false를 줌. 추후 수정 예정
-        boolean isLoggedIn = false;
-        model.addAttribute("isLoggedIn", isLoggedIn);
-        return "main";
+        return "index";
     }
 
     @GetMapping("/domestic")
@@ -25,13 +28,8 @@ public class BaseController {
         return "usa";
     }
 
-    @GetMapping("/register")
-    public String registerPage() {
-        return "register";
-    }
-
     @GetMapping("/login")
-    public String loginPage() {
+    public String loginPage(Model model) {
         return "login";
     }
 }
