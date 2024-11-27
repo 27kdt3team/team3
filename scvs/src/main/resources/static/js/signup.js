@@ -55,7 +55,6 @@ document.addEventListener("DOMContentLoaded", () => {
             passwordValidation.textContent = "비밀번호는 필수 항목입니다.";
             passwordValidation.style.color = "red";
             isPasswordValid = false;
-            return;
         }
 
         // 비밀번호 규격 체크 (8자 이상, 64자 이하, 특수문자, 대/소문자, 숫자 포함)
@@ -64,7 +63,6 @@ document.addEventListener("DOMContentLoaded", () => {
             passwordValidation.textContent = "비밀번호는 8자 이상 64자 이하, 특수문자, 영어, 숫자를 포함하여야 합니다.";
             passwordValidation.style.color = "red";
             isPasswordValid = false;
-            return;
         } else {
             // 성공 메시지
             passwordValidation.textContent = "사용 가능한 비밀번호입니다.";
@@ -94,7 +92,6 @@ document.addEventListener("DOMContentLoaded", () => {
             passwordCheckValidation.textContent = "비밀번호가 일치하지 않습니다.";
             passwordCheckValidation.style.color = "red";
             isPasswordCheckValid = false;
-            return;
         }
 
         // 비밀번호체크 검증 상태 변수 설정( 회원가입 제출시 비밀번호체크란 검증)
