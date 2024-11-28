@@ -17,18 +17,20 @@
             <p th:text="'작성일: ' + ${publishedAt}">작성일: 2024-11-20</p>
 
             <!-- 내용 -->
-            <div th:text="${psa.content}">
+            <div class="PSA-content" th:text="${psa.content}">
                 공지사항 상세 내용이 이곳에 표시됩니다.
             </div>
 
             <!-- 관리자 권한일 경우 수정/삭제 버튼 표시 -->
             <div th:if="${isAdmin}">
-                <a href="/PSA/edit" class="btn btn-warning">수정</a>
+                <a th:href="@{/PSA/update/{id}(id=${psa.id})}" class="btn btn-warning">수정</a>
                 <a href="/PSA/delete" class="btn btn-danger">삭제</a>
             </div>
 
-            <!-- 목록으로 돌아가기 -->
-            <a href="/PSA-list" class="btn btn-primary">목록</a>
+            <!-- 목록으로 돌아가기 (우측 하단 배치) -->
+            <div class="PSA-back-button">
+                <a href="/PSA-list" class="btn btn-primary">목록</a>
+            </div>
         </div>
     </th:block>
 

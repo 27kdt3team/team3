@@ -2,6 +2,7 @@ package com.team3.scvs.entity;
 
 import jakarta.persistence.*;
 import jakarta.persistence.Entity;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @Table(name = "psa")
+@Data
 public class PSA {
 
     @Id
@@ -34,9 +36,6 @@ public class PSA {
     @PrePersist
     protected void onCreate() {this.publishedAt = LocalDateTime.now();}
 
-    public LocalDateTime getPublishedAt() {
-        return publishedAt;
-    }
 
 }
 
