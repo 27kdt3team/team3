@@ -12,30 +12,29 @@ import org.springframework.stereotype.Service;
 public class DomesticService {
     private final DomesticRepository domesticRepository;
 
-    /*
-    @Transactional
-    //국내 경제 뉴스 리스트 보여주기(entity 객체를 dto 객체에 옮겨 담기)
-    public List<DomesticDto> findAll() {
-        List<DomesticEntity> domesticEntityList = domesticRepository.findAll();
-
-        //entity 객체를 dto 객체로 옮겨 담을 리스트 객체 선언
-        List<DomesticDto> domesticDtoList = new ArrayList<>();
-
-        for (DomesticEntity domesticEntity: domesticEntityList) {
-            domesticDtoList.add(DomesticDto.toDomesticDto(domesticEntity));
-        }
-
-        return domesticDtoList;
-
-    }
-    */
-
     //DB에서 데이터를 페이징 처리해서 가져오기
     public Page<DomesticDto> getDomesticList(PageRequest pageRequest) {
         return domesticRepository.findAll(pageRequest).map(domestic ->
-                new DomesticDto(domestic.getTitle(), domestic.getSource(), domestic.getPublishedAt(), domestic.getImageLink())
+                new DomesticDto(domestic.getKorEconNewsId(), domestic.getTitle(), domestic.getSource(), domestic.getPublishedAt(), domestic.getImageLink())
         );
 
     }
+
+    /*
+    //DB에서 데이터를 페이징 처리해서 가져오기
+    public Page<DomesticDto> getDomesticList(Pageable pageable) {
+        int page = pageable.getPageNumber() - 1;
+        int pageLimit = 10; //한 페이지에 기사 10개씩 보여줌
+
+        //page 위치에 있는 값은 0부터 시작 (즉, 실제 사용자가 요청한 페이지 값에서 하나 뺀 값을 가져옴)
+        Page<DomesticEntity> domesticEntities = domesticRepository.findAll(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "korEconNewsId")));
+
+        //map 메소드를 이용하여 엔티티를 dto 객체로 바꿔줌
+        Page<DomesticDto> domesticDtos = domesticEntities.map(domestic -> new DomesticDto(domestic.getKorEconNewsId(), domestic.getTitle(), domestic.getSource(), domestic.getPublishedAt(), domestic.getImageLink()));
+
+        return domesticDtos;
+
+    }
+    */
 
 }

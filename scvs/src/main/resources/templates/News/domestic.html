@@ -39,7 +39,8 @@
                             <p class="date" th:text="${newsItem.publishedAt}"></p>
                         </div>
                         <h4>
-                            <a th:href="@{/domestic/detail(id=${newsItem.id})}" th:text="${newsItem.title}" class="news-title"></a>
+                            //뉴스 아이디와 현재 머물고 있는 페이지 값을 상세 조회 메서드로 넘겨줘야 함
+                            <a th:href="@{|/domestic/${newsItem.korEconNewsId}|(page=${domesticList.number + 1})}" th:text="${newsItem.title}" class="news-title"></a>
                         </h4>
                     </div>
                     <img th:src="${newsItem.imageLink}" alt="Unable to load image" width="180" height="90" class="news images">
@@ -103,14 +104,38 @@
 
                 <!-- 페이징 버튼 -->
                 <div class="pagination">
+                    <!-- 이전 페이지 (현재 페이지가 첫 페이지가 아닌 경우) -->
                     <a th:href="@{/domestic(page=${currentPage - 1})}" th:if="${currentPage > 1}">이전</a>
-                    <span th:each="pageNum : ${#numbers.sequence(1, totalPages)}">
+
+                    <span th:each="pageNum : ${#numbers.sequence(1, 10)}">
                         <a th:href="@{/domestic(page=${pageNum})}"
                            th:classappend="${pageNum == currentPage} ? 'active'"
                            th:text="${pageNum}"></a>
                     </span>
+
+                    <!-- 다음 페이지 (현재 페이지가 마지막 페이지가 아닌 경우) -->
                     <a th:href="@{/domestic(page=${currentPage + 1})}" th:if="${currentPage < totalPages}">다음</a>
                 </div>
+
+                <!-- 페이징 처리
+                <div class="pagination">
+                    이전 페이지 (현재 페이지가 첫 페이지가 아닌 경우)
+                    <a th:href="${domesticList.first} ? '#' : @{/domestic(page=${domesticList.number})}">이전</a>
+
+                    페이지 번호
+                    <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
+                        현재 페이지는 링크 없이 숫자만으로 표시
+                        <span th:if="${page == domesticList.number + 1}" th:text="${page}"></span>
+                        현재 페이지 외의 페이지들은 숫자에 링크로 표시
+                        <span th:unless="${page == domesticList.number + 1}">
+                            <a th:href="@{/domestic(page=${page})}" th:text="${page}"></a>
+                        </span>
+                    </span>
+
+                    다음 페이지 (현재 페이지가 마지막 페이지가 아닌 경우)
+                    <a th:href="${domesticList.last} ? '#' : @{/domestic(page=${domesticList.number + 2})}">다음</a>
+                </div>
+                -->
 
             </div>
         </section>

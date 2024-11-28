@@ -9,12 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor //자동으로 생성자 생성
-@RequestMapping("/domestic")
 public class DomesticController {
     private final DomesticService domesticService;
 
@@ -24,35 +22,39 @@ public class DomesticController {
 
     }
 
-    /*
-    //국내 경제 뉴스 리스트 보여주기
-    @GetMapping("")
-    public String findAll(Model model) {
-        //DB에서 뉴스 데이터들을 가져와서 domestic.html에 보여준다.
-        List<DomesticDto> domesticDtoList = domesticService.findAll();
-        model.addAttribute("domesticList", domesticDtoList);
-
-        return "News/domestic";
-    }
-    */
-
-    @GetMapping("")
+    @GetMapping("/domestic")
     public String getDomesticList(@RequestParam(value = "page", required = false, defaultValue = "1") int page, Model model) {
-        int pageSize = 10; //페이지당 뉴스 개수
+        int pageSize = 10; //한 페이지 내 기사의 최대 갯수
 
-        //페이지 요청 생성
-        PageRequest pageRequest = PageRequest.of(page - 1, pageSize);
-
-        //서비스 호출 및 모델에 데이터 추가
-        Page<DomesticDto> currentPage = domesticService.getDomesticList(pageRequest);
+        Page<DomesticDto> currentPage = domesticService.getDomesticList(PageRequest.of(page, pageSize));
 
         model.addAttribute("domesticList", currentPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", currentPage.getTotalPages());
 
-        //html 파일 경로로 렌더링
         return "News/domestic";
 
     }
+
+    /*
+    //url: /domestic?page=1
+    @GetMapping("/domestic")
+    public String getDomesticList(@PageableDefault(page = 1) Pageable pageable, Model model) {
+        //서비스 호출 및 모델에 데이터 추가
+        Page<DomesticDto> domesticList = domesticService.getDomesticList(pageable);
+
+        int blockLimit = 5; //한번에 보여질 페이지 번호의 개수
+        int startPage = (((int)(Math.ceil((double)pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1;
+        int endPage = ((startPage + blockLimit - 1) < domesticList.getTotalPages()) ? startPage + blockLimit - 1 : domesticList.getTotalPages();
+
+        model.addAttribute("domesticList", domesticList);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+
+        //렌더링할 html 파일 경로
+        return "News/domestic";
+
+    }
+    */
 
 }
