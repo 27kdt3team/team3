@@ -4,12 +4,12 @@ import com.team3.scvs.dto.DomesticDto;
 import com.team3.scvs.service.DomesticService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor //자동으로 생성자 생성
@@ -22,21 +22,6 @@ public class DomesticController {
 
     }
 
-    @GetMapping("/domestic")
-    public String getDomesticList(@RequestParam(value = "page", required = false, defaultValue = "1") int page, Model model) {
-        int pageSize = 10; //한 페이지 내 기사의 최대 갯수
-
-        Page<DomesticDto> currentPage = domesticService.getDomesticList(PageRequest.of(page, pageSize));
-
-        model.addAttribute("domesticList", currentPage.getContent());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", currentPage.getTotalPages());
-
-        return "News/domestic";
-
-    }
-
-    /*
     //url: /domestic?page=1
     @GetMapping("/domestic")
     public String getDomesticList(@PageableDefault(page = 1) Pageable pageable, Model model) {
@@ -55,6 +40,5 @@ public class DomesticController {
         return "News/domestic";
 
     }
-    */
 
 }

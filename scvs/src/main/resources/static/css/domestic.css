@@ -40,15 +40,9 @@ body {
     display: flex; /* 플렉스 레이아웃 */
     align-items: center; /* 수직 가운데 정렬 */
     margin-bottom: 20px;
-    gap: 10px; /* 텍스트와 이미지 간격 */
+    gap: 20px; /* 텍스트와 이미지 간격 */
     border-bottom: 1px solid #ccc; /* 구분선 */
     padding-bottom: 10px;
-
-}
-
-/* 제일 마지막 기사 */
-.news-item:last-child {
-    border-bottom: none; /* 하단 구분선 없애기 */
 
 }
 
@@ -82,21 +76,18 @@ body {
 /* 기사 제목 */
 .news-item h4 {
     font-size: 18px;
-    font-weight: semi-bold;
-    color: #000;
     cursor: pointer; /* 마우스 커서가 손 모양으로 바뀜 */
     margin: 0; /* 불필요한 여백 제거 */
 
 }
 
-/* 제목 링크 (나중에 더미 데이터 지우고 활용)
+/* 제목 링크 */
 .news-item h4 a.news-title {
     text-decoration: none; //링크 밑줄 제거
-    color: inherit;
-    font-weight: inherit;
+    color: #000;
+    font-weight: semi-bold;
 
 }
-*/
 
 /* 이미지 스타일 */
 .news-item img {

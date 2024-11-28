@@ -31,7 +31,7 @@
                 <h2>국내 경제 뉴스</h2>
                 <br>
 
-                <!-- 동적으로 DB에서 가져온 데이터 출력 (나중에 더미 데이터 지우고 활용)
+                <!-- 동적으로 DB에서 가져온 데이터 출력 -->
                 <div th:each="newsItem : ${domesticList}" class="news-item">
                     <div class="text-content">
                         <div class="media-date">
@@ -39,103 +39,35 @@
                             <p class="date" th:text="${newsItem.publishedAt}"></p>
                         </div>
                         <h4>
-                            //뉴스 아이디와 현재 머물고 있는 페이지 값을 상세 조회 메서드로 넘겨줘야 함
+                            <!-- 뉴스 아이디와 현재 머물고 있는 페이지 값을 상세 조회 메서드로 넘겨주기 -->
                             <a th:href="@{|/domestic/${newsItem.korEconNewsId}|(page=${domesticList.number + 1})}" th:text="${newsItem.title}" class="news-title"></a>
                         </h4>
                     </div>
                     <img th:src="${newsItem.imageLink}" alt="Unable to load image" width="180" height="90" class="news images">
-                </div> -->
-
-                <!-- 기사(더미 데이터) -->
-                <div class="news-item">
-                    <div class="text-content">
-                        <div class="media-date">
-                            <p class="media">이데일리</p>
-                            <p class="date">2024.11.26</p>
-                        </div>
-                        <h4>거래소, 회원사 대표 간담회…정은보 "밸류업 노력할 것"</h4>
-                    </div>
-                    <img src="image-placeholder.jpg" alt="Unable to load image" width="180" height="90" class="news images">
                 </div>
 
-                <div class="news-item">
-                    <div class="text-content">
-                        <div class="media-date">
-                            <p class="media">아시아경제</p>
-                            <p class="date">2024.11.26</p>
-                        </div>
-                        <h4>[단독]종투사 차등보험료 기준 은행 수준으로 강화한다</h4>
-                    </div>
-                    <img src="image-placeholder.jpg" alt="Unable to load image" width="180" height="90" class="news images">
-                </div>
-
-                <div class="news-item">
-                    <div class="text-content">
-                        <div class="media-date">
-                            <p class="media">매일경제</p>
-                            <p class="date">2024.11.26</p>
-                        </div>
-                        <h4>내년 1% 성장 전망에 ··· 골드만삭스 “美시장서 韓기업이 중국 몫 뺏어와야”</h4>
-                    </div>
-                    <img src="image-placeholder.jpg" alt="Unable to load image" width="180" height="90" class="news images">
-                </div>
-
-                <div class="news-item">
-                    <div class="text-content">
-                        <div class="media-date">
-                            <p class="media">헤럴드경제</p>
-                            <p class="date">2024.11.26</p>
-                        </div>
-                        <h4>이스라엘-헤즈볼라 휴전 임박에 파랗게 질린 방산株···현대로템 13% 넘게 하락 [투자360]</h4>
-                    </div>
-                    <img src="image-placeholder.jpg" alt="Unable to load image" width="180" height="90" class="news images">
-                </div>
-
-                <div class="news-item">
-                    <div class="text-content">
-                        <div class="media-date">
-                            <p class="media">데일리안</p>
-                            <p class="date">2024.11.26</p>
-                        </div>
-                        <h4>신영證, ‘더드림플러스 기부신탁’ 출시</h4>
-                    </div>
-                    <img src="image-placeholder.jpg" alt="Unable to load image" width="180" height="90" class="news images">
-                </div>
-
-                <!-- 페이징 버튼 -->
+                <!-- 페이징 처리 -->
                 <div class="pagination">
-                    <!-- 이전 페이지 (현재 페이지가 첫 페이지가 아닌 경우) -->
-                    <a th:href="@{/domestic(page=${currentPage - 1})}" th:if="${currentPage > 1}">이전</a>
-
-                    <span th:each="pageNum : ${#numbers.sequence(1, 10)}">
-                        <a th:href="@{/domestic(page=${pageNum})}"
-                           th:classappend="${pageNum == currentPage} ? 'active'"
-                           th:text="${pageNum}"></a>
-                    </span>
-
-                    <!-- 다음 페이지 (현재 페이지가 마지막 페이지가 아닌 경우) -->
-                    <a th:href="@{/domestic(page=${currentPage + 1})}" th:if="${currentPage < totalPages}">다음</a>
-                </div>
-
-                <!-- 페이징 처리
-                <div class="pagination">
-                    이전 페이지 (현재 페이지가 첫 페이지가 아닌 경우)
+                    <!-- 첫번째 페이지 -->
+                    <a th:href="@{/domestic(page=1)}">맨앞</a>
+                    <!-- 이전 페이지 -->
                     <a th:href="${domesticList.first} ? '#' : @{/domestic(page=${domesticList.number})}">이전</a>
 
-                    페이지 번호
+                    <!-- 페이지 번호 -->
                     <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
-                        현재 페이지는 링크 없이 숫자만으로 표시
+                        <!-- 현재 페이지는 링크 없이 숫자만으로 표시 -->
                         <span th:if="${page == domesticList.number + 1}" th:text="${page}"></span>
-                        현재 페이지 외의 페이지들은 숫자에 링크로 표시
+                        <!-- 현재 페이지 외의 페이지들은 숫자에 링크로 표시 -->
                         <span th:unless="${page == domesticList.number + 1}">
                             <a th:href="@{/domestic(page=${page})}" th:text="${page}"></a>
                         </span>
                     </span>
 
-                    다음 페이지 (현재 페이지가 마지막 페이지가 아닌 경우)
+                    <!-- 다음 페이지 -->
                     <a th:href="${domesticList.last} ? '#' : @{/domestic(page=${domesticList.number + 2})}">다음</a>
+                    <!-- 마지막 페이지 -->
+                    <a th:href="@{/domestic(page=${domesticList.totalPages})}">맨뒤</a>
                 </div>
-                -->
 
             </div>
         </section>
