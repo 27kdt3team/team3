@@ -26,102 +26,45 @@
 
         <!-- 미국 경제 뉴스 리스트 -->
         <section class="usa">
-            <div class="news-column">
+            <h2>미국 경제 뉴스</h2>
+            <br>
 
-                <h2>미국 경제 뉴스</h2>
-                <br>
-
-                <!-- 기사 -->
-                <div class="news-item">
-                    <div class="text-content">
-                        <div class="media-date">
-                            <p class="media">THOMSON REUTERS</p>
-                            <p class="date">2024.11.26</p>
-                        </div>
-                        <h4>화웨이, 미국의 새로운 칩 규제가 다가옴에 따라 메이트 70 스마트폰 출시</h4>
+            <!-- 동적으로 DB에서 가져온 데이터 출력 -->
+            <div th:each="newsItem : ${usaList}" class="news-item">
+                <div class="text-content">
+                    <div class="media-date">
+                        <p class="media" th:text="${newsItem.source}"></p>
+                        <p class="date" th:text="${newsItem.publishedAt}"></p>
                     </div>
-                    <img src="image-placeholder.jpg" alt="Usa Image" width="180" height="90" class="news images">
+                    <h4>
+                        <!-- 뉴스 아이디와 현재 머물고 있는 페이지 값을 상세 조회 메서드로 넘겨주기 -->
+                        <a th:href="@{|/usa/${newsItem.usaEconNewsId}|(page=${usaList.number + 1})}" th:text="${newsItem.title}" class="news-title"></a>
+                    </h4>
                 </div>
+                <img th:src="${newsItem.imageLink}" alt="Unable to load image" width="180" height="90" class="news images">
+            </div>
 
-                <div class="news-item">
-                    <div class="text-content">
-                        <div class="media-date">
-                            <p class="media">THOMSON REUTERS</p>
-                            <p class="date">2024.11.26</p>
-                        </div>
-                        <h4>애플, 중국에서 자체 AI 출시 '어려운' 과정에 직면 - FT</h4>
-                    </div>
-                    <img src="image-placeholder.jpg" alt="Usa Image" width="180" height="90" class="news images">
-                </div>
+            <!-- 페이징 처리 -->
+            <div class="pagination">
+                <!-- 첫번째 페이지 -->
+                <a th:href="@{/usa(page=1)}">맨앞</a>
+                <!-- 이전 페이지 -->
+                <a th:href="${usaList.first} ? '#' : @{/usa(page=${usaList.number})}">이전</a>
 
-                <div class="news-item">
-                    <div class="text-content">
-                        <div class="media-date">
-                            <p class="media">THOMSON REUTERS</p>
-                            <p class="date">2024.11.26</p>
-                        </div>
-                        <h4>트럼프가 약속한 관세의 영향을 받을 수 있는 기업들</h4>
-                    </div>
-                    <img src="image-placeholder.jpg" alt="Usa Image" width="180" height="90" class="news images">
-                </div>
-
-                <div class="news-item">
-                    <div class="text-content">
-                        <div class="media-date">
-                            <p class="media">THOMSON REUTERS</p>
-                            <p class="date">2024.11.26</p>
-                        </div>
-                        <h4>일본 경쟁 당국이 아마존 재팬을 급습했다고 소식통이 밝혔습니다.</h4>
-                    </div>
-                    <img src="image-placeholder.jpg" alt="Usa Image" width="180" height="90" class="news images">
-                </div>
-
-                <div class="news-item">
-                    <div class="text-content">
-                        <div class="media-date">
-                            <p class="media">THOMSON REUTERS</p>
-                            <p class="date">2024.11.25</p>
-                        </div>
-                        <h4>EU, 예약은 디지털 시장법을 준수해야 합니다.</h4>
-                    </div>
-                    <img src="image-placeholder.jpg" alt="Usa Image" width="180" height="90" class="news images">
-                </div>
-
-                <!-- 페이징 버튼 -->
-                <div class="pagination">
-                    <!-- 이전 페이지 (현재 페이지가 첫 페이지가 아닌 경우) -->
-                    <a th:href="@{/usa(page=${currentPage - 1})}" th:if="${currentPage > 1}">이전</a>
-
-                    <span th:each="pageNum : ${#numbers.sequence(1, 10)}">
-                        <a th:href="@{/usa(page=${pageNum})}"
-                           th:classappend="${pageNum == currentPage} ? 'active'"
-                           th:text="${pageNum}"></a>
+                <!-- 페이지 번호 -->
+                <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
+                    <!-- 현재 페이지는 링크 없이 숫자만으로 표시 -->
+                    <span th:if="${page == usaList.number + 1}" th:text="${page}"></span>
+                    <!-- 현재 페이지 외의 페이지들은 숫자에 링크로 표시 -->
+                    <span th:unless="${page == usaList.number + 1}">
+                        <a th:href="@{/usa(page=${page})}" th:text="${page}"></a>
                     </span>
+                </span>
 
-                    <!-- 다음 페이지 (현재 페이지가 마지막 페이지가 아닌 경우) -->
-                    <a th:href="@{/usa(page=${currentPage + 1})}" th:if="${currentPage < totalPages}">다음</a>
-                </div>
-
-                <!-- 페이징 처리
-                <div class="pagination">
-                    이전 페이지 (현재 페이지가 첫 페이지가 아닌 경우)
-                    <a th:href="${usaList.first} ? '#' : @{/usa(page=${usaList.number})}">이전</a>
-
-                    페이지 번호
-                    <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
-                        현재 페이지는 링크 없이 숫자만으로 표시
-                        <span th:if="${page == usaList.number + 1}" th:text="${page}"></span>
-                        현재 페이지 외의 페이지들은 숫자에 링크로 표시
-                        <span th:unless="${page == usaList.number + 1}">
-                            <a th:href="@{/usa(page=${page})}" th:text="${page}"></a>
-                        </span>
-                    </span>
-
-                    다음 페이지 (현재 페이지가 마지막 페이지가 아닌 경우)
-                    <a th:href="${usaList.last} ? '#' : @{/usa(page=${usaList.number + 2})}">다음</a>
-                </div>
-                -->
-
+                <!-- 다음 페이지 -->
+                <a th:href="${usaList.last} ? '#' : @{/usa(page=${usaList.number + 2})}">다음</a>
+                <!-- 마지막 페이지 -->
+                <a th:href="@{/usa(page=${usaList.totalPages})}">맨뒤</a>
             </div>
         </section>
 
