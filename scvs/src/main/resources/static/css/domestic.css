@@ -83,7 +83,7 @@ body {
 
 /* 제목 링크 */
 .news-item h4 a.news-title {
-    text-decoration: none; //링크 밑줄 제거
+    text-decoration: none; /* 링크 밑줄 제거 */
     color: #000;
     font-weight: semi-bold;
 

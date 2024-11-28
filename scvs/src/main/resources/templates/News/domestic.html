@@ -26,49 +26,45 @@
 
         <!-- 국내 경제 뉴스 리스트 -->
         <section class="domestic">
-            <div class="news-column">
+            <h2>국내 경제 뉴스</h2>
+            <br>
 
-                <h2>국내 경제 뉴스</h2>
-                <br>
-
-                <!-- 동적으로 DB에서 가져온 데이터 출력 -->
-                <div th:each="newsItem : ${domesticList}" class="news-item">
-                    <div class="text-content">
-                        <div class="media-date">
-                            <p class="media" th:text="${newsItem.source}"></p>
-                            <p class="date" th:text="${newsItem.publishedAt}"></p>
-                        </div>
-                        <h4>
-                            <!-- 뉴스 아이디와 현재 머물고 있는 페이지 값을 상세 조회 메서드로 넘겨주기 -->
-                            <a th:href="@{|/domestic/${newsItem.korEconNewsId}|(page=${domesticList.number + 1})}" th:text="${newsItem.title}" class="news-title"></a>
-                        </h4>
+            <!-- 동적으로 DB에서 가져온 데이터 출력 -->
+            <div th:each="newsItem : ${domesticList}" class="news-item">
+                <div class="text-content">
+                    <div class="media-date">
+                        <p class="media" th:text="${newsItem.source}"></p>
+                        <p class="date" th:text="${newsItem.publishedAt}"></p>
                     </div>
-                    <img th:src="${newsItem.imageLink}" alt="Unable to load image" width="180" height="90" class="news images">
+                    <h4>
+                        <!-- 뉴스 아이디와 현재 머물고 있는 페이지 값을 상세 조회 메서드로 넘겨주기 -->
+                        <a th:href="@{|/domestic/${newsItem.korEconNewsId}|(page=${domesticList.number + 1})}" th:text="${newsItem.title}" class="news-title"></a>
+                    </h4>
                 </div>
+                <img th:src="${newsItem.imageLink}" alt="Unable to load image" width="180" height="90" class="news images">
+            </div>
 
-                <!-- 페이징 처리 -->
-                <div class="pagination">
-                    <!-- 첫번째 페이지 -->
-                    <a th:href="@{/domestic(page=1)}">맨앞</a>
-                    <!-- 이전 페이지 -->
-                    <a th:href="${domesticList.first} ? '#' : @{/domestic(page=${domesticList.number})}">이전</a>
+            <!-- 페이징 처리 -->
+            <div class="pagination">
+                <!-- 첫번째 페이지 -->
+                <a th:href="@{/domestic(page=1)}">맨앞</a>
+                <!-- 이전 페이지 -->
+                <a th:href="${domesticList.first} ? '#' : @{/domestic(page=${domesticList.number})}">이전</a>
 
-                    <!-- 페이지 번호 -->
-                    <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
-                        <!-- 현재 페이지는 링크 없이 숫자만으로 표시 -->
-                        <span th:if="${page == domesticList.number + 1}" th:text="${page}"></span>
-                        <!-- 현재 페이지 외의 페이지들은 숫자에 링크로 표시 -->
-                        <span th:unless="${page == domesticList.number + 1}">
-                            <a th:href="@{/domestic(page=${page})}" th:text="${page}"></a>
-                        </span>
+                <!-- 페이지 번호 -->
+                <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
+                    <!-- 현재 페이지는 링크 없이 숫자만으로 표시 -->
+                    <span th:if="${page == domesticList.number + 1}" th:text="${page}"></span>
+                    <!-- 현재 페이지 외의 페이지들은 숫자에 링크로 표시 -->
+                    <span th:unless="${page == domesticList.number + 1}">
+                        <a th:href="@{/domestic(page=${page})}" th:text="${page}"></a>
                     </span>
+                </span>
 
-                    <!-- 다음 페이지 -->
-                    <a th:href="${domesticList.last} ? '#' : @{/domestic(page=${domesticList.number + 2})}">다음</a>
-                    <!-- 마지막 페이지 -->
-                    <a th:href="@{/domestic(page=${domesticList.totalPages})}">맨뒤</a>
-                </div>
-
+                <!-- 다음 페이지 -->
+                <a th:href="${domesticList.last} ? '#' : @{/domestic(page=${domesticList.number + 2})}">다음</a>
+                <!-- 마지막 페이지 -->
+                <a th:href="@{/domestic(page=${domesticList.totalPages})}">맨뒤</a>
             </div>
         </section>
 
