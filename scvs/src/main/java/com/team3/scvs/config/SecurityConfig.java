@@ -44,7 +44,7 @@ public class SecurityConfig {
         return new CustomAuthenticationFailureHandler();
     }
 
-    // 필터에서 Security기본설정
+    // 필터에서 Security기본설정 ( 접근권한 , 로그인설정 , 로그아웃설정)
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -52,6 +52,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/").permitAll() // index 페이지 접근을 인증 없이 허용
                     .requestMatchers("/profile").authenticated() // profile 페이지는 인증된 사용자만 접근
+                    .requestMatchers("/admin/**").hasRole("ADMIN") // /admin/**는 ROLE_ADMIN만 접근 가능
                     .anyRequest().permitAll() // 모든 요청은 인증 불필요
             )
             .formLogin(form -> form
@@ -59,7 +60,7 @@ public class SecurityConfig {
                 .loginProcessingUrl("/login") // 로그인 요청 처리 URL
                 .successHandler(authenticationSuccessHandler()) // 커스텀 성공 핸들러
                 .failureHandler(authenticationFailureHandler()) // 커스텀 실패 핸들러
-                .usernameParameter("email") // 화면에서 입력받은 email를 username(Security 로그인 변수)으로 변경
+                .usernameParameter("email") // 클라이언트의 userDTO.email를 username(Security 로그인 변수)으로 변경
             )
             .logout(form -> form
                 .logoutUrl("/logout")   // 로그아웃 페이지 URL
@@ -68,7 +69,7 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // AuthenticationManager를 반환하는 메서드 - Security에서 사용하는 빌더에 사용하는 CustomService, passwordEncoding설정
+    // Security의 빌더에 사용하는 Service, passwordEncoding를 수정한 메서드로 사용
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
         // AuthenticationManagerBuilder를 사용하여 AuthenticationManager를 빌드
