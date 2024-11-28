@@ -21,7 +21,7 @@ class EconomistSpider(scrapy.Spider):
         
         for article in articles:
             article_dict = {}
-            article_dict['country'] = 'Korea'    
+            article_dict['country'] = 'KOR'    
             article_dict['title'] = article['title']
             
             # 이미지가 없는 뉴스 기사도 있어서 try catch로 처리

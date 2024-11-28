@@ -9,7 +9,7 @@ class PapagoTranslator:
     API_URL = 'https://naveropenapi.apigw.ntruss.com/nmt/v1/translation'
     
     # API에 필요한 환경 변수 설정
-    def __init__(self):
+    def __init__(self) -> None:
         load_dotenv()
         self.client_id = os.getenv('PAPAGO_CLIENT_ID')
         self.client_secret = os.getenv('PAPAGO_CLIENT_SECRET')
@@ -31,7 +31,7 @@ class PapagoTranslator:
         }
         
     # 영어에서 한국어로 번역
-    def translate(self, text):    
+    def translate(self, text) -> str:    
         # POST로 API 호출
         payload = self.get_payload(text)
         headers = self.get_headers()
@@ -45,10 +45,6 @@ class PapagoTranslator:
         else:
             raise Exception(f"Error from Papago API: {response.status_code} - {response.text}")
 
-
-# papago = PapagoTranslator()
-# translated_text = papago.translate("Hello guys! It's good to see you again! How are you guys holding up?")
-# print(translated_text)
         
         
         

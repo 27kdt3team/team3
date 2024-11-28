@@ -22,7 +22,7 @@ class HankyungSpider(scrapy.Spider):
     def parse_article(self, response):
         # 뉴스 기사 정보를 dict 형태로 저장한다
         article_dict = {}
-        article_dict['country'] = 'Korea'
+        article_dict['country'] = 'KOR'
         article_dict['title'] = response.xpath("normalize-space(//h1[@class='headline']/text())").get()
         
         img_ret = response.xpath("//div[@class='figure-img']/img/@src").get()

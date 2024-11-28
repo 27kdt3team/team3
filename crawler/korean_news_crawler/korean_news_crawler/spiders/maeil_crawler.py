@@ -53,7 +53,7 @@ class MaeilSpider(scrapy.Spider):
     def parse_article(self, response):
         article_dict = {}
         
-        article_dict['country'] = 'Korea'
+        article_dict['country'] = 'KOR'
         article_dict['title'] = response.xpath("normalize-space(//h2[@class='news_ttl'])").get()
         article_dict['source'] = '매일경제'
         article_dict['image_link'] = response.xpath("//div[@class='thumb']/img/@src").get()
