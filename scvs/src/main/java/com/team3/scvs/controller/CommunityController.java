@@ -34,6 +34,13 @@ public class CommunityController {
         CommunityVoteEntity voteInfo = communityService.getVoteInfo(communityId);
         //토론방 코멘트 가져오기
         List<CommunityCommentViewEntity> commentList = communityService.getComments(communityId);
+
+        System.out.println("=== Comment List in Controller ===");
+        commentList.forEach(comment -> {
+            System.out.println("Nickname: " + comment.getNickname());
+            System.out.println("Comment: " + comment.getComment());
+            System.out.println("Updated At: " + comment.getUpdatedAt());
+        });
         // 로그인 구현되면 삭제
         model.addAttribute("isLoggedIn", true);
 

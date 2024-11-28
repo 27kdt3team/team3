@@ -18,14 +18,21 @@ import java.time.LocalDateTime;
 public class CommunityCommentViewEntity {
 
     @Id
+    @Column(name = "community_comment_id")
+    private Long id;
+
     @Column(name = "community_id")
     private long communityId;
-    @Column(name= "nickname")
+
+    @Column(name = "nickname")
     private String nickname;
+
     @Column(nullable = false, length = 255)
     private String comment;
+
     @Column(name = "published_at")
     private LocalDateTime publishedAt;
+
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 }
