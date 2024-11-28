@@ -3,4 +3,10 @@
     justify-content: center;
     align-items: center;
     height: 84vh;
+    text-align: center;
+}
+
+.home-btn{
+    background: #515151;
+    color: white;
 }
