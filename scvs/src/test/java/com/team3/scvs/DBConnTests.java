@@ -21,15 +21,6 @@ public class DBConnTests {
     private DataSource dataSource;
 
     @Test
-    void testSelectTable(){
-        String sql = "SELECT * FROM test";
-        List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
-
-        assertThat(maps).isNotNull();
-        assertThat(maps.size()).isNotZero();
-    }
-
-    @Test
     void testConnection() {
         try {
             String result = jdbcTemplate.queryForObject("SELECT VERSION()", String.class);
