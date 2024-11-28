@@ -31,7 +31,21 @@
                 <h2>국내 경제 뉴스</h2>
                 <br>
 
-                <!-- 기사 -->
+                <!-- 동적으로 DB에서 가져온 데이터 출력 (나중에 더미 데이터 지우고 활용)
+                <div th:each="newsItem : ${domesticList}" class="news-item">
+                    <div class="text-content">
+                        <div class="media-date">
+                            <p class="media" th:text="${newsItem.source}"></p>
+                            <p class="date" th:text="${newsItem.publishedAt}"></p>
+                        </div>
+                        <h4>
+                            <a th:href="@{/domestic/detail(id=${newsItem.id})}" th:text="${newsItem.title}" class="news-title"></a>
+                        </h4>
+                    </div>
+                    <img th:src="${newsItem.imageLink}" alt="Unable to load image" width="180" height="90" class="news images">
+                </div> -->
+
+                <!-- 기사(더미 데이터) -->
                 <div class="news-item">
                     <div class="text-content">
                         <div class="media-date">
@@ -40,7 +54,7 @@
                         </div>
                         <h4>거래소, 회원사 대표 간담회…정은보 "밸류업 노력할 것"</h4>
                     </div>
-                    <img src="image-placeholder.jpg" alt="Domestic Image" width="180" height="90" class="news images">
+                    <img src="image-placeholder.jpg" alt="Unable to load image" width="180" height="90" class="news images">
                 </div>
 
                 <div class="news-item">
@@ -51,7 +65,7 @@
                         </div>
                         <h4>[단독]종투사 차등보험료 기준 은행 수준으로 강화한다</h4>
                     </div>
-                    <img src="image-placeholder.jpg" alt="Domestic Image" width="180" height="90" class="news images">
+                    <img src="image-placeholder.jpg" alt="Unable to load image" width="180" height="90" class="news images">
                 </div>
 
                 <div class="news-item">
@@ -62,7 +76,7 @@
                         </div>
                         <h4>내년 1% 성장 전망에 ··· 골드만삭스 “美시장서 韓기업이 중국 몫 뺏어와야”</h4>
                     </div>
-                    <img src="image-placeholder.jpg" alt="Domestic Image" width="180" height="90" class="news images">
+                    <img src="image-placeholder.jpg" alt="Unable to load image" width="180" height="90" class="news images">
                 </div>
 
                 <div class="news-item">
@@ -73,7 +87,7 @@
                         </div>
                         <h4>이스라엘-헤즈볼라 휴전 임박에 파랗게 질린 방산株···현대로템 13% 넘게 하락 [투자360]</h4>
                     </div>
-                    <img src="image-placeholder.jpg" alt="Domestic Image" width="180" height="90" class="news images">
+                    <img src="image-placeholder.jpg" alt="Unable to load image" width="180" height="90" class="news images">
                 </div>
 
                 <div class="news-item">
@@ -84,7 +98,7 @@
                         </div>
                         <h4>신영證, ‘더드림플러스 기부신탁’ 출시</h4>
                     </div>
-                    <img src="image-placeholder.jpg" alt="Domestic Image" width="180" height="90" class="news images">
+                    <img src="image-placeholder.jpg" alt="Unable to load image" width="180" height="90" class="news images">
                 </div>
 
                 <!-- 페이징 버튼 -->

@@ -69,7 +69,7 @@ body {
 
 .media {
     color: #555;
-    font-weight: demi light;
+    font-weight: demi-light;
 
 }
 
@@ -82,11 +82,21 @@ body {
 /* 기사 제목 */
 .news-item h4 {
     font-size: 18px;
-    font-weight: semi bold;
+    font-weight: semi-bold;
     color: #000;
     cursor: pointer; /* 마우스 커서가 손 모양으로 바뀜 */
+    margin: 0; /* 불필요한 여백 제거 */
 
 }
+
+/* 제목 링크 (나중에 더미 데이터 지우고 활용)
+.news-item h4 a.news-title {
+    text-decoration: none; //링크 밑줄 제거
+    color: inherit;
+    font-weight: inherit;
+
+}
+*/
 
 /* 이미지 스타일 */
 .news-item img {
