@@ -89,14 +89,38 @@
 
                 <!-- 페이징 버튼 -->
                 <div class="pagination">
-                    <a th:href="@{/domestic(page=${currentPage - 1})}" th:if="${currentPage > 1}">이전</a>
-                    <span th:each="pageNum : ${#numbers.sequence(1, totalPages)}">
-                        <a th:href="@{/domestic(page=${pageNum})}"
+                    <!-- 이전 페이지 (현재 페이지가 첫 페이지가 아닌 경우) -->
+                    <a th:href="@{/usa(page=${currentPage - 1})}" th:if="${currentPage > 1}">이전</a>
+
+                    <span th:each="pageNum : ${#numbers.sequence(1, 10)}">
+                        <a th:href="@{/usa(page=${pageNum})}"
                            th:classappend="${pageNum == currentPage} ? 'active'"
                            th:text="${pageNum}"></a>
                     </span>
-                    <a th:href="@{/domestic(page=${currentPage + 1})}" th:if="${currentPage < totalPages}">다음</a>
+
+                    <!-- 다음 페이지 (현재 페이지가 마지막 페이지가 아닌 경우) -->
+                    <a th:href="@{/usa(page=${currentPage + 1})}" th:if="${currentPage < totalPages}">다음</a>
                 </div>
+
+                <!-- 페이징 처리
+                <div class="pagination">
+                    이전 페이지 (현재 페이지가 첫 페이지가 아닌 경우)
+                    <a th:href="${usaList.first} ? '#' : @{/usa(page=${usaList.number})}">이전</a>
+
+                    페이지 번호
+                    <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
+                        현재 페이지는 링크 없이 숫자만으로 표시
+                        <span th:if="${page == usaList.number + 1}" th:text="${page}"></span>
+                        현재 페이지 외의 페이지들은 숫자에 링크로 표시
+                        <span th:unless="${page == usaList.number + 1}">
+                            <a th:href="@{/usa(page=${page})}" th:text="${page}"></a>
+                        </span>
+                    </span>
+
+                    다음 페이지 (현재 페이지가 마지막 페이지가 아닌 경우)
+                    <a th:href="${usaList.last} ? '#' : @{/usa(page=${usaList.number + 2})}">다음</a>
+                </div>
+                -->
 
             </div>
         </section>
