@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base}">
+<th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/community.css}">
+</th:block>
+<body>
+<th:block layout:fragment="MainBodyContents">
+    <div class="container">
+        <div class="Stock-info">
+            <div class="stock-header">
+                <!-- 회사명과 심볼 -->
+                <span class="company-name" th:text="${stockInfo.company}"></span>
+                <span class="symbol" th:text="${stockInfo.symbol}"></span>
+            </div>
+            <!-- 현재 가격 및 투표 -->
+            <div class="stock-price">
+                <span class="current-price" th:text="${stockInfo.currentprice}"></span>
+                <button class="vote-button positive-vote">
+                    😊 <span th:text="${voteInfo.positiveVotes}"></span>
+                </button>
+                <button class="vote-button negative-vote">
+                    😢 <span th:text="${voteInfo.negativeVotes}"></span>
+                </button>
+            </div>
+        </div>
+        <div class="community">
+            <form class="comment-form" action="/addComment" method="post">
+                <input type="hidden" name="CommunityId" th:value="${communityId}"/>
+                <input type="hidden" name="tickerId" th:value="${stockInfo.tickerId}"/>
+                <div class="input-section">
+                    <input type="text" class="comment-input" name="commentInput" placeholder="의견을 남겨 보세요" required />
+                    <button type="submit" class="comment-submit">등록</button>
+                </div>
+            </form>
+
+            <!-- 댓글 리스트 -->
+            <div class="comment-list">
+                <th:block th:if="${commentList != null}">
+                    <th:block th:each="comment : ${commentList}">
+                        <div class="comment-item">
+                            <!-- 닉네임 -->
+                            <span class="nickname" th:text="${comment.nickname}"></span>
+                            <!-- 작성 시간 -->
+                            <span class="time" th:text="${comment.updatedAt}"></span>
+                            <!-- 댓글 내용 -->
+                            <span class="comment-text" th:text="${comment.comment}"></span>
+                        </div>
+                    </th:block>
+                </th:block>
+                <th:block th:if="${commentList == null || commentList.size() == 0}">
+                    <p class="no-comment">comment가 없습니다</p>
+                </th:block>
+            </div>
+        </div>
+        <div class="market-stats">
+            <p>회사정보</p>
+        </div>
+        <div class="news">
+            <p>뉴스</p>
+        </div>
+    </div>
+
+</th:block>
+
+</body>
+</html>
