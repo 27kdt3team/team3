@@ -21,6 +21,9 @@ public class CommunityCommentViewEntity {
     @Column(name = "community_comment_id")
     private Long id;
 
+    @Column(name = "user_id")
+    private long userId;
+
     @Column(name = "community_id")
     private long communityId;
 
@@ -35,4 +38,6 @@ public class CommunityCommentViewEntity {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+    @Column(name = "time_ago")
+    private String timeAgo;
 }

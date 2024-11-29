@@ -16,15 +16,32 @@
             </div>
             <!-- 현재 가격 및 투표 -->
             <div class="stock-price">
+                <!-- 현재 주식 가격 -->
                 <span class="current-price" th:text="${stockInfo.currentprice}"></span>
-                <button class="vote-button positive-vote">
-                    😊 <span th:text="${voteInfo.positiveVotes}"></span>
-                </button>
-                <button class="vote-button negative-vote">
-                    😢 <span th:text="${voteInfo.negativeVotes}"></span>
-                </button>
+
+                <!-- 긍정 투표 버튼 -->
+                <form action="/castVote" method="POST" style="display: inline;">
+                    <input type="hidden" name="communityId" th:value="${communityId}" />
+                    <input type="hidden" name="voteType" value="positive" />
+                    <input type="hidden" name="tickerId" th:value="${stockInfo.tickerId}" />
+                    <button type="submit" class="vote-button positive-vote">
+                        😊 <span th:text="${voteInfo.positiveVotes}"></span>
+                    </button>
+                </form>
+
+                <!-- 부정 투표 버튼 -->
+                <form action="/castVote" method="POST" style="display: inline;">
+                    <input type="hidden" name="communityId" th:value="${communityId}" />
+                    <input type="hidden" name="voteType" value="negative" />
+                    <input type="hidden" name="tickerId" th:value="${stockInfo.tickerId}" />
+                    <button type="submit" class="vote-button negative-vote">
+                        😢 <span th:text="${voteInfo.negativeVotes}"></span>
+                    </button>
+                </form>
             </div>
+
         </div>
+
         <div class="community">
             <form class="comment-form" action="/addComment" method="post">
                 <input type="hidden" name="CommunityId" th:value="${communityId}"/>
@@ -34,18 +51,33 @@
                     <button type="submit" class="comment-submit">등록</button>
                 </div>
             </form>
-
             <!-- 댓글 리스트 -->
-            <div class="comment-list">
+            <div class="comment-list" style="overflow-y: auto; height: 550px;">
                 <th:block th:if="${commentList != null}">
                     <th:block th:each="comment : ${commentList}">
                         <div class="comment-item">
                             <!-- 닉네임 -->
                             <span class="nickname" th:text="${comment.nickname}"></span>
                             <!-- 작성 시간 -->
-                            <span class="time" th:text="${comment.updatedAt}"></span>
+                            <span class="time" th:text="${comment.timeAgo}"></span>
                             <!-- 댓글 내용 -->
                             <span class="comment-text" th:text="${comment.comment}"></span>
+
+                            <!-- 수정 및 삭제 버튼 (본인 글만 표시) -->
+                            <th:block th:if="${comment.userId == userId}">
+                                <div class="comment-actions">
+                                    <form action="/editComment" method="POST" style="display: inline;">
+                                        <input type="hidden" name="communityCommentId" th:value="${comment.id}"/>
+                                        <input type="hidden" name="tickerId" th:value="${stockInfo.tickerId}"/>
+                                        <button type="submit" class="btn btn-edit">수정</button>
+                                    </form>
+                                    <form action="/deleteComment" method="POST" style="display: inline;">
+                                        <input type="hidden" name="communityCommentId" th:value="${comment.id}" />
+                                        <input type="hidden" name="tickerId" th:value="${stockInfo.tickerId}"/>
+                                        <button type="submit" class="btn btn-delete">삭제</button>
+                                    </form>
+                                </div>
+                            </th:block>
                         </div>
                     </th:block>
                 </th:block>
@@ -54,14 +86,15 @@
                 </th:block>
             </div>
         </div>
+
         <div class="market-stats">
             <p>회사정보</p>
         </div>
+
         <div class="news">
             <p>뉴스</p>
         </div>
     </div>
-
 </th:block>
 
 </body>

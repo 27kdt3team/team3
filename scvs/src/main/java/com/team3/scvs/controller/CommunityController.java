@@ -20,11 +20,19 @@ public class CommunityController {
 
     @Autowired
     private CommunityService communityService;
+
+    @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
     @GetMapping("/community")
     public String community(@RequestParam("tickerId") Long tickerId,
                              Model model) {
+        //로그인 기능이 완성되면 호출
+        //Long userId = customUserDetailsService.getLoggedInUserId();
+
+        //로그인 기능 사라지면 지우기
+        long userId = 1;
+
         //주식 정보 가져오기
         CommunityStockInfoEntity stockInfo = communityService.getstockinfo(tickerId);
         // 커뮤니티 테이블 가져오기
@@ -35,15 +43,7 @@ public class CommunityController {
         //토론방 코멘트 가져오기
         List<CommunityCommentViewEntity> commentList = communityService.getComments(communityId);
 
-        System.out.println("=== Comment List in Controller ===");
-        commentList.forEach(comment -> {
-            System.out.println("Nickname: " + comment.getNickname());
-            System.out.println("Comment: " + comment.getComment());
-            System.out.println("Updated At: " + comment.getUpdatedAt());
-        });
-        // 로그인 구현되면 삭제
-        model.addAttribute("isLoggedIn", true);
-
+        model.addAttribute("userId",userId);
         model.addAttribute("stockInfo", stockInfo);
         model.addAttribute("voteInfo",voteInfo);
         model.addAttribute("commentList",commentList);
@@ -55,7 +55,6 @@ public class CommunityController {
     public String addComment(@RequestParam("CommunityId") Long communityId,
                              @RequestParam("tickerId") Long tickerId,
                              @RequestParam("commentInput") String commentInput) {
-
         //로그인 기능이 완성되면 호출
         //Long userId = customUserDetailsService.getLoggedInUserId();
 
@@ -68,6 +67,81 @@ public class CommunityController {
         // 등록 후 기존 페이지로 리다이렉트
         return "redirect:/community?tickerId=" + tickerId;
     }
+
+    @PostMapping("/castVote")
+    public String castVote(@RequestParam("communityId") Long communityId,
+                           @RequestParam("voteType") String voteType,
+                           @RequestParam("tickerId") Long tickerId,
+                           Model model) {
+        //로그인 기능이 완성되면 호출
+        //Long userId = customUserDetailsService.getLoggedInUserId();
+
+        //로그인 기능 사라지면 지우기
+        long userId = 1;
+
+        try {
+            // 투표 처리 로직 호출
+            boolean isVoteSuccessful = communityService.castVote(communityId, userId, voteType);
+
+            if (!isVoteSuccessful) {
+                // 이미 투표한 경우 오류 메시지 추가
+                model.addAttribute("voteError", "이미 투표하셨습니다.");
+            }
+        } catch (IllegalArgumentException e) {
+            // 잘못된 입력 처리
+            model.addAttribute("voteError", e.getMessage());
+        }
+
+        // 기존 페이지로 리다이렉트
+        return "redirect:/community?tickerId=" + tickerId;
+    }
+
+    @PostMapping("/deleteComment")
+    public String deleteComment(@RequestParam("communityCommentId") Long communityCommentId,
+                                @RequestParam("tickerId") Long tickerId,
+                                Model model) {
+        //로그인 기능이 완성되면 호출
+        //Long userId = customUserDetailsService.getLoggedInUserId();
+
+        // 로그인된 사용자 ID 가져오기 (임시)
+        Long userId = 1L; // 실제 로그인 기능 구현 후 교체
+        try {
+            // 삭제 로직 호출
+            communityService.deleteComment(communityCommentId, userId);
+        } catch (SecurityException e) {
+            model.addAttribute("deleteError", e.getMessage());
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("deleteError", "댓글을 찾을 수 없습니다.");
+        }
+
+        // 삭제 후 기존 페이지로 리다이렉트
+        return "redirect:/community?tickerId=" + tickerId;
+    }
+    @PostMapping("/editComment")
+    public String editComment(@RequestParam("communityCommentId") Long commentId,
+                              @RequestParam("tickerId") Long tickerId,
+                              @RequestParam("editedComment") String updatedComment,
+                              Model model) {
+
+        //로그인 기능이 완성되면 호출
+        //Long userId = customUserDetailsService.getLoggedInUserId();
+
+        // 로그인된 사용자 ID 가져오기 (임시)
+        Long userId = 1L; // 실제 로그인 기능 구현 후 교체
+
+        try {
+            // 수정 로직 호출
+            communityService.editComment(commentId, userId, updatedComment);
+        } catch (SecurityException e) {
+            model.addAttribute("editError", e.getMessage());
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("editError", "댓글을 찾을 수 없습니다.");
+        }
+
+        // 수정 후 기존 페이지로 리다이렉트
+        return "redirect:/community?tickerId=" + tickerId;
+    }
+
 
 
 }

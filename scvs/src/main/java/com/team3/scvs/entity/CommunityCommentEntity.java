@@ -35,4 +35,17 @@ public class CommunityCommentEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    // 생성 시 publishedAt 설정
+    @PrePersist
+    protected void onCreate() {
+        this.publishedAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    // 수정 시 updatedAt 설정
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
 }

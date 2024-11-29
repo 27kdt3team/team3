@@ -8,4 +8,5 @@ import java.util.List;
 public interface CommunityCommentViewRepository extends JpaRepository<CommunityCommentViewEntity, Long> {
 
     List<CommunityCommentViewEntity> findAllByCommunityId(Long communityId);
+
 }
