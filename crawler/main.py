@@ -6,6 +6,8 @@ def say_hello():
 def main():
     sched = BackgroundScheduler(timezone='Asia/Seoul')
     sched.add_job(say_hello, 'interval', seconds=10, id='test')
+    # API 호출 가능
+    sched.add_job(kis_api_Call,'interval', seconds=10, id='test')
     sched.start() 
     
     # main loop

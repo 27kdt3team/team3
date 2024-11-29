@@ -1,6 +1,11 @@
+import os, sys
+
 from pykis import PyKis, KisAuth
 import requests
 from datetime import datetime
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from database_manager import DatabaseManager
 
 class KisIndexApiService:
     def __init__(self, base_url):
@@ -42,7 +47,7 @@ class KisIndexApiService:
         else:
             print(f"Failed to revoke access token: {response.status_code}, {response.text}")
 
-    def get_korea_index(self, fid):
+    def get_korea_index(self, title, fid):
         url = f"{self.base_url}/uapi/domestic-stock/v1/quotations/inquire-index-price"
         headers = {
             "content-type": "application/json",
@@ -59,12 +64,19 @@ class KisIndexApiService:
 
         response = requests.get(url, headers=headers, params=params)
         if response.status_code == 200:
-            return response.json()
+            jsonResult = response.json()
+            index = {
+                "title" : title,
+                "current_value" : jsonResult["output"]["bstp_nmix_prpr"],
+                "change_value" : jsonResult["output"]["bstp_nmix_prdy_vrss"],
+                "change_percent" : jsonResult["output"]["bstp_nmix_prdy_ctrt"]
+            }            
+            return index
         else:
             print(f"Failed to get Korea index: {response.status_code}, {response.text}")
             return None
 
-    def get_usa_index(self, market_code, iscd):
+    def get_usa_index(self, title, market_code, iscd):
         url = f"{self.base_url}/uapi/overseas-price/v1/quotations/inquire-daily-chartprice"
         today_date = datetime.now().strftime("%Y%m%d")
         headers = {
@@ -84,58 +96,53 @@ class KisIndexApiService:
 
         response = requests.get(url, headers=headers, params=params)
         if response.status_code == 200:
-            return response.json()
+            jsonResult = response.json()
+            index = {
+                "title" : title,
+                "current_value" : jsonResult["output1"]["ovrs_nmix_prpr"],
+                "change_value" : jsonResult["output1"]["ovrs_nmix_prdy_vrss"],
+                "change_percent" : jsonResult["output1"]["prdy_ctrt"]
+            }            
+            return index
         else:
             print(f"Failed to get USA index: {response.status_code}, {response.text}")
             return None
         
-    def print_index_info(self, index_title, current_value, increase_value, increase_percent):
+    def print_index_info(self, index_title, index):
         print(index_title)
-        print("Current Value : ", current_value)
-        print("Change Value : ", increase_value)
-        print("Change Percent : ", increase_percent)
-        print()
+        print(index)
 
 # Example usage:
 if __name__ == "__main__":
     kis_index_api_service = KisIndexApiService(base_url="https://openapi.koreainvestment.com:9443")
     kis_index_api_service.get_access_token()
     
-    KOSPI = kis_index_api_service.get_korea_index("0001")
+    KOSPI = kis_index_api_service.get_korea_index("KOSPI", "0001")
     #print("KOSPI Index:", KOSPI)
-    kis_index_api_service.print_index_info("KOSPI", 
-                                 KOSPI["output"]["bstp_nmix_prpr"],
-                                 KOSPI["output"]["bstp_nmix_prdy_vrss"], 
-                                 KOSPI["output"]["bstp_nmix_prdy_ctrt"])
+    kis_index_api_service.print_index_info("KOSPI", KOSPI)
     
-    KOSDAQ = kis_index_api_service.get_korea_index("1001")
+    KOSDAQ = kis_index_api_service.get_korea_index("KOSDAQ", "1001")
     #print("KOSDAQ Index:", KOSDAQ)
-    kis_index_api_service.print_index_info("KOSDAQ", 
-                                 KOSDAQ["output"]["bstp_nmix_prpr"],
-                                 KOSDAQ["output"]["bstp_nmix_prdy_vrss"], 
-                                 KOSDAQ["output"]["bstp_nmix_prdy_ctrt"])
+    kis_index_api_service.print_index_info("KOSDAQ", KOSDAQ)
     
-    NASDAQ = kis_index_api_service.get_usa_index("N", "COMP")
+    NASDAQ = kis_index_api_service.get_usa_index("NASDAQ", "N", "COMP")
     # print("NASDAQ Index:", NASDAQ)
-    kis_index_api_service.print_index_info("NASDAQ", 
-                                 NASDAQ["output1"]["ovrs_nmix_prpr"],
-                                 NASDAQ["output1"]["ovrs_nmix_prdy_vrss"], 
-                                 NASDAQ["output1"]["prdy_ctrt"])
+    kis_index_api_service.print_index_info("NASDAQ", NASDAQ)
     
-    SNP500 = kis_index_api_service.get_usa_index("N", "SPX")
+    SNP500 = kis_index_api_service.get_usa_index("S&P500", "N", "SPX")
     # print("SNP500 Index:", SNP500)
-    kis_index_api_service.print_index_info("SNP500", 
-                                 SNP500["output1"]["ovrs_nmix_prpr"],
-                                 SNP500["output1"]["ovrs_nmix_prdy_vrss"], 
-                                 SNP500["output1"]["prdy_ctrt"])
+    kis_index_api_service.print_index_info("S&P500", SNP500)
     
-    FOREX = kis_index_api_service.get_usa_index("X", "FX@KRW")
+    FOREX = kis_index_api_service.get_usa_index("KRW/USD", "X", "FX@KRW")
     # print("FOREX Index:", FOREX)
-    kis_index_api_service.print_index_info("FOREX", 
-                                 FOREX["output1"]["ovrs_nmix_prpr"],
-                                 FOREX["output1"]["ovrs_nmix_prdy_vrss"], 
-                                 FOREX["output1"]["prdy_ctrt"])
+    kis_index_api_service.print_index_info("FOREX", FOREX)
 
     #ksi_service.revoke_access_token()
-
-
+    db = DatabaseManager()
+    db.connect()
+    db.insert_index(KOSPI)
+    db.insert_index(KOSDAQ)
+    db.insert_index(NASDAQ)
+    db.insert_index(SNP500)
+    db.insert_forex(FOREX)
+    db.disconnect()

@@ -94,6 +94,7 @@ class DatabaseManager:
         try:
             cursor = self.connection.cursor()
             cursor.execute(query, values)
+            cursor.exec
             self.connection.commit()
         except Error as sql_e:
             print('Error inserting query...')
@@ -108,6 +109,92 @@ class DatabaseManager:
         finally:
             cursor.close()
         
+    # 시장 지표 데이터 삽입    
+    def insert_index(self, item) -> None:
+        # 실제 넣을 테이블 쿼리
+        # query = '''
+        # INSERT INTO indices (title, current_value, change_value, change_percent)
+        # VALUES ('KOSPI', 100, -1.2, -1.2)
+        # ON DUPLICATE KEY UPDATE
+        #   current_value = VALUES(current_value),
+        #   change_value = VALUES(change_value),
+        #   change_percent = VALUES(change_percent);
+        # '''
         
+        # 테스트 테이블용 쿼리
+        query = '''
+        INSERT INTO indices (title, current_value, change_value, change_percent) 
+        VALUES (%s, %s, %s, %s)
+        ON DUPLICATE KEY UPDATE
+            current_value = VALUES(current_value),
+            change_value = VALUES(change_value),
+            change_percent = VALUES(change_percent);
+        '''
+        
+        # Scrapy에서 크롤링한 기사 정보
+        values = (
+            item['title'],
+            item['current_value'],
+            item['change_value'],
+            item['change_percent']
+        )
+        
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query, values)
+            self.connection.commit()
+            self.last_row_id = cursor.lastrowid # 로그 생성을 위해 마지막으로 넣은 PK 저장
+        except Error as sql_e:
+            print('Error inserting query...')
+            print('Function : insert_raw_articles')
+            print(f'Query: {query}')
+            print(f'Values: {str(item)}')
+            print(f'Error: {sql_e}')
+        finally:
+            cursor.close()
+            
+    # 시장 지표 데이터 삽입    
+    def insert_forex(self, item) -> None:
+        # 실제 넣을 테이블 쿼리
+        # query = '''
+        # INSERT INTO forex (forex_name, rate, change_value, change_percent, last_updated) 
+        # VALUES (%s, %s, %s, %s, NOW())
+        # ON DUPLICATE KEY UPDATE
+        #   rate = VALUES(rate),
+        #   change_value = VALUES(change_value),
+        #   change_percent = VALUES(change_percent);
+        # '''
+        
+        # 테스트 테이블용 쿼리
+        query = '''
+        INSERT INTO forex (forex_name, rate, change_value, change_percent, last_updated) 
+        VALUES (%s, %s, %s, %s, NOW())
+        ON DUPLICATE KEY UPDATE
+            rate = VALUES(rate),
+            change_value = VALUES(change_value),
+            change_percent = VALUES(change_percent);
+        '''
+        
+        # Scrapy에서 크롤링한 기사 정보
+        values = (
+            item['title'],
+            item['current_value'],
+            item['change_value'],
+            item['change_percent']
+        )
+        
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(query, values)
+            self.connection.commit()
+            self.last_row_id = cursor.lastrowid # 로그 생성을 위해 마지막으로 넣은 PK 저장
+        except Error as sql_e:
+            print('Error inserting query...')
+            print('Function : insert_raw_articles')
+            print(f'Query: {query}')
+            print(f'Values: {str(item)}')
+            print(f'Error: {sql_e}')
+        finally:
+            cursor.close()
 
         
