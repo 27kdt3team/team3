@@ -47,24 +47,24 @@
             <!-- 페이징 처리 -->
             <div class="pagination">
                 <!-- 첫번째 페이지 -->
-                <a th:href="@{/usa(page=1)}">맨앞</a>
+                <a th:href="@{/usa(page=1)}" class="first-page"></a>
                 <!-- 이전 페이지 -->
-                <a th:href="${usaList.first} ? '#' : @{/usa(page=${usaList.number})}">이전</a>
+                <a th:href="${usaList.first} ? '#' : @{/usa(page=${usaList.number})}" class="previous-page"></a>
 
                 <!-- 페이지 번호 -->
                 <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
-                    <!-- 현재 페이지는 링크 없이 숫자만으로 표시 -->
-                    <span th:if="${page == usaList.number + 1}" th:text="${page}"></span>
+                    <!-- 현재 페이지는 링크 없이 숫자만으로 표시 (domesticList.number 값은 실제 페이지보다 1이 작은 값) -->
+                    <span th:if="${page == usaList.number + 1}" th:text="${page}" class="current-page"></span>
                     <!-- 현재 페이지 외의 페이지들은 숫자에 링크로 표시 -->
                     <span th:unless="${page == usaList.number + 1}">
-                        <a th:href="@{/usa(page=${page})}" th:text="${page}"></a>
+                        <a th:href="@{/usa(page=${page})}" th:text="${page}" class="page-link"></a>
                     </span>
                 </span>
 
                 <!-- 다음 페이지 -->
-                <a th:href="${usaList.last} ? '#' : @{/usa(page=${usaList.number + 2})}">다음</a>
+                <a th:href="${usaList.last} ? '#' : @{/usa(page=${usaList.number + 2})}" class="next-page"></a>
                 <!-- 마지막 페이지 -->
-                <a th:href="@{/usa(page=${usaList.totalPages})}">맨뒤</a>
+                <a th:href="@{/usa(page=${usaList.totalPages})}" class="last-page"></a>
             </div>
         </section>
 
@@ -72,8 +72,12 @@
         <aside class="exchange-rate-container">
             <div class="rate">
                 <div class="currency-symbol">$ / ₩</div>
-                <div class="currency-value">1411</div>
-                <div class="currency-change">▼ 2.70 (-0.19%)</div>
+                <div class="currency-value" th:text="${#numbers.formatDecimal(forex.rate, 2, 2)}"></div>
+                <div class="currency-change">
+                    <div class="change-value" th:text="'변동가격: ' + ${#numbers.formatDecimal(forex.changeValue, 2, 2)}"></div>
+                    <div class="change-percent" th:text="'변동률: ' + ${#numbers.formatDecimal(forex.changePercent, 2, 2)} + '%'"></div>
+                </div>
+                <div class="currency-date" th:text="'업데이트: ' + ${forex.lastUpdated}"></div>
             </div>
         </aside>
 

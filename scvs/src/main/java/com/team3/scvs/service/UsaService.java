@@ -22,9 +22,12 @@ public class UsaService {
         Page<UsaEntity> usaEntities = usaRepository.findAll(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "usaEconNewsId")));
 
         //map 메소드를 이용하여 엔티티를 dto 객체로 바꿔줌
-        Page<UsaDto> usaDtos = usaEntities.map(usa -> new UsaDto(usa.getUsaEconNewsId(), usa.getTitle(), usa.getSource(), usa.getPublishedAt(), usa.getImageLink()));
-
-        return usaDtos;
+        return usaEntities.map(usa -> new UsaDto(
+                usa.getUsaEconNewsId(),
+                usa.getTitle(),
+                usa.getSource(),
+                usa.getPublishedAt(),
+                usa.getImageLink()));
 
     }
 
