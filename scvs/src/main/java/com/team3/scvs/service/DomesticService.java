@@ -21,10 +21,13 @@ public class DomesticService {
 
         Page<DomesticEntity> domesticEntities = domesticRepository.findAll(PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "korEconNewsId")));
 
-        //map 메소드를 이용하여 엔티티를 dto 객체로 바꿔줌
-        Page<DomesticDto> domesticDtos = domesticEntities.map(domestic -> new DomesticDto(domestic.getKorEconNewsId(), domestic.getTitle(), domestic.getSource(), domestic.getPublishedAt(), domestic.getImageLink()));
-
-        return domesticDtos;
+        //map 메소드를 이용하여 엔티티를 dto 객체로 바꿔서 반환
+        return domesticEntities.map(domestic -> new DomesticDto(
+                domestic.getKorEconNewsId(),
+                domestic.getTitle(),
+                domestic.getSource(),
+                domestic.getPublishedAt(),
+                domestic.getImageLink()));
 
     }
 
