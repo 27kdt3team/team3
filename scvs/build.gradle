@@ -51,10 +51,12 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-json:3.3.3'
 	implementation 'org.apache.httpcomponents.client5:httpclient5:5.3.1'
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
-
 	// 로그인 보안 서비스
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.security:spring-security-crypto'
+
+	//타임리프-시큐리티 통합
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 
 }
 
