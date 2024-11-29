@@ -249,6 +249,11 @@
     background-color: #e6e6e6; /* 취소 버튼 호버 시 색상 */
 }
 
+.error-message {
+    font-size: 0.9em;
+    margin-top: 5px;
+    color: red;
+}
 
 
 /* News Section */
@@ -257,20 +262,104 @@
     grid-row: 4 / 6;
     padding: 20px;
     border-radius: 8px;
-    border: 3px solid black;
     display: flex;
     flex-direction: column;
     gap: 15px;
+    background-color: #f9f9f9; /* 배경색 추가 */
+}
+
+.news h1 {
+    text-align: center;
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.news ul {
+    list-style-type: none; /* 기본 리스트 스타일 제거 */
+    padding: 0; /* 리스트 내부 여백 제거 */
+    margin: 0; /* 리스트 외부 여백 제거 */
+}
+
+.news li {
+    font-size: 18px;
+    border-bottom: 1px solid #ccc; /* 각 뉴스 항목 하단 구분선 */
+    padding: 10px 0;
+}
+
+.news li:last-child {
+    border-bottom: none; /* 마지막 항목 구분선 제거 */
+}
+
+.news a {
+    text-decoration: none; /* 링크 밑줄 제거 */
+    color: #0073e6; /* 링크 색상 */
+    transition: color 0.3s ease; /* 색상 전환 효과 */
+}
+
+.news a:hover {
+    color: #005bb5; /* 호버 시 링크 색상 */
+    text-decoration: underline; /* 호버 시 밑줄 추가 */
 }
 
 /* Market Stats Section */
-.market-stats {
+.market-stats-wrapper {
     grid-column: 2 / 3;
     grid-row: 1 / 4;
     padding: 20px;
     border-radius: 8px;
-    border: 3px solid black;
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
+.market-stats {
+    padding: 20px;
+    border-radius: 8px;
+    border: 3px solid black;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.market-stats h1 {
+    text-align: center;
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.market-stats ul {
+    list-style: none; /* 기본 리스트 스타일 제거 */
+    padding: 0;
+    margin: 0;
+}
+
+.market-stats li {
+    display: flex; /* 텍스트와 값 정렬 */
+    justify-content: space-between; /* 양쪽 정렬 */
+    align-items: center; /* 세로 중앙 정렬 */
+    font-size: 16px;
+    padding: 10px 0; /* 리스트 항목 간 간격 */
+    border-bottom: 1px solid #ddd; /* 하단 구분선 */
+}
+
+.market-stats li:last-child {
+    border-bottom: none; /* 마지막 항목의 구분선 제거 */
+}
+
+.market-stats li span:first-child {
+    font-weight: bold; /* 항목 이름 강조 */
+    color: #555;
+}
+
+.market-stats li span:last-child {
+    color: #000; /* 값 강조 */
+}
+
+.no-data {
+    text-align: center;
+    font-size: 18px;
+    color: #ff0000;
+    margin-top: 20px;
+    font-weight: bold;
+}
+

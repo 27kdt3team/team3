@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +22,8 @@ public class CommunityService {
     private final UserRepository userRepository;
     private final CommunityCommentViewRepository communityCommentViewRepository;
     private final UserVoteRepository userVoteRepository;
+    private final StocksRepository stocksRepository;
+    private final StocksNewsRepository stocksNewsRepository;
 
     public CommunityStockInfoEntity getstockinfo(Long tickerId) {
         return communityStockInfoRepository.findById(tickerId).orElse(null);
@@ -94,7 +97,7 @@ public class CommunityService {
     }
 
     public List<CommunityCommentViewEntity> getComments(Long communityId) {
-        return communityCommentViewRepository.findAllByCommunityId(communityId);
+        return communityCommentViewRepository.findAllByCommunityIdOrderByPublishedAtDesc(communityId);
     }
 
     public void addComment(String commentInput, Long communityId, Long userId) {
@@ -144,6 +147,14 @@ public class CommunityService {
         communityCommentRepository.save(comment);
 
         return true; // 성공적으로 수정되었음을 반환
+    }
+
+    public Optional<StocksEntity> getStocksinfo(Long tickerId) {
+        return stocksRepository.findById(tickerId);
+    }
+    public List<StocksNewsEntity> getStocksNewstitle(Long tickerId){
+        return stocksNewsRepository.findLatestByTickerId(tickerId).stream().limit(5).toList();
+
     }
 
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ui.Model;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Controller
@@ -42,12 +43,19 @@ public class CommunityController {
         CommunityVoteEntity voteInfo = communityService.getVoteInfo(communityId);
         //토론방 코멘트 가져오기
         List<CommunityCommentViewEntity> commentList = communityService.getComments(communityId);
+        //마켓 정보 가져오기
+        Optional<StocksEntity> stockinfoOptional = communityService.getStocksinfo(tickerId);
+        StocksEntity stockinfo = stockinfoOptional.orElse(null); // 값이 없으면 null을 반환
+        //뉴스 제목 가져오기
+        List<StocksNewsEntity> stocknewsinfo = communityService.getStocksNewstitle(tickerId);
 
         model.addAttribute("userId",userId);
         model.addAttribute("stockInfo", stockInfo);
         model.addAttribute("voteInfo",voteInfo);
         model.addAttribute("commentList",commentList);
         model.addAttribute("communityId",communityId);
+        model.addAttribute("stockinfo",stockinfo);
+        model.addAttribute("stocknewsinfo",stocknewsinfo);
         return "Stockwatch/community";
     }
 
@@ -143,5 +151,12 @@ public class CommunityController {
     }
 
 
+//    @GetMapping("/domestic/id")
+//    public String getNewsDetail(@PathVariable("id") String id, Model model) {
+//        // ID에 해당하는 뉴스 데이터를 가져오기
+//        NewsDTO news = newsService.getNewsById(id);
+//        model.addAttribute("newsDetail", news);
+//        return "news-detail"; // 상세 페이지를 보여줄 Thymeleaf 템플릿 이름
+//    }
 
 }

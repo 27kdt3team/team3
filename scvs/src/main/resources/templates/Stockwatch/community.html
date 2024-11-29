@@ -91,13 +91,63 @@
                 </th:block>
             </div>
         </div>
-
-        <div class="market-stats">
-            <p>회사정보</p>
+        <!-- maker-stats -->
+        <div class="market-stats-wrapper">
+            <h1>Market Stats</h1>
+            <div class="market-stats" th:if="${stockinfo != null}">
+                <ul>
+                    <li>
+                        <span>Open:</span>
+                        <span th:text="${stockinfo.open}"></span>
+                    </li>
+                    <li>
+                        <span>Close:</span>
+                        <span th:text="${stockinfo.close}"></span>
+                    </li>
+                    <li>
+                        <span>Volume:</span>
+                        <span th:text="${stockinfo.volume}"></span>
+                    </li>
+                    <li>
+                        <span>Day Range:</span>
+                        <span th:text="${stockinfo.dayLow} + ' - ' + ${stockinfo.dayHigh}"></span>
+                    </li>
+                    <li>
+                        <span>52 Week Range:</span>
+                        <span th:text="${stockinfo.fiftytwoWeekLow} + ' - ' + ${stockinfo.fiftytwoWeekHigh}"></span>
+                    </li>
+                    <li>
+                        <span>ROE:</span>
+                        <span th:text="${stockinfo.returnOnEquity} + '%'"></span>
+                    </li>
+                    <li>
+                        <span>EV:</span>
+                        <span th:text="${stockinfo.enterpriseValue}"></span>
+                    </li>
+                    <li>
+                        <span>EV/EBITDA:</span>
+                        <span th:text="${stockinfo.enterpriseToEBITDA}"></span>
+                    </li>
+                    <li>
+                        <span>P/B Ratio:</span>
+                        <span th:text="${stockinfo.priceToBook}"></span>
+                    </li>
+                </ul>
+            </div>
+            <div class="no-data" th:if="${stockinfo == null}">
+                <p>No market data available for this ticker.</p>
+            </div>
         </div>
 
+        <!-- news -->
         <div class="news">
-            <p>뉴스</p>
+            <h1>Stock News</h1>
+            <ul>
+                <!-- 반복문으로 뉴스 제목 출력 -->
+                <li th:each="news : ${stocknewsinfo}">
+                    <a th:href="@{/news/detail/{id}(id=${news.id})}" th:text="${news.title}"></a>
+                </li>
+            </ul>
         </div>
     </div>
     <script th:src="@{/js/community.js}"></script>
