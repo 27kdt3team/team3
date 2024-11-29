@@ -31,4 +31,10 @@ public interface PSARepository extends JpaRepository<PSA, Long> {
 
     // 페이징 가능한 검색 메서드
     Page<PSA> findByTitleContaining(String title, Pageable pageable);
+
+    // id가 현재 id보다 큰 가장 작은 공지
+    PSA findFirstByIdGreaterThanOrderByIdAsc(Long id);
+
+    // id가 현재 id보다 작은 가장 큰 공지
+    PSA findFirstByIdLessThanOrderByIdDesc(Long id);
 }

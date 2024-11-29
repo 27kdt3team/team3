@@ -65,5 +65,15 @@ public class PSAService {
         return psaRepository.findByTitleContaining(query, pageable);
     }
 
+    // 이전 공지
+    public PSA findPreviousPSA(Long id) {
+        return psaRepository.findFirstByIdGreaterThanOrderByIdAsc(id);
+    }
+
+    // 다음 공지
+    public PSA findNextPSA(Long id) {
+        return psaRepository.findFirstByIdLessThanOrderByIdDesc(id);
+    }
+
 
 }

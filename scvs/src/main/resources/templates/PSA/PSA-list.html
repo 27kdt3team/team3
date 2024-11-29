@@ -42,9 +42,16 @@
             </tbody>
         </table>
 
-        <!-- 로그인 상태 확인 -->
+
+        <!-- 로그인 상태 확인
         <div th:if="${isLoggedIn != null ? isLoggedIn : false}">
             <a href="/psa/add" class="btn btn-primary">공지 추가</a>
+        </div>
+        -->
+
+        <!-- 공지추가 버튼 -->
+        <div class="PSA-add-button">
+            <a href="/PSA-add" class="btn btn-primary">공지추가</a>
         </div>
 
         <!-- 페이지네이션 -->

@@ -21,16 +21,51 @@
                 공지사항 상세 내용이 이곳에 표시됩니다.
             </div>
 
-            <!-- 관리자 권한일 경우 수정/삭제 버튼 표시 -->
-            <div th:if="${isAdmin}">
-                <a th:href="@{/PSA/update/{id}(id=${psa.id})}" class="btn btn-warning">수정</a>
-                <a href="/PSA/delete" class="btn btn-danger">삭제</a>
+            <!-- 버튼 그룹 -->
+            <div class="PSA-actions">
+                <!-- 좌측 하단 수정/삭제 버튼 -->
+                <div class="btn-group PSA-edit-delete-buttons" role="group" th:if="${isAdmin}">
+                    <a th:href="@{/PSA/update/{id}(id=${psa.id})}" class="btn btn-warning">수정</a>
+                    <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">삭제</a>
+                </div>
+                <!-- 우측 하단 목록 버튼 -->
+                <div class="PSA-back-button">
+                    <a href="/PSA-list" class="btn btn-primary">목록</a>
+                </div>
+            </div>
+        </div>
+
+            <!-- 부트스트랩 모달 -->
+            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteModalLabel">공지 삭제</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            삭제한 공지는 복구할 수 없습니다. 정말 삭제하시겠습니까?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                            <a th:href="@{/PSA/delete/{id}(id=${psa.id})}" class="btn btn-danger">삭제</a>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- 목록으로 돌아가기 (우측 하단 배치) -->
-            <div class="PSA-back-button">
-                <a href="/PSA-list" class="btn btn-primary">목록</a>
-            </div>
+        <div class="PSA-navigation">
+            <!-- 이전 공지 -->
+            <a th:if="${previousPSA != null}"
+               th:href="@{/PSA-detail/{id}(id=${previousPSA.id})}"
+               class="btn btn-secondary">이전</a>
+
+            <!-- 다음 공지 -->
+            <a th:if="${nextPSA != null}"
+               th:href="@{/PSA-detail/{id}(id=${nextPSA.id})}"
+               class="btn btn-secondary">다음</a>
+        </div>
+
         </div>
     </th:block>
 

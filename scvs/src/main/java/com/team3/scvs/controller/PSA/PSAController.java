@@ -67,6 +67,10 @@ public class PSAController {
                 ? psa.getPublishedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
                 : "작성일 정보 없음";
 
+        // 이전 글, 다음 글 호출
+        PSA previousPSA = psaService.findPreviousPSA(id);
+        PSA nextPSA = psaService.findNextPSA(id);
+
 
         // 로그인 상태 기본값 및 관리자 여부 설정
         boolean isLoggedIn = true; // 로그인 여부 확인 로직으로 대체 가능
@@ -77,6 +81,8 @@ public class PSAController {
         model.addAttribute("publishedAt", formattedDate);
         model.addAttribute("isLoggedIn", isLoggedIn);
         model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("previousPSA", previousPSA);
+        model.addAttribute("nextPSA", nextPSA);
 
         return "PSA/PSA-detail"; // Thymeleaf 템플릿 경로
     }
@@ -129,6 +135,16 @@ public class PSAController {
             psaService.savePSA(psa); // 수정된 내용 저장
         }
         return "redirect:/PSA-detail/" + id; // 수정 후 상세 화면으로 리다이렉트
+    }
+
+    /**
+     * 공지 삭제
+     */
+
+    @GetMapping("/PSA/delete/{id}")
+    public String deletePSA(@PathVariable Long id) {
+        psaService.deletePSAById(id);
+        return "redirect:/PSA-list";
     }
 
     /**
