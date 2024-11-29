@@ -47,9 +47,9 @@
             <!-- 페이징 처리 -->
             <div class="pagination">
                 <!-- 첫번째 페이지 -->
-                <a th:href="@{/domestic(page=1)}" class="page-link">맨앞</a>
+                <a th:href="@{/domestic(page=1)}" class="first-page"></a>
                 <!-- 이전 페이지 -->
-                <a th:href="${domesticList.first} ? '#' : @{/domestic(page=${domesticList.number})}" class="page-link">이전</a>
+                <a th:href="${domesticList.first} ? '#' : @{/domestic(page=${domesticList.number})}" class="previous-page"></a>
 
                 <!-- 페이지 번호 -->
                 <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
@@ -62,9 +62,9 @@
                 </span>
 
                 <!-- 다음 페이지 -->
-                <a th:href="${domesticList.last} ? '#' : @{/domestic(page=${domesticList.number + 2})}" class="page-link">다음</a>
+                <a th:href="${domesticList.last} ? '#' : @{/domestic(page=${domesticList.number + 2})}" class="next-page"></a>
                 <!-- 마지막 페이지 -->
-                <a th:href="@{/domestic(page=${domesticList.totalPages})}" class="page-link">맨뒤</a>
+                <a th:href="@{/domestic(page=${domesticList.totalPages})}" class="last-page"></a>
             </div>
         </section>
 

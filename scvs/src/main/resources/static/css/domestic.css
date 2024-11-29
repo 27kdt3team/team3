@@ -118,6 +118,52 @@ body {
 
 }
 
+/* 맨 앞 페이지 (삼각형) */
+.first-page {
+    position: relative;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-right: 8px solid #eee;
+
+}
+
+/* 맨 앞 페이지 (막대 직사각형) */
+.first-page::after {
+    content: '';
+    position: absolute;
+    top: -8px;
+    right: -12px;
+    width: 2px;
+    height: 16px;
+    background-color: #eee;
+
+}
+
+/* 맨 앞 페이지에 마우스를 올렸을 때 */
+.first-page:hover {
+    border-right-color: #ccc; /* 삼각형의 색상 변화 */
+
+}
+
+.first-page:hover::after {
+    background-color: #ccc; /* 막대 직사각형의 색상 변화 */
+
+}
+
+/* 이전 페이지 (삼각형) */
+.previous-page {
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-right: 8px solid #eee;
+
+}
+
+/* 이전 페이지에 마우스를 올렸을 때 */
+.previous-page:hover {
+    border-right-color: #ccc;
+
+}
+
 /* 페이지 링크 */
 .page-link {
     color: #ccc;
@@ -138,6 +184,52 @@ body {
 /* 페이지 링크를 클릭했을 때 */
 .page-link:focus, .page-link:active {
     box-shadow: none;
+
+}
+
+/* 다음 페이지 (삼각형) */
+.next-page {
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 8px solid #eee;
+
+}
+
+/* 다음 페이지에 마우스를 올렸을 때 */
+.next-page:hover {
+    border-left-color: #ccc;
+
+}
+
+/* 맨 뒤 페이지 (삼각형) */
+.last-page {
+    position: relative;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 8px solid #eee;
+
+}
+
+/* 맨 뒤 페이지 (막대 직사각형) */
+.last-page::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: -12px;
+    width: 2px;
+    height: 16px;
+    background-color: #eee;
+
+}
+
+/* 맨 뒤 페이지에 마우스를 올렸을 때 */
+.last-page:hover {
+    border-left-color: #ccc; /* 삼각형의 색상 변화 */
+
+}
+
+.last-page:hover::before {
+    background-color: #ccc; /* 막대 직사각형의 색상 변화 */
 
 }
 

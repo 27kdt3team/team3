@@ -32,7 +32,7 @@ public class DomesticController {
         ForexDto forex = forexService.getForex(); //환율 데이터
 
         //페이징
-        int blockLimit = 5; //한번에 보여질 페이지 번호의 개수
+        int blockLimit = 10; //한번에 보여질 페이지 번호의 개수
         int startPage = (((int)(Math.ceil((double)pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1;
         int endPage = ((startPage + blockLimit - 1) < domesticList.getTotalPages()) ? startPage + blockLimit - 1 : domesticList.getTotalPages();
 
