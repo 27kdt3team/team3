@@ -113,15 +113,19 @@ h2 {
   display: flex;
   align-items: center;
   gap: 10px;
+  margin-left: 10px;
 }
   
 /* 내부자잘한 글자크기 조절용*/
 .index-key {
-  font-size: 28px;
+  font-size: 1.2em;
+  margin-bottom: 4px;
 }
 
 .index-value {
-  font-size: 14px;
+  font-size: 1.75em;
+  margin-bottom: 6px;
+  font-weight: bold;
 }
 
 /*내부 자잘한 폰트 및 라인 정리용*/
@@ -133,10 +137,17 @@ h2 {
 .before-value-red {
   color: red;
   display: inline;
+  font-weight: bold;
+}
+.before-value-dark {
+  color: black;
+  display: inline;
+  font-weight: bold;
 }
 .before-value-blue {
   color: blue;
   display: inline;
+  font-weight: bold;
 }
 
 /*사이 검은 선*/
