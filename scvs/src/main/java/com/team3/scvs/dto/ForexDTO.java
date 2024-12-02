@@ -5,16 +5,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 /**
- * KOSDAQ, KOSPI, NASDAQ, S&P500 지수
+ * 원/달러 환율 지수
  */
-public class IndexDTO {
-    private String title;
-    private double currentValue;
+public class ForexDTO {
+    private String forexName;
+    private double rate;
     private double changeValue;
     private double changePercent;
+    private LocalDateTime lastUpdated;
 }

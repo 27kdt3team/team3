@@ -4,7 +4,7 @@
       layout:decorate="~{layouts/base}">
 
 <th:block layout:fragment="css">
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/index.css">
 </th:block>
 
 <body>
@@ -59,16 +59,25 @@
             <h2>주요 경제 지표</h2>
             <br>
 
-            <div th:replace="Partials/statItem.html::statItem('image-placeholder.jpg','환율',
-                '1406.05원', '+15.8', '0.5')"></div>
-            <div th:replace="Partials/statItem.html::statItem('image-placeholder.jpg','환율',
-                '16854.15', '+30.8', '0.5')"></div>
-            <div th:replace="Partials/statItem.html::statItem('image-placeholder.jpg','환율',
-                '5625.05', '+15.8', '0.5')"></div>
-            <div th:replace="Partials/statItem.html::statItem('image-placeholder.jpg','환율',
-                '2260.05', '+15.8', '0.5')"></div>
-            <div th:replace="Partials/statItem.html::statItem('image-placeholder.jpg','환율',
-                '1406.05', '+15.8', '0.5')"></div>
+            <!-- forex apply -->
+            <div th:replace="Partials/statItem.html::statItem(
+                    'images/indicesForex/forex.png',
+                    ${forex.forexName},
+                    ${forex.rate},
+                    ${forex.changeValue},
+                    ${forex.changePercent}
+                )"></div>
+
+            <!-- indicex apply -->
+            <div th:each="index : ${indices}">
+                <div th:replace="Partials/statItem.html::statItem(
+                     ${index.title == 'KOSPI' or index.title == 'KOSDAQ'} ? 'images/indicesForex/kor.png' : 'images/indicesForex/usa.png',
+                    ${index.title},
+                    ${index.currentValue},
+                    ${index.changeValue},
+                    ${index.changePercent}
+                )"></div>
+            </div>
 
         </aside>
     </main>
