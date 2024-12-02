@@ -7,6 +7,7 @@ import com.team3.scvs.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -28,12 +29,9 @@ public class CommunityController {
     @GetMapping("/community")
     public String community(@RequestParam("tickerId") Long tickerId,
                              Model model) {
-        //로그인 기능이 완성되면 호출
-        //Long userId = customUserDetailsService.getLoggedInUserId();
 
-        //로그인 기능 사라지면 지우기
-        long userId = 1;
-
+        //userId가져오기
+        Long userId = customUserDetailsService.getLoggedInUserId();
         //주식 정보 가져오기
         CommunityStockInfoEntity stockInfo = communityService.getstockinfo(tickerId);
         // 커뮤니티 테이블 가져오기
@@ -63,11 +61,8 @@ public class CommunityController {
     public String addComment(@RequestParam("CommunityId") Long communityId,
                              @RequestParam("tickerId") Long tickerId,
                              @RequestParam("commentInput") String commentInput) {
-        //로그인 기능이 완성되면 호출
-        //Long userId = customUserDetailsService.getLoggedInUserId();
 
-        //로그인 기능 사라지면 지우기
-        long userId = 1;
+        Long userId = customUserDetailsService.getLoggedInUserId();
 
         // 댓글 등록 로직 호출
         communityService.addComment(commentInput, communityId, userId);
@@ -81,12 +76,8 @@ public class CommunityController {
                            @RequestParam("voteType") String voteType,
                            @RequestParam("tickerId") Long tickerId,
                            Model model) {
-        //로그인 기능이 완성되면 호출
-        //Long userId = customUserDetailsService.getLoggedInUserId();
 
-        //로그인 기능 사라지면 지우기
-        long userId = 1;
-
+        Long userId = customUserDetailsService.getLoggedInUserId();
         try {
             // 투표 처리 로직 호출
             boolean isVoteSuccessful = communityService.castVote(communityId, userId, voteType);
@@ -108,11 +99,8 @@ public class CommunityController {
     public String deleteComment(@RequestParam("communityCommentId") Long communityCommentId,
                                 @RequestParam("tickerId") Long tickerId,
                                 Model model) {
-        //로그인 기능이 완성되면 호출
-        //Long userId = customUserDetailsService.getLoggedInUserId();
 
-        // 로그인된 사용자 ID 가져오기 (임시)
-        Long userId = 1L; // 실제 로그인 기능 구현 후 교체
+        Long userId = customUserDetailsService.getLoggedInUserId();
         try {
             // 삭제 로직 호출
             communityService.deleteComment(communityCommentId, userId);
@@ -131,11 +119,7 @@ public class CommunityController {
                               @RequestParam("editedComment") String updatedComment,
                               Model model) {
 
-        //로그인 기능이 완성되면 호출
-        //Long userId = customUserDetailsService.getLoggedInUserId();
-
-        // 로그인된 사용자 ID 가져오기 (임시)
-        Long userId = 1L; // 실제 로그인 기능 구현 후 교체
+        Long userId = customUserDetailsService.getLoggedInUserId();
 
         try {
             // 수정 로직 호출
@@ -151,12 +135,31 @@ public class CommunityController {
     }
 
 
-//    @GetMapping("/domestic/id")
-//    public String getNewsDetail(@PathVariable("id") String id, Model model) {
-//        // ID에 해당하는 뉴스 데이터를 가져오기
-//        NewsDTO news = newsService.getNewsById(id);
-//        model.addAttribute("newsDetail", news);
-//        return "news-detail"; // 상세 페이지를 보여줄 Thymeleaf 템플릿 이름
-//    }
+    @GetMapping("/domestic/id")
+    public String getNewsDetail(@PathVariable("id") String id, Model model) {
+        // region 추출 (kor_ 또는 usa_)
+        String region;
+        if (id.startsWith("kor_")) {
+            region = "kor";
+        } else if (id.startsWith("usa_")) {
+            region = "usa";
+        } else {
+            throw new IllegalArgumentException("Invalid ID format: " + id);
+        }
+
+        // ID에서 접두사 제거 (실제 뉴스 ID만 추출)
+        String actualId = id.substring(id.indexOf("_") + 1);
+
+        // ID에 해당하는 뉴스 데이터를 가져오기
+        // 나중에 상세페이지 구현 후 Entity 확인해서 수정
+        //NewsDTO news = newsService.getNewsById(actualId);
+
+        // 뉴스 데이터와 지역 정보를 모델에 추가
+        //model.addAttribute("newsDetail", news);
+        model.addAttribute("region", region); // 지역 정보 추가
+
+        return "news-detail"; // 상세 페이지를 보여줄 Thymeleaf 템플릿 이름
+    }
+
 
 }

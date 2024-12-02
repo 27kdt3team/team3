@@ -25,7 +25,7 @@
                     <input type="hidden" name="voteType" value="positive" />
                     <input type="hidden" name="tickerId" th:value="${stockInfo.tickerId}" />
                     <button type="submit" class="vote-button positive-vote">
-                        😊 <span th:text="${voteInfo.positiveVotes}"></span>
+                        &#128522; <span th:text="${voteInfo.positiveVotes}"></span>
                     </button>
                 </form>
 
@@ -35,7 +35,7 @@
                     <input type="hidden" name="voteType" value="negative" />
                     <input type="hidden" name="tickerId" th:value="${stockInfo.tickerId}" />
                     <button type="submit" class="vote-button negative-vote">
-                        😢 <span th:text="${voteInfo.negativeVotes}"></span>
+                        &#128542; <span th:text="${voteInfo.negativeVotes}"></span>
                     </button>
                 </form>
             </div>
@@ -135,7 +135,7 @@
                 </ul>
             </div>
             <div class="no-data" th:if="${stockinfo == null}">
-                <p>No market data available for this ticker.</p>
+                <p>마켓 정보가 없습니다</p>
             </div>
         </div>
 
@@ -145,7 +145,7 @@
             <ul>
                 <!-- 반복문으로 뉴스 제목 출력 -->
                 <li th:each="news : ${stocknewsinfo}">
-                    <a th:href="@{/news/detail/{id}(id=${news.id})}" th:text="${news.title}"></a>
+                    <a th:href="@{/domestic/id(id=${news.id})}" th:text="${news.title}"></a>
                 </li>
             </ul>
         </div>
