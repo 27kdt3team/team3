@@ -29,7 +29,7 @@ public class DomesticDto {
     }
 
     //엔티티를 dto로 변환
-    public static DomesticDto toDomesticDto (DomesticEntity domesticEntity) {
+    public static DomesticDto toDomesticDto(DomesticEntity domesticEntity) {
         DomesticDto domesticDto = new DomesticDto();
 
         domesticDto.setKorEconNewsId(domesticEntity.getKorEconNewsId());
