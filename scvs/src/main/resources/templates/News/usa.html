@@ -32,15 +32,18 @@
             <!-- 동적으로 DB에서 가져온 데이터 출력 -->
             <div th:each="newsItem : ${usaList}" class="news-item">
                 <div class="text-content">
-                    <div class="media-date">
-                        <p class="media" th:text="${newsItem.source}"></p>
-                        <p class="date" th:text="${newsItem.publishedAt}"></p>
+                    <div class="source-publishedAt">
+                        <!-- 언론사 -->
+                        <p class="source" th:text="${newsItem.source}"></p>
+                        <!-- 작성일 -->
+                        <p class="publishedAt" th:text="${newsItem.publishedAt}"></p>
                     </div>
                     <h4>
-                        <!-- 뉴스 아이디와 현재 머물고 있는 페이지 값을 상세 조회 메서드로 넘겨주기 -->
+                        <!-- 기사 제목을 클릭하면 뉴스 아이디와 현재 머물고 있는 페이지 값을 상세 조회 메서드로 넘겨주기 -->
                         <a th:href="@{|/usa/${newsItem.usaEconNewsId}|(page=${usaList.number + 1})}" th:text="${newsItem.title}" class="news-title"></a>
                     </h4>
                 </div>
+                <!-- 뉴스 이미지 -->
                 <img th:src="${newsItem.imageLink}" alt="Unable to load image" width="180" height="90" class="news images">
             </div>
 
@@ -53,7 +56,7 @@
 
                 <!-- 페이지 번호 -->
                 <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
-                    <!-- 현재 페이지는 링크 없이 숫자만으로 표시 (domesticList.number 값은 실제 페이지보다 1이 작은 값) -->
+                    <!-- 현재 페이지는 링크 없이 숫자만으로 표시 (usaList.number 값은 실제 페이지보다 1이 작은 값) -->
                     <span th:if="${page == usaList.number + 1}" th:text="${page}" class="current-page"></span>
                     <!-- 현재 페이지 외의 페이지들은 숫자에 링크로 표시 -->
                     <span th:unless="${page == usaList.number + 1}">
@@ -72,11 +75,15 @@
         <aside class="exchange-rate-container">
             <div class="rate">
                 <div class="currency-symbol">$ / ₩</div>
+                <!-- 환율 -->
                 <div class="currency-value" th:text="${#numbers.formatDecimal(forex.rate, 2, 2)}"></div>
                 <div class="currency-change">
-                    <div class="change-value" th:text="'변동가격: ' + ${#numbers.formatDecimal(forex.changeValue, 2, 2)}"></div>
-                    <div class="change-percent" th:text="'변동률: ' + ${#numbers.formatDecimal(forex.changePercent, 2, 2)} + '%'"></div>
+                    <!-- 도형으로 상승, 하락, 유지 표시 -->
+                    <span class="triangle" th:classappend="${forex.changeValue > 0} ? 'up' : (${forex.changeValue < 0} ? 'down' : 'stay')"></span>
+                    <!-- 변동값과 변동률 -->
+                    <span th:text="${#numbers.formatDecimal(forex.changeValue, 2, 2)} + ' ( ' + ${#numbers.formatDecimal(forex.changePercent, 2, 2)} + '% )'"></span>
                 </div>
+                <!-- 업데이트 날짜 -->
                 <div class="currency-date" th:text="'업데이트: ' + ${forex.lastUpdated}"></div>
             </div>
         </aside>

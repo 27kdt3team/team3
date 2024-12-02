@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 @RequiredArgsConstructor //자동으로 생성자 생성
@@ -19,16 +20,17 @@ public class UsaController {
     private final UsaService usaService;
     private final ForexService forexService;
 
-    @ModelAttribute("isLoggedIn") //자동으로 설정
+    @ModelAttribute("isLoggedIn")
     public boolean setDefaultIsLoggedIn() {
         return false; //기본값 설정
 
     }
 
+    //뉴스 목록 조회
     //url: /usa?page=1
     @GetMapping("/usa")
     public String getUsaList(@PageableDefault(page = 1) Pageable pageable, Model model) {
-        Page<UsaDto> usaList = usaService.getUsaList(pageable); //미국 경제 뉴스 데이터 리스트
+        Page<UsaDto> usaList = usaService.getUsaList(pageable); //페이징된 미국 경제 뉴스 데이터 리스트
         ForexDto forex = forexService.getForex(); //환율 데이터
 
         //페이징
@@ -36,15 +38,31 @@ public class UsaController {
         int startPage = (((int)(Math.ceil((double)pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1;
         int endPage = ((startPage + blockLimit - 1) < usaList.getTotalPages()) ? startPage + blockLimit - 1 : usaList.getTotalPages();
 
-        //모델에 데이터 추가
-        model.addAttribute("usaList", usaList);
-        model.addAttribute("startPage", startPage);
-        model.addAttribute("endPage", endPage);
+        //모델에 데이터 추가하여 뷰에 전달
+        model.addAttribute("usaList", usaList); //뉴스 데이터 리스트
+        model.addAttribute("startPage", startPage); //첫번째 페이지
+        model.addAttribute("endPage", endPage); //마지막 페이지
 
-        model.addAttribute("forex", forex);
+        model.addAttribute("forex", forex); //환율 데이터
 
-        //렌더링할 html 파일 경로
+        //뷰 템플릿
         return "News/usa";
+
+    }
+
+    //뉴스 상세 페이지 조회
+    //url: /usa/1?page=1
+    @GetMapping("/usa/{usaEconNewsId}")
+    public String findById(@PathVariable Long usaEconNewsId, Model model,
+                           @PageableDefault(page = 1) Pageable pageable) {
+        UsaDto usaDto = usaService.findById(usaEconNewsId); //usaEconNewsId로 조회한 뉴스 데이터
+
+        //모델에 데이터 추가하여 뷰에 전달
+        model.addAttribute("usa", usaDto); //뉴스 상세 데이터
+        model.addAttribute("page", pageable.getPageNumber()); //현재 페이지
+
+        //뷰 템플릿
+        return "News/usaDetail";
 
     }
 
