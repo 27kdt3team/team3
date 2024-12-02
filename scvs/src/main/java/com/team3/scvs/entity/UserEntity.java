@@ -24,4 +24,5 @@ public class UserEntity {
     private String email; // 이메일
     private String password; // 암호화된 비밀번호
     private String nickname; // 닉네임
+    private String userrole; // 역할 user or admin
 }
