@@ -1,5 +1,6 @@
 package com.team3.scvs.dto;
 
+import com.team3.scvs.entity.DomesticEntity;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -24,6 +25,22 @@ public class DomesticDto {
         this.source = source;
         this.publishedAt = publishedAt;
         this.imageLink = imageLink;
+
+    }
+
+    //엔티티를 dto로 변환
+    public static DomesticDto toDomesticDto (DomesticEntity domesticEntity) {
+        DomesticDto domesticDto = new DomesticDto();
+
+        domesticDto.setKorEconNewsId(domesticEntity.getKorEconNewsId());
+        domesticDto.setTitle(domesticEntity.getTitle());
+        domesticDto.setSource(domesticEntity.getSource());
+        domesticDto.setImageLink(domesticEntity.getImageLink());
+        domesticDto.setContent(domesticEntity.getContent());
+        domesticDto.setPublishedAt(domesticEntity.getPublishedAt());
+        domesticDto.setLink(domesticEntity.getLink());
+
+        return domesticDto;
 
     }
 

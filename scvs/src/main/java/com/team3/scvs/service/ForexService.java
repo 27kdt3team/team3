@@ -11,11 +11,12 @@ import org.springframework.stereotype.Service;
 public class ForexService {
     private final ForexRepository forexRepository;
 
+    //환율 정보
     public ForexDto getForex() {
         //엔티티 조회
         ForexEntity forexEntity = forexRepository.findFirstByOrderByForexIdDesc();
 
-        //엔티티를 dto로 변환
+        //엔티티를 dto로 바꿔서 반환
         return new ForexDto(
                 forexEntity.getForexId(),
                 forexEntity.getRate(),
