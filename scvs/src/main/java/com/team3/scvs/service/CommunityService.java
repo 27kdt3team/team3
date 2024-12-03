@@ -1,5 +1,6 @@
 package com.team3.scvs.service;
 
+import com.team3.scvs.dto.*;
 import com.team3.scvs.entity.*;
 import com.team3.scvs.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -8,12 +9,11 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CommunityService {
-
-
 
     private final CommunityStockInfoRepository communityStockInfoRepository;
     private final CommunityVoteRepository communityVoteRepository;
@@ -25,46 +25,48 @@ public class CommunityService {
     private final StocksRepository stocksRepository;
     private final StocksNewsRepository stocksNewsRepository;
 
-    public CommunityStockInfoEntity getstockinfo(Long tickerId) {
-        return communityStockInfoRepository.findById(tickerId).orElse(null);
+    public CommunityStockInfoDTO getStockInfo(Long tickerId) {
+        // 엔티티 조회
+        CommunityStockInfoEntity entity = communityStockInfoRepository.findById(tickerId).orElse(null);
+        // 엔티티가 존재하지 않으면 null 반환
+        if (entity == null) {
+            return null;
+        }
+        // DTO로 변환하여 반환
+        return convertToDTO(entity);
     }
 
-    public CommunityVoteEntity getVoteInfo(long communityId) {
-        // communityId로 CommunityVoteEntity 조회
+    public CommunityVoteDTO getVoteInfo(long communityId) {
         CommunityVoteEntity voteInfo = communityVoteRepository.findByCommunity_CommunityId(communityId).orElse(null);
         if (voteInfo == null) {
-            // 조회 결과가 없으면 새 엔티티 생성
             voteInfo = new CommunityVoteEntity();
             voteInfo.setCommunity(new CommunityEntity());
-            voteInfo.getCommunity().setCommunityId(communityId); // communityId 설정
-            voteInfo.setPositiveVotes(0); // 초기값 설정
-            voteInfo.setNegativeVotes(0); // 초기값 설정
-            // 새로 생성한 엔티티 저장
+            voteInfo.getCommunity().setCommunityId(communityId);
+            voteInfo.setPositiveVotes(0);
+            voteInfo.setNegativeVotes(0);
             voteInfo = communityVoteRepository.save(voteInfo);
         }
-        return voteInfo; // 기존 또는 새로 생성된 엔티티 반환
+        return convertToDTO(voteInfo);
     }
 
-    public boolean castVote(Long communityId, Long userId, String voteType) {
-        // CommunityVoteEntity 조회 또는 생성
-        CommunityVoteEntity voteInfo = getVoteInfo(communityId);
+    public boolean castVote(UserVoteDTO userVoteDTO, String voteType) {
+        CommunityVoteEntity voteInfo = communityVoteRepository.findByCommunity_CommunityId(userVoteDTO.getCommunityId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 communityId에 대한 투표 데이터가 존재하지 않습니다."));
 
-        // UserVoteEntity 조회 또는 생성
-        UserVoteEntity userVote = userVoteRepository.findByUserIdAndCommunityId(userId, communityId)
+        UserVoteEntity userVote = userVoteRepository.findByUserIdAndCommunityId(userVoteDTO.getUserId(), userVoteDTO.getCommunityId())
                 .orElseGet(() -> {
-                    // UserVoteEntity가 없으면 새로 생성
                     UserVoteEntity newUserVote = new UserVoteEntity();
-                    newUserVote.setUserId(userId);
-                    newUserVote.setCommunityId(communityId);
-                    newUserVote.setVote(false); // 기본값 false
-                    newUserVote.setCreatedAt(LocalDateTime.now()); // 생성 시간 설정
+                    newUserVote.setUserId(userVoteDTO.getUserId());
+                    newUserVote.setCommunityId(userVoteDTO.getCommunityId());
+                    newUserVote.setVote(false);
+                    newUserVote.setCreatedAt(LocalDateTime.now());
                     return userVoteRepository.save(newUserVote);
                 });
+
         if (userVote.isVote()) {
-            return false; // 투표 실패
+            return false;
         }
 
-        // 투표 데이터 업데이트
         switch (voteType.toLowerCase()) {
             case "positive":
                 voteInfo.setPositiveVotes(voteInfo.getPositiveVotes() + 1);
@@ -76,42 +78,49 @@ public class CommunityService {
                 throw new IllegalArgumentException("올바르지 않은 투표 유형입니다: " + voteType);
         }
 
-        // 변경된 투표 데이터 저장
         userVote.setVote(true);
         userVoteRepository.save(userVote);
         communityVoteRepository.save(voteInfo);
 
-        return true; // 성공적으로 업데이트되었음을 반환
+        return true;
     }
 
-    public CommunityEntity getOrCreateCommunity(Long tickerId) {
+    public CommunityDTO getOrCreateCommunity(Long tickerId) {
         // tickerId로 CommunityEntity 조회
         CommunityEntity community = communityRepository.findByTickerId(tickerId).orElse(null);
+
         if (community == null) {
             // 조회 결과가 없으면 새 엔티티 생성
             CommunityEntity newCommunity = new CommunityEntity();
             newCommunity.setTickerId(tickerId); // tickerId 설정
             community = communityRepository.save(newCommunity); // 저장 후 반환
         }
-        return community; // 조회된 또는 새로 생성된 엔티티 반환
+
+        // convertToDTO 메서드를 사용하여 CommunityDTO로 변환
+        return convertToDTO(community);
     }
 
-    public List<CommunityCommentViewEntity> getComments(Long communityId) {
-        return communityCommentViewRepository.findAllByCommunityIdOrderByPublishedAtDesc(communityId);
+    public List<CommunityCommentViewDTO> getComments(Long communityId) {
+        return communityCommentViewRepository.findAllByCommunityIdOrderByPublishedAtDesc(communityId)
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
-    public void addComment(String commentInput, Long communityId, Long userId) {
+    public void addComment(CommunityCommentDTO commentDTO) {
         // CommunityEntity 조회
-        CommunityEntity community = communityRepository.findById(communityId)
+        CommunityEntity community = communityRepository.findById(commentDTO.getCommunityId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 communityId에 대한 커뮤니티가 존재하지 않습니다."));
+
         // UserEntity 조회
-        UserEntity user = userRepository.findById(userId)
+        UserEntity user = userRepository.findById(commentDTO.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 userId에 대한 사용자가 존재하지 않습니다."));
+
         // 새로운 댓글 엔티티 생성 및 설정
         CommunityCommentEntity newComment = new CommunityCommentEntity();
         newComment.setCommunity(community);
         newComment.setUser(user);
-        newComment.setComment(commentInput);
+        newComment.setComment(commentDTO.getComment());
 
         // 댓글 저장
         communityCommentRepository.save(newComment);
@@ -149,12 +158,104 @@ public class CommunityService {
         return true; // 성공적으로 수정되었음을 반환
     }
 
-    public Optional<StocksEntity> getStocksinfo(Long tickerId) {
-        return stocksRepository.findById(tickerId);
+    public Optional<StocksDTO> getStocksInfo(Long tickerId) {
+        return stocksRepository.findById(tickerId).map(this::convertToDTO);
     }
-    public List<StocksNewsEntity> getStocksNewstitle(Long tickerId){
-        return stocksNewsRepository.findLatestByTickerId(tickerId).stream().limit(5).toList();
 
+    public List<StocksNewsDTO> getStocksNewsTitle(Long tickerId) {
+        return stocksNewsRepository.findLatestByTickerId(tickerId).stream()
+                .map(this::convertToDTO)
+                .limit(5)
+                .collect(Collectors.toList());
     }
+
+
+
+    // Entity -> DTO 변환 메서드
+    private CommunityStockInfoDTO convertToDTO(CommunityStockInfoEntity entity){
+        return new CommunityStockInfoDTO(
+                entity.getTickerId(),
+                entity.getSymbol(),
+                entity.getCompany(),
+                entity.getCurrentprice()
+        );
+    }
+
+    private CommunityCommentDTO convertToDTO(CommunityCommentEntity entity) {
+        return new CommunityCommentDTO(
+                entity.getCommunityCommentId(),
+                entity.getCommunity().getCommunityId(),
+                entity.getUser().getUserId(),
+                entity.getComment(),
+                entity.getPublishedAt(),
+                entity.getUpdatedAt()
+        );
+    }
+
+    private CommunityVoteDTO convertToDTO(CommunityVoteEntity entity) {
+        return new CommunityVoteDTO(
+                entity.getCommunityVoteId(),
+                entity.getCommunity().getCommunityId(),
+                entity.getPositiveVotes(),
+                entity.getNegativeVotes()
+        );
+    }
+
+    private CommunityDTO convertToDTO(CommunityEntity entity) {
+        return new CommunityDTO(
+                entity.getCommunityId(),
+                entity.getTickerId()
+        );
+    }
+
+    private StocksDTO convertToDTO(StocksEntity entity) {
+        return new StocksDTO(
+                entity.getStockId(),
+                entity.getTicker(),
+                entity.getMarket(),
+                entity.getCurrentPrice(),
+                entity.getClose(),
+                entity.getOpen(),
+                entity.getVolume(),
+                entity.getFiftytwoWeekLow(),
+                entity.getFiftytwoWeekHigh(),
+                entity.getDayLow(),
+                entity.getDayHigh(),
+                entity.getReturnOnAssets(),
+                entity.getReturnOnEquity(),
+                entity.getEnterpriseValue(),
+                entity.getEnterpriseToEBITDA(),
+                entity.getPriceToBook(),
+                entity.getPriceToSales(),
+                entity.getEarningsPerShare(),
+                entity.getCurrentRatio(),
+                entity.getDebtToEquity()
+        );
+    }
+
+    private StocksNewsDTO convertToDTO(StocksNewsEntity entity) {
+        return new StocksNewsDTO(
+                entity.getId(),
+                entity.getTitle(),
+                entity.getTickerId(),
+                entity.getSentiment(),
+                entity.getPublishedAt(),
+                entity.getMarket()
+        );
+    }
+
+    private CommunityCommentViewDTO convertToDTO(CommunityCommentViewEntity entity) {
+        return new CommunityCommentViewDTO(
+                entity.getId(),
+                entity.getUserId(),
+                entity.getCommunityId(),
+                entity.getNickname(),
+                entity.getComment(),
+                entity.getPublishedAt(),
+                entity.getUpdatedAt(),
+                entity.getTimeAgo()
+        );
+    }
+
 
 }

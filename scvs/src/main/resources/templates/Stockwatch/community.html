@@ -17,7 +17,7 @@
             <!-- 현재 가격 및 투표 -->
             <div class="stock-price">
                 <!-- 현재 주식 가격 -->
-                <span class="current-price" th:text="${stockInfo.currentprice}"></span>
+                <span class="current-price" th:text="${stockInfo.currentPrice}"></span>
 
                 <!-- 긍정 투표 버튼 -->
                 <form action="/castVote" method="POST" style="display: inline;">
@@ -44,7 +44,7 @@
 
         <div class="community">
             <form class="comment-form" action="/addComment" method="post">
-                <input type="hidden" name="CommunityId" th:value="${communityId}"/>
+                <input type="hidden" name="communityId" th:value="${communityId}"/>
                 <input type="hidden" name="tickerId" th:value="${stockInfo.tickerId}"/>
                 <div class="input-section">
                     <input type="text" class="comment-input" name="commentInput" placeholder="의견을 남겨 보세요" required />
@@ -91,6 +91,7 @@
                 </th:block>
             </div>
         </div>
+
         <!-- maker-stats -->
         <div class="market-stats-wrapper">
             <h1>Market Stats</h1>
@@ -114,7 +115,7 @@
                     </li>
                     <li>
                         <span>52 Week Range:</span>
-                        <span th:text="${stockinfo.fiftytwoWeekLow} + ' - ' + ${stockinfo.fiftytwoWeekHigh}"></span>
+                        <span th:text="${stockinfo.fiftyTwoWeekLow} + ' - ' + ${stockinfo.fiftyTwoWeekHigh}"></span>
                     </li>
                     <li>
                         <span>ROE:</span>
