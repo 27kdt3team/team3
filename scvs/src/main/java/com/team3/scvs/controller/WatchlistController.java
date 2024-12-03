@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -29,7 +30,8 @@ public class WatchlistController {
 
         // 관심 목록에 있는 종목 리스트 추출하기
         List<WatchlistStocksEntity> watchlistStocks = watchlists.stream()
-                .flatMap(watchlist -> watchlist.getStocks().stream())
+                .flatMap(watchlist -> watchlist.getStocks().stream()) //리스트안에 리스트를 하나의 스트림으로 평탄화 작업
+                .sorted(Comparator.comparing(stock -> stock.getTicker().getSymbol()))  // Symbol 기준으로 정렬
                 .toList();
 
         // 전체 종목 리스트 가져오기
@@ -66,11 +68,6 @@ public class WatchlistController {
             return "redirect:/watchlist?userId=" + userId;
         }
     }
-
-
-
-
-
 
 
     // 관심 목록에서 종목 삭제

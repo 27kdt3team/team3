@@ -13,4 +13,4 @@ public interface WatchlistStocksRepository extends JpaRepository<WatchlistStocks
     Optional<WatchlistStocksEntity> findByUserWatchlistAndTicker(UserWatchlistEntity userWatchlist, TickerEntity ticker);
 
     boolean existsByUserWatchlistAndTicker(UserWatchlistEntity userWatchlist, TickerEntity ticker);
-}
+    }

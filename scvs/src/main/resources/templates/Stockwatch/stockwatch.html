@@ -1,10 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base}">
+<th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/stockwatch.css}">
+</th:block>
 <body>
+<th:block layout:fragment="MainBodyContents">
+    <div class="container">
+        <div class="Stock-info">
+            <p>주식 정보</p>
+        </div>
+        <div class = "graph">
+            <p> 그래프</p>
+        </div>
+        <div class="market-stats">
+            <p>회사정보</p>
+        </div>
+        <div class="news">
+            <p>뉴스</p>
+        </div>
+        <div class="community">
+            <p>토론방</p>
+        </div>
+    </div>
+
+</th:block>
 
 </body>
 </html>
