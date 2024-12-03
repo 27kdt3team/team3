@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layouts/base}">
 <body>
 
@@ -48,10 +49,14 @@
             <a href="/psa/add" class="btn btn-primary">공지 추가</a>
         </div>
         -->
+        <!-- 로그인 상태 안내 -->
+        <div sec:authorize="isAnonymous()">
+            <p>로그인이 필요합니다.</p>
+        </div>
 
         <!-- 공지추가 버튼 -->
-        <div class="PSA-add-button">
-            <a href="/PSA-add" class="btn btn-primary">공지추가</a>
+        <div class="PSA-add-button" sec:authorize="hasRole('ROLE_ADMIN')" style="margin-top: 20px;">
+            <a href="/PSA-add" class="btn btn-primary">공지 추가</a>
         </div>
 
         <!-- 페이지네이션 -->

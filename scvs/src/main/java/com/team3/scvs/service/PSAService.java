@@ -18,9 +18,11 @@ public class PSAService {
     @Autowired
     private PSARepository psaRepository;
 
-    // 모든 공지사항 조회 (최신순 정렬)
+    // 모든 공지사항 조회 (공지 id순 정렬)
     public List<PSA> findAllPSAs() {
-        return psaRepository.findAllByOrderByPublishedAtDesc();
+        //return psaRepository.findAllByOrderByPublishedAtDesc();
+
+        return psaRepository.findAllByOrderByIdDesc();
     }
 
     // 특정 공지사항 ID로 조회
@@ -55,8 +57,8 @@ public class PSAService {
 
     // 페이지네이션 지원 공지사항 목록 조회
     public Page<PSA> findAllPSAsPaginated(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return psaRepository.findAllByOrderByPublishedAtDesc(pageable);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+        return psaRepository.findAll(pageable); // findAll로 변경
     }
 
     // 페이징을 지원하는 검색 기능

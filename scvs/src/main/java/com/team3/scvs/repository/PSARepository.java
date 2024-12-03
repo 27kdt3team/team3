@@ -18,7 +18,10 @@ public interface PSARepository extends JpaRepository<PSA, Long> {
     List<PSA> findByTitleContaining(String keyword);
 
     // 작성일 기준 내림차순 정렬
-    List<PSA> findAllByOrderByPublishedAtDesc();
+    //List<PSA> findAllByOrderByPublishedAtDesc();
+
+    // 공지 id 기준 내림차순 정렬
+    List<PSA> findAllByOrderByIdDesc();
 
     // 특정 기간 동안 작성된 공지사항 검색
     List<PSA> findByPublishedAtBetween(LocalDateTime startDate, LocalDateTime endDate);
@@ -27,7 +30,7 @@ public interface PSARepository extends JpaRepository<PSA, Long> {
     PSA findTopByOrderByPublishedAtDesc();
 
     // 페이지 단위로 공지사항 가져오기
-    Page<PSA> findAllByOrderByPublishedAtDesc(Pageable pageable);
+    Page<PSA> findAll(Pageable pageable);
 
     // 페이징 가능한 검색 메서드
     Page<PSA> findByTitleContaining(String title, Pageable pageable);

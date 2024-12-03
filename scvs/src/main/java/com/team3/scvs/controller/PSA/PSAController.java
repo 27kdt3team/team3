@@ -29,7 +29,7 @@ public class PSAController {
             @RequestParam(defaultValue = "") String query, // 검색어 기본값
             Model model) {
 
-        // 공지사항 페이지 데이터 가져오기(작업중)
+        // 공지사항 페이지 데이터 가져오기
         Page<PSA> psaPage;
         if (query.isEmpty()) {
             // 검색어가 없는 경우 전체 조회
