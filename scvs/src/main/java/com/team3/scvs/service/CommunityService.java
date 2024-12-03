@@ -6,7 +6,6 @@ import com.team3.scvs.repository.*;
 import com.team3.scvs.util.ConvertUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import com.team3.scvs.util.ConvertUtil.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -107,7 +106,7 @@ public class CommunityService {
     public List<CommunityCommentViewDTO> getComments(Long communityId) {
         return communityCommentViewRepository.findAllByCommunityIdOrderByPublishedAtDesc(communityId)
                 .stream()
-                .map(convert::convertToDTO) // ConvertUtil의 convertToDTO 메서드 호출
+                .map(convert::convertToDTO)
                 .collect(Collectors.toList());
     }
 
