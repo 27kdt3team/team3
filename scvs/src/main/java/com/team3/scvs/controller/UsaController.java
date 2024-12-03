@@ -1,7 +1,7 @@
 package com.team3.scvs.controller;
 
-import com.team3.scvs.dto.ForexDto;
-import com.team3.scvs.dto.UsaDto;
+import com.team3.scvs.dto.ForexDTO;
+import com.team3.scvs.dto.UsaDTO;
 import com.team3.scvs.service.ForexService;
 import com.team3.scvs.service.UsaService;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +30,8 @@ public class UsaController {
     //url: /usa?page=1
     @GetMapping("/usa")
     public String getUsaList(@PageableDefault(page = 1) Pageable pageable, Model model) {
-        Page<UsaDto> usaList = usaService.getUsaList(pageable); //페이징된 미국 경제 뉴스 데이터 리스트
-        ForexDto forex = forexService.getForex(); //환율 데이터
+        Page<UsaDTO> usaList = usaService.getUsaList(pageable); //페이징된 미국 경제 뉴스 데이터 리스트
+        ForexDTO forex = forexService.getKrwUsdForex(); //환율 데이터
 
         //페이징
         int blockLimit = 10; //한번에 보여질 페이지 번호의 개수
@@ -55,7 +55,7 @@ public class UsaController {
     @GetMapping("/usa/{usaEconNewsId}")
     public String findById(@PathVariable Long usaEconNewsId, Model model,
                            @PageableDefault(page = 1) Pageable pageable) {
-        UsaDto usaDto = usaService.findById(usaEconNewsId); //usaEconNewsId로 조회한 뉴스 데이터
+        UsaDTO usaDto = usaService.findById(usaEconNewsId); //usaEconNewsId로 조회한 뉴스 데이터
 
         //모델에 데이터 추가하여 뷰에 전달
         model.addAttribute("usa", usaDto); //뉴스 상세 데이터

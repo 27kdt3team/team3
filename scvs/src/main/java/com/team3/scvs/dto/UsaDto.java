@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class UsaDto {
+public class UsaDTO {
     private Long usaEconNewsId;
     private String title;
     private String source;
@@ -20,7 +20,7 @@ public class UsaDto {
     private String link;
 
     //뉴스 리스트 생성자
-    public UsaDto(Long usaEconNewsId, String title, String source, LocalDateTime publishedAt, String imageLink) {
+    public UsaDTO(Long usaEconNewsId, String title, String source, LocalDateTime publishedAt, String imageLink) {
         this.usaEconNewsId = usaEconNewsId;
         this.title = title;
         this.source = source;
@@ -30,8 +30,8 @@ public class UsaDto {
     }
 
     //엔티티를 dto로 변환
-    public static UsaDto toUsaDto(UsaEntity usaEntity) {
-        UsaDto usaDto = new UsaDto();
+    public static UsaDTO toUsaDto(UsaEntity usaEntity) {
+        UsaDTO usaDto = new UsaDTO();
 
         usaDto.setUsaEconNewsId(usaEntity.getUsaEconNewsId());
         usaDto.setTitle(usaEntity.getTitle());
