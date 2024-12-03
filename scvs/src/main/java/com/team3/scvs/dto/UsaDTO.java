@@ -1,9 +1,8 @@
 package com.team3.scvs.dto;
 
-import com.team3.scvs.entity.UsaEntity;
 import lombok.*;
-
 import java.time.LocalDateTime;
+import com.team3.scvs.entity.UsaEntity;
 
 @Getter
 @Setter
