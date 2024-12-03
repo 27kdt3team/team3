@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Table(name = "kor_econ_news")
 @Getter
 @Setter
-public class DomesticEntity {
+public class KorEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long korEconNewsId;

@@ -1,9 +1,9 @@
 package com.team3.scvs.repository;
 
-import com.team3.scvs.entity.DomesticEntity;
+import com.team3.scvs.entity.KorEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DomesticRepository extends JpaRepository<DomesticEntity, Long> {
+public interface KorRepository extends JpaRepository<KorEntity, Long> {
 }
