@@ -17,7 +17,13 @@
             <!-- 현재 가격 및 투표 -->
             <div class="stock-price">
                 <!-- 현재 주식 가격 -->
-                <span class="current-price" th:text="${stockInfo.currentprice}"></span>
+                <span class="current-price">
+                    <span th:if="${stockInfo.market != null}">
+                        <span th:if="${stockInfo.market == 'KOR'}">₩</span>
+                        <span th:if="${stockInfo.market == 'USA'}">$</span>
+                    </span>
+                    <span th:text="${stockInfo.currentPrice}"></span>
+                </span>
 
                 <!-- 긍정 투표 버튼 -->
                 <form action="/castVote" method="POST" style="display: inline;">
@@ -41,10 +47,10 @@
             </div>
 
         </div>
-
+        <!-- 토론방 -->
         <div class="community">
             <form class="comment-form" action="/addComment" method="post">
-                <input type="hidden" name="CommunityId" th:value="${communityId}"/>
+                <input type="hidden" name="communityId" th:value="${communityId}"/>
                 <input type="hidden" name="tickerId" th:value="${stockInfo.tickerId}"/>
                 <div class="input-section">
                     <input type="text" class="comment-input" name="commentInput" placeholder="의견을 남겨 보세요" required />
@@ -91,57 +97,54 @@
                 </th:block>
             </div>
         </div>
+
         <!-- maker-stats -->
         <div class="market-stats-wrapper">
-            <h1>Market Stats</h1>
-            <div class="market-stats" th:if="${stockinfo != null}">
+            <h2>Market Stats</h2>
+            <div class="market-stats" th:if="${stocksinfo != null}">
                 <ul>
                     <li>
                         <span>Open:</span>
-                        <span th:text="${stockinfo.open}"></span>
+                        <span th:text="${stocksinfo.open}"></span>
                     </li>
                     <li>
                         <span>Close:</span>
-                        <span th:text="${stockinfo.close}"></span>
+                        <span th:text="${stocksinfo.close}"></span>
                     </li>
                     <li>
                         <span>Volume:</span>
-                        <span th:text="${stockinfo.volume}"></span>
+                        <span th:text="${stocksinfo.volume}"></span>
                     </li>
                     <li>
                         <span>Day Range:</span>
-                        <span th:text="${stockinfo.dayLow} + ' - ' + ${stockinfo.dayHigh}"></span>
-                    </li>
-                    <li>
-                        <span>52 Week Range:</span>
-                        <span th:text="${stockinfo.fiftytwoWeekLow} + ' - ' + ${stockinfo.fiftytwoWeekHigh}"></span>
+                        <span th:text="${stocksinfo.dayLow} + ' - ' + ${stocksinfo.dayHigh}"></span>
                     </li>
                     <li>
                         <span>ROE:</span>
-                        <span th:text="${stockinfo.returnOnEquity} + '%'"></span>
+                        <span th:text="${stocksinfo.returnOnEquity} + '%'"></span>
                     </li>
                     <li>
                         <span>EV:</span>
-                        <span th:text="${stockinfo.enterpriseValue}"></span>
+                        <span th:text="${stocksinfo.enterpriseValue}"></span>
                     </li>
                     <li>
                         <span>EV/EBITDA:</span>
-                        <span th:text="${stockinfo.enterpriseToEBITDA}"></span>
+                        <span th:text="${stocksinfo.enterpriseToEBITDA}"></span>
                     </li>
                     <li>
                         <span>P/B Ratio:</span>
-                        <span th:text="${stockinfo.priceToBook}"></span>
+                        <span th:text="${stocksinfo.priceToBook}"></span>
                     </li>
                 </ul>
             </div>
-            <div class="no-data" th:if="${stockinfo == null}">
+            <div class="no-data" th:if="${stocksinfo == null}">
                 <p>마켓 정보가 없습니다</p>
             </div>
         </div>
 
         <!-- news -->
         <div class="news">
-            <h1>Stock News</h1>
+            <h2>Stock News</h2>
             <ul>
                 <!-- 반복문으로 뉴스 제목 출력 -->
                 <li th:each="news : ${stocknewsinfo}">

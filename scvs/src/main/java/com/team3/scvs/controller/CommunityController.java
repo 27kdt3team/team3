@@ -1,6 +1,7 @@
 package com.team3.scvs.controller;
 
 
+import com.team3.scvs.dto.*;
 import com.team3.scvs.entity.*;
 import com.team3.scvs.service.CommunityService;
 import com.team3.scvs.service.CustomUserDetailsService;
@@ -28,44 +29,57 @@ public class CommunityController {
 
     @GetMapping("/community")
     public String community(@RequestParam("tickerId") Long tickerId,
-                             Model model) {
+                            Model model) {
 
-        //userId가져오기
+        // userId 가져오기
         Long userId = customUserDetailsService.getLoggedInUserId();
-        //주식 정보 가져오기
-        CommunityStockInfoEntity stockInfo = communityService.getstockinfo(tickerId);
-        // 커뮤니티 테이블 가져오기
-        CommunityEntity community = communityService.getOrCreateCommunity(tickerId);
-        //투표 결과 가져오기
-        Long communityId = community.getCommunityId(); // Community ID를 추출
-        CommunityVoteEntity voteInfo = communityService.getVoteInfo(communityId);
-        //토론방 코멘트 가져오기
-        List<CommunityCommentViewEntity> commentList = communityService.getComments(communityId);
-        //마켓 정보 가져오기
-        Optional<StocksEntity> stockinfoOptional = communityService.getStocksinfo(tickerId);
-        StocksEntity stockinfo = stockinfoOptional.orElse(null); // 값이 없으면 null을 반환
-        //뉴스 제목 가져오기
-        List<StocksNewsEntity> stocknewsinfo = communityService.getStocksNewstitle(tickerId);
 
-        model.addAttribute("userId",userId);
+        // 주식 정보 가져오기
+        CommunityStockInfoDTO stockInfo = communityService.getStockInfo(tickerId);
+
+        // 커뮤니티 테이블 가져오기
+        CommunityDTO community = communityService.getOrCreateCommunity(tickerId);
+
+        // 투표 결과 가져오기
+        Long communityId = community.getCommunityId();
+        CommunityVoteDTO voteInfo = communityService.getVoteInfo(communityId);
+
+        // 토론방 코멘트 가져오기
+        List<CommunityCommentViewDTO> commentList = communityService.getComments(communityId);
+
+        // 마켓 정보 가져오기
+        Optional<StocksDTO> stockinfoOptional = communityService.getStocksInfo(tickerId);
+        StocksDTO stocksinfo = stockinfoOptional.orElse(null);
+
+        // 뉴스 제목 가져오기
+        List<StocksNewsDTO> stocknewsinfo = communityService.getStocksNewsTitle(tickerId);
+
+        // 모델에 데이터 추가
+        model.addAttribute("userId", userId);
         model.addAttribute("stockInfo", stockInfo);
-        model.addAttribute("voteInfo",voteInfo);
-        model.addAttribute("commentList",commentList);
-        model.addAttribute("communityId",communityId);
-        model.addAttribute("stockinfo",stockinfo);
-        model.addAttribute("stocknewsinfo",stocknewsinfo);
+        model.addAttribute("voteInfo", voteInfo);
+        model.addAttribute("commentList", commentList);
+        model.addAttribute("communityId", communityId);
+        model.addAttribute("stocksinfo", stocksinfo);
+        model.addAttribute("stocknewsinfo", stocknewsinfo);
         return "Stockwatch/community";
     }
 
     @PostMapping("/addComment")
-    public String addComment(@RequestParam("CommunityId") Long communityId,
+    public String addComment(@RequestParam("communityId") Long communityId,
                              @RequestParam("tickerId") Long tickerId,
                              @RequestParam("commentInput") String commentInput) {
 
         Long userId = customUserDetailsService.getLoggedInUserId();
 
+        // 댓글 DTO 생성
+        CommunityCommentDTO commentDTO = new CommunityCommentDTO();
+        commentDTO.setCommunityId(communityId);
+        commentDTO.setUserId(userId);
+        commentDTO.setComment(commentInput);
+
         // 댓글 등록 로직 호출
-        communityService.addComment(commentInput, communityId, userId);
+        communityService.addComment(commentDTO);
 
         // 등록 후 기존 페이지로 리다이렉트
         return "redirect:/community?tickerId=" + tickerId;
@@ -79,8 +93,13 @@ public class CommunityController {
 
         Long userId = customUserDetailsService.getLoggedInUserId();
         try {
+            // 투표 DTO 생성
+            UserVoteDTO userVoteDTO = new UserVoteDTO();
+            userVoteDTO.setCommunityId(communityId);
+            userVoteDTO.setUserId(userId);
+
             // 투표 처리 로직 호출
-            boolean isVoteSuccessful = communityService.castVote(communityId, userId, voteType);
+            boolean isVoteSuccessful = communityService.castVote(userVoteDTO, voteType);
 
             if (!isVoteSuccessful) {
                 // 이미 투표한 경우 오류 메시지 추가
@@ -113,6 +132,7 @@ public class CommunityController {
         // 삭제 후 기존 페이지로 리다이렉트
         return "redirect:/community?tickerId=" + tickerId;
     }
+
     @PostMapping("/editComment")
     public String editComment(@RequestParam("communityCommentId") Long commentId,
                               @RequestParam("tickerId") Long tickerId,

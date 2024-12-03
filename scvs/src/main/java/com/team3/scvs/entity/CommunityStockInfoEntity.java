@@ -19,6 +19,7 @@ public class CommunityStockInfoEntity {
 
     private String symbol;
     private String company;
+    private String market;
 
     @Column(name = "current_price")
     private long currentprice;
