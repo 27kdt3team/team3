@@ -43,7 +43,7 @@ body {
     gap: 20px; /* 텍스트와 이미지 간격 */
     border-bottom: 1px solid #ccc; /* 구분선 */
     padding-bottom: 10px; /* 구분선과의 간격 */
-
+    width: 50vw;
 }
 
 /* 기사 정보 */
