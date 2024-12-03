@@ -18,11 +18,11 @@ public class ForexService {
     public ForexDTO getKrwUsdForex(){
         return forexRepository.findByForexName(krwUsdForexName)
                 .map(forex -> new ForexDTO(
-                        forex.getForexName(),
-                        forex.getRate(),
-                        forex.getChangeValue(),
-                        forex.getChangePercent(),
-                        forex.getLastUpdated()
-                )).get();
+                    forex.getForexName(),
+                    forex.getRate(),
+                    forex.getChangeValue(),
+                    forex.getChangePercent(),
+                    forex.getLastUpdated()
+        )).get();
     }
 }

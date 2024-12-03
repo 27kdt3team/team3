@@ -42,7 +42,7 @@ h2 {
   font-size: 30px;
   font-weight: 500;
 }
-
+  
 /*news 클래스 내부의 news-colum 클래스 news-colum 클래스 안에는 news-item이 종속되어 있습니다*/
 .news-column {
   flex: 1;
@@ -66,7 +66,7 @@ h2 {
     object-fit: scale-down;
 }
 
-
+  
 /*뉴스의 제목과 화면 구조를 꾸미는 클래스 입니다.
       국내 5개 미국 5개 */
 .news-item {
@@ -77,7 +77,7 @@ h2 {
   /*width: 30vw;*/
   height: 80px;
 }
-
+  
 /*국내 or 미국 소식 더보기... 탭*/
 .more-btn {
   display: block;
@@ -89,7 +89,7 @@ h2 {
   cursor: pointer;
   width: 100%;
 }
-
+  
 /*우측 경제 지표 탭을 꾸미는 클래스  stat-item 클래스들이 종속*/
 .stats {
   flex: 1;
@@ -115,7 +115,7 @@ h2 {
   gap: 10px;
   margin-left: 10px;
 }
-
+  
 /* 내부자잘한 글자크기 조절용*/
 .index-key {
   font-size: 1.2em;
