@@ -10,6 +10,7 @@ public class ConvertUtil {
                 entity.getTickerId(),
                 entity.getSymbol(),
                 entity.getCompany(),
+                entity.getMarket(),
                 entity.getCurrentprice()
         );
     }
@@ -44,7 +45,7 @@ public class ConvertUtil {
     public StocksDTO convertToDTO(StocksEntity entity) {
         return new StocksDTO(
                 entity.getStockId(),
-                entity.getTicker(),
+                entity.getTickerId(),
                 entity.getMarket(),
                 entity.getCurrentPrice(),
                 entity.getClose(),

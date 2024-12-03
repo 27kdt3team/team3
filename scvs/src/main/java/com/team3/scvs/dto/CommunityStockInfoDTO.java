@@ -11,5 +11,6 @@ public class CommunityStockInfoDTO {
     private long tickerId;
     private String symbol;
     private String company;
+    private String market;
     private long currentPrice;
 }

@@ -28,6 +28,7 @@ public class CommunityService {
 
     private final ConvertUtil convert = new ConvertUtil();
 
+    //주식 기초 정보
     public CommunityStockInfoDTO getStockInfo(Long tickerId) {
         // 엔티티 조회
         CommunityStockInfoEntity entity = communityStockInfoRepository.findById(tickerId).orElse(null);
@@ -38,9 +39,11 @@ public class CommunityService {
         // DTO로 변환하여 반환
         return convert.convertToDTO(entity);
     }
-
+    // 주식 투표 정보
     public CommunityVoteDTO getVoteInfo(long communityId) {
+        // 엔티티 조회
         CommunityVoteEntity voteInfo = communityVoteRepository.findByCommunity_CommunityId(communityId).orElse(null);
+        //엔티티가 없으면 새로운 엔티티 생성
         if (voteInfo == null) {
             voteInfo = new CommunityVoteEntity();
             voteInfo.setCommunity(new CommunityEntity());
@@ -49,15 +52,18 @@ public class CommunityService {
             voteInfo.setNegativeVotes(0);
             voteInfo = communityVoteRepository.save(voteInfo);
         }
+        // DTO로 변환하여 반환
         return convert.convertToDTO(voteInfo);
     }
-
+    // 주식 투표
     public boolean castVote(UserVoteDTO userVoteDTO, String voteType) {
+        // 엔티티 조회
         CommunityVoteEntity voteInfo = communityVoteRepository.findByCommunity_CommunityId(userVoteDTO.getCommunityId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 communityId에 대한 투표 데이터가 존재하지 않습니다."));
-
+        // 엔티티 조회
         UserVoteEntity userVote = userVoteRepository.findByUserIdAndCommunityId(userVoteDTO.getUserId(), userVoteDTO.getCommunityId())
                 .orElseGet(() -> {
+                    //엔티티가 없으면 새로운 엔티티 생성
                     UserVoteEntity newUserVote = new UserVoteEntity();
                     newUserVote.setUserId(userVoteDTO.getUserId());
                     newUserVote.setCommunityId(userVoteDTO.getCommunityId());
@@ -65,11 +71,11 @@ public class CommunityService {
                     newUserVote.setCreatedAt(LocalDateTime.now());
                     return userVoteRepository.save(newUserVote);
                 });
-
+        //투표했으면 false
         if (userVote.isVote()) {
             return false;
         }
-
+        //투표 정보 반환
         switch (voteType.toLowerCase()) {
             case "positive":
                 voteInfo.setPositiveVotes(voteInfo.getPositiveVotes() + 1);
@@ -80,14 +86,14 @@ public class CommunityService {
             default:
                 throw new IllegalArgumentException("올바르지 않은 투표 유형입니다: " + voteType);
         }
-
+        //엔티티 저장
         userVote.setVote(true);
         userVoteRepository.save(userVote);
         communityVoteRepository.save(voteInfo);
 
         return true;
     }
-
+    //토론방 정보
     public CommunityDTO getOrCreateCommunity(Long tickerId) {
         // tickerId로 CommunityEntity 조회
         CommunityEntity community = communityRepository.findByTickerId(tickerId).orElse(null);
@@ -102,14 +108,14 @@ public class CommunityService {
         // convertToDTO 메서드를 사용하여 CommunityDTO로 변환
         return convert.convertToDTO(community);
     }
-
+    //토론방에 댓글 정보
     public List<CommunityCommentViewDTO> getComments(Long communityId) {
         return communityCommentViewRepository.findAllByCommunityIdOrderByPublishedAtDesc(communityId)
                 .stream()
                 .map(convert::convertToDTO)
                 .collect(Collectors.toList());
     }
-
+    // 댓글 추가
     public void addComment(CommunityCommentDTO commentDTO) {
         // CommunityEntity 조회
         CommunityEntity community = communityRepository.findById(commentDTO.getCommunityId())
@@ -128,6 +134,7 @@ public class CommunityService {
         // 댓글 저장
         communityCommentRepository.save(newComment);
     }
+    //댓글 삭제
     public boolean deleteComment(Long communityCommentId, Long userId) {
         // 댓글 조회
         CommunityCommentEntity comment = communityCommentRepository.findById(communityCommentId)
@@ -142,7 +149,7 @@ public class CommunityService {
         communityCommentRepository.delete(comment);
         return true; // 성공적으로 삭제되었음을 반환
     }
-
+    //댓글 수정
     public boolean editComment(Long commentId, Long userId, String updatedComment) {
         // 댓글 조회
         CommunityCommentEntity comment = communityCommentRepository.findById(commentId)
@@ -160,11 +167,12 @@ public class CommunityService {
 
         return true; // 성공적으로 수정되었음을 반환
     }
-
+    // 주식에 다양한 정보
     public Optional<StocksDTO> getStocksInfo(Long tickerId) {
-        return stocksRepository.findById(tickerId).map(convert::convertToDTO);
+        return stocksRepository.findByTickerId(tickerId).map(convert::convertToDTO);
     }
 
+    //주식 관련 뉴스
     public List<StocksNewsDTO> getStocksNewsTitle(Long tickerId) {
         return stocksNewsRepository.findLatestByTickerId(tickerId).stream()
                 .map(convert::convertToDTO)

@@ -49,7 +49,7 @@ public class CommunityController {
 
         // 마켓 정보 가져오기
         Optional<StocksDTO> stockinfoOptional = communityService.getStocksInfo(tickerId);
-        StocksDTO stockinfo = stockinfoOptional.orElse(null);
+        StocksDTO stocksinfo = stockinfoOptional.orElse(null);
 
         // 뉴스 제목 가져오기
         List<StocksNewsDTO> stocknewsinfo = communityService.getStocksNewsTitle(tickerId);
@@ -60,7 +60,7 @@ public class CommunityController {
         model.addAttribute("voteInfo", voteInfo);
         model.addAttribute("commentList", commentList);
         model.addAttribute("communityId", communityId);
-        model.addAttribute("stockinfo", stockinfo);
+        model.addAttribute("stocksinfo", stocksinfo);
         model.addAttribute("stocknewsinfo", stocknewsinfo);
         return "Stockwatch/community";
     }
