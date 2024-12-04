@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -54,4 +55,14 @@ public class UsaService {
 
     }
 
+    public List<UsaDTO> getMainHomeNews(){
+        List<UsaEntity> mainNews = usaRepository.findTop5ByOrderByUsaEconNewsIdDescPublishedAtDesc(PageRequest.of(0, 5));
+        return mainNews.stream().map(usa -> new UsaDTO(
+                usa.getUsaEconNewsId(),
+                usa.getTitle(),
+                usa.getSource(),
+                usa.getPublishedAt(),
+                usa.getImageLink()
+        )).toList();
+    }
 }
