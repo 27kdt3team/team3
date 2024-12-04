@@ -96,20 +96,20 @@ public class UserController {
         return "User/passwordchange";
     }
     // 회원 탈퇴 화면 호출
-    @GetMapping("/user/signout")
-    public String showSignoutPage(){
-        return "User/signout";
+    @GetMapping("/user/accountdel")
+    public String showAccountDelPage(){
+        return "User/accountdel";
     }
     // 회원 탈퇴 기능
-    @PostMapping("/user/signout")
-    public String signOut(HttpServletRequest request, HttpServletResponse response){
+    @PostMapping("/user/accountdel")
+    public String deleteUser(HttpServletRequest request, HttpServletResponse response){
         userService.deleteUser(request, response);
-        return "redirect:/signoutsuccess";
+        return "redirect:/accountdelsuccess";
     }
     // 회원탈퇴 뷰 호출
-    @GetMapping("/signoutsuccess")
-    public String showSignoutSuccessPage() {
-        return "user/signoutsuccess";  // signoutsuccess.html을 반환
+    @GetMapping("/accountdelsuccess")
+    public String showAccountDelSuccessPage() {
+        return "user/accountdelsuccess";  // accountdelsuccess.html을 반환
     }
 
 }

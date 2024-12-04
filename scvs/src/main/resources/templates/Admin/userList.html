@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base}">
+<body>
+
+<th:block layout:fragment="MainBodyContents">
+  <div class="container mt-4">
+    <!-- 상단 -->
+    <form class="row mb-3 align-items-center" th:action="@{/admin/userList}" method="POST">
+      <!-- 라벨 -->
+      <div class="col-md-1">
+        <label for="filterDropdown" >검색 필터</label>
+      </div>
+
+      <!-- 드롭다운 email or nickname -->
+      <div class="col-md-2">
+        <select class="form-select" name="filterDropdown" id="filterDropdown">
+          <option value="email" th:selected="${filterDropdown == 'email'}">email</option>
+          <option value="nickname" th:selected="${filterDropdown == 'nickname'}">nickname</option>
+        </select>
+      </div>
+
+      <!-- 검색 입력란 -->
+      <div class="col-md-7">
+        <input type="text" class="form-control" name="findInput" id="findInput" placeholder="입력란" th:value="${findInput}">
+      </div>
+
+      <!-- 조회 버튼 -->
+      <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">조회</button>
+      </div>
+    </form>
+    <!-- 상단 끝 -->
+
+    <!-- 상단과 중단 사이 -->
+    <form th:action="@{/admin/deleteUserList}" method="POST">
+      <input type="hidden" name="page" th:value="${users.number}"> <!-- 현재 페이지 -->
+      <input type="hidden" name="filterDropdown" th:value="${filterDropdown}"> <!-- 필터 유지 -->
+      <input type="hidden" name="findInput" th:value="${findInput}"> <!-- 검색 유지 -->
+
+      <div class="row mb-3 align-items-center">
+        <div class="col-md-6">
+          <button id="deleteSubmit" class="btn btn-danger">삭제</button>  <!-- 삭제 버튼 -->
+        </div>
+        <div class="col-md-6 text-end">
+          <span>검색 결과: <strong th:text="${users.content.size()}">0</strong>건</span> <!-- 검색 건수 -->
+        </div>
+      </div>
+      <!-- 상단과 중단 사이 끝 -->
+
+      <!-- 중단 유저 리스트 -->
+      <div class="d-flex justify-content-center">
+        <table class="table table-bordered">
+          <thead class="table-dark">
+          <tr>
+            <th scope="col" class="col-1 text-center" style="width: 4%;"><input type="checkbox" id="selectAll" onclick="toggleCheckboxes(this)"></th>
+            <th scope="col" class="col-1 text-center" style="width: 4%;">번호</th>
+            <th scope="col" class="col-3">이메일</th>
+            <th scope="col" class="col-3">닉네임</th>
+            <th scope="col" class="col-2">역할</th>
+          </tr>
+          </thead>
+          <tbody>
+          <!-- 데이터 행 -->
+
+          <tr th:each="user, iterStat : ${users.content}">
+            <td class="text-center"><input type="checkbox" name="userIds" th:value="${user.userId}"></td> <!-- 삭제 체크리스트 -->
+            <td th:text="${user.userId}" class="text-center"></td> <!-- 번호 -->
+            <td th:text="${user.email}"></td> <!-- 이메일 -->
+            <td th:text="${user.nickname}"></td> <!-- 닉네임 -->
+            <td th:text="${user.userrole}"></td> <!-- role -->
+          </tr>
+          </tbody>
+
+
+        </table>
+      </div>
+    </form>
+
+    <!-- 하단 페이징 -->
+    <div class="d-flex justify-content-end mt-3">
+      <div class="pagination">
+        <form method="post" action="/admin/userList">
+          <input type="hidden" name="filterDropdown" th:value="${filterDropdown}"> <!-- 필터 유지 -->
+          <input type="hidden" name="findInput" th:value="${findInput}"> <!-- 검색 유지 -->
+          <ul class="pagination">
+            <!-- 페이징 버튼들 -->
+            <li class="page-item" th:classappend="${users.number > 0} ? '' : 'disabled'">
+              <button type="submit" class="page-link" name="page" value="0">맨 처음</button>
+            </li>
+            <li class="page-item" th:classappend="${users.hasPrevious} ? '' : 'disabled'">
+              <button type="submit" class="page-link" name="page" th:value="${users.number - 1}">이전</button>
+            </li>
+            <li class="page-item" th:each="i : ${#numbers.sequence(startPage, endPage)}">
+              <button type="submit" class="page-link" name="page" th:value="${i}" th:classappend="${i == users.number} ? 'active' : ''" th:text="${i + 1}"></button>
+            </li>
+            <li class="page-item" th:classappend="${users.hasNext} ? '' : 'disabled'">
+              <button type="submit" class="page-link" name="page" th:value="${users.number + 1}">다음</button>
+            </li>
+            <li class="page-item" th:classappend="${users.number < users.totalPages - 1} ? '' : 'disabled'">
+              <button type="submit" class="page-link" name="page" th:value="${users.totalPages - 1}">맨 마지막</button>
+            </li>
+          </ul>
+        </form>
+      </div>
+    </div>
+    <!-- 하단 페이징 끝-->
+
+  </div>
+
+  <script th:src="@{/js/userList.js}"></script>
+</th:block>
+
+</body>
+</html>
