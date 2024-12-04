@@ -1,6 +1,5 @@
 package com.team3.scvs.controller;
 
-import com.team3.scvs.dto.ForexDTO;
 import com.team3.scvs.dto.KorDTO;
 import com.team3.scvs.service.KorService;
 import com.team3.scvs.service.ForexService;
