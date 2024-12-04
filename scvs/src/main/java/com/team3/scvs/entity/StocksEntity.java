@@ -41,5 +41,4 @@ public class StocksEntity {
     private BigDecimal earningsPerShare;
     private BigDecimal currentRatio;
     private BigDecimal debtToEquity;
-
 }
