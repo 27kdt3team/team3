@@ -8,20 +8,244 @@
 <body>
 <th:block layout:fragment="MainBodyContents">
     <div class="container">
-        <div class="Stock-info">
-            <p>주식 정보</p>
+        <div class="Stock-info"> <!-- 왼쪽 맨 윗 부분-->
+            <img width="30px", height="30px" src="../../static/images/apple.png"/>
+            <div class="stockLogo"> <!-- 로고, 기업명 -->
+                <p>Apple Inc.</p> <!--(회사 명) -->
+                <span class="tinyText">AAPL</span><!--(회사 번호명?) -->
+            </div>
+            <div class="risesFalls"> <!-- -100%  -->
+                <Span>-100% ↓</Span>
+            </div>
+            <!--<div class="risesFalls2">
+                <Span>-100% ↑</Span>
+            </div> -->
+            <div class="stock-price"> <!-- 현재 가격 -->
+                <p>₩282,321.77</p>
+                <span class="tinyText">Last updated 14.30</span><!-- 최신 업데이트 날짜-->
+            </div>
         </div>
-        <div class = "graph">
-            <p> 그래프</p>
+        <div class ="graphInfo"> <!-- 그래프 및 주변부 -->
+            <div class="time-buttons"> <!-- 그래프 지표 선택 버튼 -->
+                <button class="active">1 Day</button>
+                <button>1 Week</button>
+                <button>1 Month</button>
+                <button>3 Month</button>
+                <button>6 Month</button>
+                <button>1 Year</button>
+                <button>5 Year</button>
+                <button>All</button>
+            </div>
+
+            <div class="graph"><!-- flex 그래프 및 주변부-->
+                <div class="graphPrice"><!-- 수직 그래프 옆 가격 표시-->
+                    <p>100000</p>
+                    <p>10</p>
+                    <p>10</p>
+                    <p>10</p>
+                    <p>10</p>
+                    <p>10</p>
+                </div>
+                <div class="temp"> <!-- 그래프+날짜 -->
+                    <img class="graphImage"  src="../../static/images/graph.png"/><!-- 그래프 -->
+                    <div class="graphDate"><!-- 날짜 -->
+                        <div>
+                            <p>Mon</p>
+                            <span>10</span>
+                        </div>
+                        <div>
+                            <p>Tue</p>
+                            <span>10</span>
+                        </div>
+                        <div>
+                            <p>Wed</p>
+                            <span>10</span>
+                        </div>
+                        <div>
+                            <p>Thu</p>
+                            <span>10</span>
+                        </div>
+                        <div>
+                            <p>Fri</p>
+                            <span>10</span>
+                        </div>
+                        <div>
+                            <p>Sat</p>
+                            <span>10</span>
+                        </div>
+                        <div>
+                            <p>Sun</p>
+                            <span>10</span>
+                        </div>
+                        <div>
+                            <p>Mon</p>
+                            <span>10</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
-        <div class="market-stats">
-            <p>회사정보</p>
+        <div class="market-stats"> <!-- 우측 위 지표-->
+            <div class="marketStatsTable"> <!-- 내부 -->
+                <h2>Market Stats</h2>
+                <ul class="stats-list"> <!-- 지표 나열된 표 -->
+                    <li>
+                        <div>
+                            <!-- 조그만 아이콘 + 지표명 -->
+                            <img class="icon" src="../../static/images/index2.png">
+                            <span class="stats-index">Open</span>
+                        </div>
+                        <span class="value">277,890.00</span> <!-- 값, 우측 정렬 -->
+                    </li>
+                    <li> <!-- 위와 같은 구조 11개 반복 -->
+                        <div>
+                            <img class="icon" src="../../static/images/index2.png">
+                            <span class="stats-index">Close</span>
+                        </div>
+                        <span class="value">278,000.00</span>
+                    </li>
+                    <li>
+                        <div>
+                            <img class="icon" src="../../static/images/index3~5.png">
+                            <span class="stats-index">Volume</span>
+                        </div>
+                        <span class="value">220.75K</span>
+                    </li>
+                    <li>
+                        <div>
+                            <img class="icon" src="../../static/images/index3~5.png">
+                            <span class="stats-index">Day-Range</span>
+                        </div>
+                        <span class="value">3.50%</span>
+                    </li>
+                    <li>
+                        <div>
+                            <img class="icon" src="../../static/images/index3~5.png">
+                            <span class="stats-index">52 Week Range</span>
+                        </div>
+                        <span class="value">25.80%</span>
+                    </li>
+                    <li>
+                        <div>
+                            <img class="icon" src="../../static/images/index6~9.png">
+                            <span class="stats-index">ROE</span>
+                        </div>
+                        <span class="value">6.50%</span>
+                    </li>
+                    <li>
+                        <div>
+                            <img class="icon" src="../../static/images/index6~9.png">
+                            <span class="stats-index">P/E Ratio</span>
+                        </div>
+                        <span class="value">5.24</span>
+                    </li>
+                    <li>
+                        <div class="stats-index">
+                            <img class="icon" src="../../static/images/index6~9.png">
+                            <span>P/B Ratio</span>
+                        </div>
+                        <span class="value">0.55</span>
+                    </li>
+                    <li>
+                        <div class="stats-index">
+                            <img class="icon" src="../../static/images/index6~9.png">
+                            <span>P/C Ratio</span>
+                        </div>
+                        <span class="value">6.70</span>
+                    </li>
+                    <li>
+                        <div class="stats-index">
+                            <img class="icon" src="../../static/images/index10~11.png">
+                            <span>EV</span>
+                        </div>
+                        <span class="value">28.14</span>
+                    </li>
+                    <li>
+                        <div class="stats-index">
+                            <img class="icon" src="../../static/images/index10~11.png">
+                            <span>EV/EBITDA</span>
+                        </div>
+                        <span class="value">4.20</span>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <div class="news">
-            <p>뉴스</p>
+        <div class="news"> <!-- 왼쪽 아래 뉴스 페이지 -->
+            <h3>News</h3>
+            <div class="newsIndex"> <!-- 뉴스 제목, 날짜, 사진 포함된 1 단락-->
+                <div>
+                    <!-- 언론사 및 날짜 -->
+                    <span class="media-company-color">NewsLetter - </span> <span class="date-color">27 dec 2020</span>
+                    <div class="newsTitle"> <!-- 뉴스 제목 및 감정표현 -->
+                        <p>Penn's Expanding Political Climate Gears Up Fo 2020 Election</p>
+                        <img class="imotion" src="../../static/images/positive.png"/>
+                    </div>
+                </div>
+                <img class="newsIndexImage"  src="../../static/images/picture1.png"/> <!-- 뉴스 이미지 -->
+                <!-- 위와 같은 구조 3개 -->
+            </div>
+            <div class="newsIndex">
+                <div>
+                    <span class="media-company-color">서울 신문 - </span> <span class="date-color">27 dec 2020</span>
+                    <div class="newsTitle">
+                        <p>Things To Look For In A Financial Trading Platformaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
+                        <img class="imotion" src="../../static/images/negative.png"/>
+                    </div>
+                </div>
+                <img class="newsIndexImage" src="../../static/images/picture2.png"/>
+            </div>
+            <div class="newsIndex">
+                <div>
+                    <span class="media-company-color">한국 경제 - </span> <span class="date-color">27 dec 2020</span>
+                    <div class="newsTitle">
+                        <p>The Only Thing That Overcomes Hard Luck Is Hard Workaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
+                        <img class="imotion" src="../../static/images/nutral.png"/>
+                    </div>
+                </div>
+                <img class="newsIndexImage" src="../../static/images/picture3.png"/>
+            </div>
+
+
+
+            <!-- 페이징 처리 -->
+            <!-- 주연님 페이징 부분 복사 붙여넣기 했습니다. -->
+            <div class="pagination">
+                <!-- 첫번째 페이지 -->
+                <a th:href="@{/usa(page=1)}" class="first-page"></a>
+                <!-- 이전 페이지 -->
+                <a th:href="${usaList.first} ? '#' : @{/usa(page=${usaList.number})}" class="previous-page"></a>
+
+                <!-- 페이지 번호 -->
+                <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
+                    <!-- 현재 페이지는 링크 없이 숫자만으로 표시 (usaList.number 값은 실제 페이지보다 1이 작은 값) -->
+                    <span th:if="${page == usaList.number + 1}" th:text="${page}" class="current-page"></span>
+                    <!-- 현재 페이지 외의 페이지들은 숫자에 링크로 표시 -->
+                    <span th:unless="${page == usaList.number + 1}">
+                        <a th:href="@{/usa(page=${page})}" th:text="${page}" class="page-link"></a>
+                    </span>
+                </span>
+
+                <!-- 다음 페이지 -->
+                <a th:href="${usaList.last} ? '#' : @{/usa(page=${usaList.number + 2})}" class="next-page"></a>
+                <!-- 마지막 페이지 -->
+                <a th:href="@{/usa(page=${usaList.totalPages})}" class="last-page"></a>
+            </div>
         </div>
-        <div class="community">
-            <p>토론방</p>
+
+
+
+
+        <div class="community"> <!--우측 아래 토론방 -->
+            <h3>토론방 바로가기</h3>
+            <p class="cDate">13:32 기준</p>
+            <div class="communityMove"> <!-- 토론방 박스 안 -->
+                <!-- 이모티콘 + 글자-->
+                <p><img src="../../static/images/discuss.png" width="22", height="15"/> &nbsp;(가장 최신 comment)</p>
+
+                <hr class="communityBorder">
+                <p class="communityComment">12,345개의 의견 보기 ></p>
+            </div>
         </div>
     </div>
 
