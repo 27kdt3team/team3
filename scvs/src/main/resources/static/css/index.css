@@ -66,16 +66,21 @@ h2 {
     object-fit: scale-down;
 }
 
+.news-link {
+    color: black;
+    text-decoration: unset;
+}
+
   
 /*뉴스의 제목과 화면 구조를 꾸미는 클래스 입니다.
       국내 5개 미국 5개 */
 .news-item {
   margin-bottom: 20px;
   display: flex;
-  align-items: center;
+  /*align-items: flex-start;*/
   gap: 10px;
   /*width: 30vw;*/
-  height: 80px;
+  /*height: 80px;*/
 }
   
 /*국내 or 미국 소식 더보기... 탭*/
@@ -92,7 +97,7 @@ h2 {
   
 /*우측 경제 지표 탭을 꾸미는 클래스  stat-item 클래스들이 종속*/
 .stats {
-  flex: 1;
+  /*flex: 1;*/
   background: #fff;
   margin-left: 20px;
 }
@@ -101,7 +106,7 @@ h2 {
 .stat-item {
   margin-bottom: 20px;
   background-color:#f0eded;
-  width: 270px;
+  /*width: 270px;*/
   height: 110px;
   text-align: center;
   box-shadow: 0 2px 1px rgba(59, 58, 58, 0.3);

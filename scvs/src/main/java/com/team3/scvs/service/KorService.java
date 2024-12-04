@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,6 +34,17 @@ public class KorService {
                 kor.getPublishedAt(),
                 kor.getImageLink()));
 
+    }
+
+    public List<KorDTO> getMainHomeNews(){
+        List<KorEntity> mainNews = korRepository.findTop5ByOrderByKorEconNewsIdDescPublishedAtDesc(PageRequest.of(0, 5));
+        return mainNews.stream().map(kor -> new KorDTO(
+                kor.getKorEconNewsId(),
+                kor.getTitle(),
+                kor.getSource(),
+                kor.getPublishedAt(),
+                kor.getImageLink()
+        )).toList();
     }
 
     //뉴스 상세 페이지 조회
