@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base}">
+<body>
+
+<th:block layout:fragment="MainBodyContents">
+    <div class="container mt-4">
+        <h1>관리자 관심 종목 관리</h1>
+
+        <!-- 전체 종목 테이블 -->
+        <table class="table table-bordered mt-3">
+            <thead>
+            <tr>
+                <th>종목명</th>
+                <th>코드</th>
+                <th>추가</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="ticker : ${allTickers}">
+                <td th:text="${ticker.company}">Company</td>
+                <td th:text="${ticker.symbol}">Symbol</td>
+                <td>
+                    <form th:action="@{/admin/watchList/add}" method="post">
+                        <input type="hidden" name="tickerId" th:value="${ticker.tickerId}">
+                        <input type="hidden" name="userId" value="1"> <!-- 관리자 유저 ID -->
+                        <button type="submit" class="btn btn-primary">추가</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</th:block>
+
+</body>
+</html>

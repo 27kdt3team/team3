@@ -43,12 +43,6 @@
             </tbody>
         </table>
 
-
-        <!-- 로그인 상태 확인
-        <div th:if="${isLoggedIn != null ? isLoggedIn : false}">
-            <a href="/psa/add" class="btn btn-primary">공지 추가</a>
-        </div>
-        -->
         <!-- 로그인 상태 안내 -->
         <div sec:authorize="isAnonymous()">
             <p>로그인이 필요합니다.</p>
