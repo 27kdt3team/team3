@@ -29,7 +29,7 @@
         <!-- 기사 제목 -->
         <p class="title" th:text="${usa.title}"></p>
         <!-- 작성 시간 -->
-        <p class="publishedAt" th:text="${usa.publishedAt}"></p>
+        <p class="publishedAt" th:text="${#temporals.format(usa.publishedAt, 'yyyy-MM-dd HH:mm:ss')}"></p>
         <!-- 기사 이미지 -->
         <div class="image">
             <img th:src="${usa.imageLink}" alt="Unable to load image" class="article-image">
