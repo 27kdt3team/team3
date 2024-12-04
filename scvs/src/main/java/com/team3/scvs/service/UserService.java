@@ -1,59 +1,56 @@
 package com.team3.scvs.service;
 
+import com.team3.scvs.constant.UserConstants;
 import com.team3.scvs.dto.UserDTO;
 import com.team3.scvs.entity.UserEntity;
-import com.team3.scvs.entity.UserWatchlistEntity;
 import com.team3.scvs.repository.UserRepository;
-import com.team3.scvs.repository.UserWatchlistRepository;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
-import java.util.List;
 
-@Slf4j
+
 @Service
 public class UserService {
 
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    // 생성자 주입
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
-    // 앞단어 40개
-    private final String[] FIRST_PARTS = {
-            "맑은", "따듯한", "차가운", "상냥한", "활발한", "조용한", "친절한", "빛나는", "행복한", "부드러운", "똑똑한", "멋진",
-            "따스한", "강렬한", "산뜻한", "순수한", "사랑스러운", "우아한", "용감한", "재밌는", "평화로운", "아늑한", "열정적인", "상쾌한",
-            "청량한", "활기찬", "고요한", "기분좋은", "은은한", "매혹적인", "온화한", "자유로운", "포근한", "잔잔한", "아름다운", "순탄한",
-            "선명한", "신비로운", "따사로운", "감미로운"
-    };
-    // 뒷단어 40개
-    private final String[] SECOND_PARTS = {
-            "나무", "돌고래", "기린", "구름", "바다", "산", "별", "호수", "강", "태양", "달", "숲",
-            "하늘", "물고기", "꽃", "폭포", "구름", "폭풍", "안개", "별빛", "새", "바람", "자연", "모래",
-            "석양", "조약돌", "대지", "별자리", "불꽃", "운석", "늑대", "해변", "성운", "하늘길", "비", "빛",
-            "마을", "폭풍우", "비바람", "정원", "우주", "산호", "석양", "안개꽃"
-    };
+    // 난수 생성
+    private final Random random = new Random();
 
-    //닉네임 랜덤생성 앞단어 + 뒷단어 + 난수(1~1000)으로 생성 ex)맑은나무444
+    // 회원가입에 사용
+    // 닉네임 랜덤생성 앞단어 + 뒷단어 + 난수(1~1000)으로 생성 ex)맑은나무444
     public String generateRandomNickname() {
-        Random random = new Random();
         String randomNickname; // 랜덤 닉네임 변수
-        int maxAttempts = 100; // 최대 시도 횟수
-        int attempts = 0; // 시도 횟수 0으로 초기화
+        int attempts = 0;
 
         do {
-            String firstPart = FIRST_PARTS[random.nextInt(FIRST_PARTS.length)];
-            String secondPart = SECOND_PARTS[random.nextInt(SECOND_PARTS.length)];
-            int randomNumber = random.nextInt(1000) + 1; // 1~1000 난수
+
+            String firstPart = UserConstants.FIRST_PARTS[random.nextInt(UserConstants.FIRST_PARTS.length)];
+            String secondPart = UserConstants.SECOND_PARTS[random.nextInt(UserConstants.SECOND_PARTS.length)];
+            int randomNumber = this.random.nextInt(1000) + 1; // 1~1000 난수
             attempts++; // 시도 1회 증가
 
-            if (attempts >= maxAttempts) { // 시도가 100회이상이 되면
-                throw new RuntimeException("닉네임 생성 실패: 중복을 피할 수 없습니다."); // 에러발생
+            if (attempts >= UserConstants.MAX_ATTEMPTS) { // 시도가 100회이상이 되면
+                throw new IllegalArgumentException("닉네임 생성 실패: 중복을 피할 수 없습니다."); // 에러발생
             }
             randomNickname = firstPart + secondPart + randomNumber;
         } while (isNicknameDuplicate(randomNickname)); // DB에서 중복된 닉네임이 있으면 true 반복
@@ -62,32 +59,141 @@ public class UserService {
         return randomNickname;
     }
 
-
-    // email이 db에 있는지 중복체크
+    // 이메일 중복확인, 회원가입 정보수정에 사용
     public boolean isEmailDuplicate(String email) {
         return userRepository.existsByEmail(email);
     }
-
-    // nickname이 db에 있는지 중복체크
+    // 닉네임 중복확인, 회원가입 정보수정에 사용
     public boolean isNicknameDuplicate(String nickname) {
         return userRepository.existsByNickname(nickname);
     }
+    // 패스워드 중복확인, 비밀번호 수정에 사용
+    public boolean isPasswordDuplicate(String password) {
 
-    // UserDTO에 담긴 내용을 UserEntity에 저장해서 DB에 저장
+        String username = getAuthenticatedUsername(); // 가져온 username변수
+
+        // DB에서 username으로 조회
+        UserEntity userEntity = userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException(UserConstants.USER_NOT_FOUND_ERROR + username)); // 예시로 이메일을 사용
+        // 사용자가 입력한 비밀번호와 DB에서 가져온 암호화된 비밀번호 비교
+        return passwordEncoder.matches(password, userEntity.getPassword());
+    }
+
+
+    // Create(회원가입)
     public void registerUser(UserDTO userDTO) {
+        if (userDTO == null) {
+            throw new IllegalArgumentException("UserDTO cannot be null.");
+        }
 
+        // UserDTO에서 UserEntity로 저장 > DB에 저장
         UserEntity userEntity = new UserEntity();
         userEntity.setEmail(userDTO.getEmail());
         userEntity.setPassword(passwordEncoder.encode(userDTO.getPassword())); // 비밀번호 암호화
         userEntity.setNickname(userDTO.getNickname());
-        userRepository.save(userEntity);
+        userEntity.setUserrole("ROLE_USER");
+
+        userRepository.save(userEntity); // db저장 실행
+    }
+
+    // Read(User ReadDB에서 값을 가져와 UserDTO를 리턴 (로그인에서는 사용하지 않음))
+    public UserDTO getUser(){
+
+        // 현재 로그인된 email를 저장
+        String username = getAuthenticatedUsername();
+
+        // DB에서 username으로 조회
+        UserEntity userEntity = userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException(UserConstants.USER_NOT_FOUND_ERROR + username)); // 로그인상태여서 DB에 값이 없으면 안됨 > 오류 발생
+
+        UserDTO userDTO = new UserDTO();
+        setDtoFromEntity(userDTO, userEntity); // DB 에서 가져온 UserEntity를 UserDTO에 매칭
+
+        return userDTO;
+    }
+
+    // DB에서 가져온 UserEntity값을 UserDTO에 설정한다.
+    public void setDtoFromEntity(UserDTO userDTO , UserEntity userEntity){
+        userDTO.setEmail(userEntity.getEmail());
+        userDTO.setNickname(userEntity.getNickname());
+        userDTO.setUserrole(userEntity.getUserrole());
+    }
+
+    // Update(회원정보 수정, 세션업데이트)
+    public void updateUser(UserDTO userDTO) {
+        // 현재 로그인된 email를 저장
+        String username = getAuthenticatedUsername(); // 가져온 username변수
+
+        // DB에서 UserEntity를 가져옴
+        UserEntity user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException(UserConstants.USER_NOT_FOUND_ERROR + username));
+
+        // null이 아니면 email 수정
+        if (userDTO.getEmail() != null) {
+            user.setEmail(userDTO.getEmail());
+        }
+
+        // null이 아니면 nickname 수정
+        if (userDTO.getNickname() != null) {
+            user.setNickname(userDTO.getNickname());
+        }
+
+        // null이 아니면 password 수정
+        if (userDTO.getPassword() != null) {
+            user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        }
+        // SecurityContext에 업데이트( 현재 로그인정보수정)
+        updateSecurityContext(user);
+
+        // DB에 업데이트된 정보 저장
+        userRepository.save(user);
+
 
     }
-    @Autowired
-    private UserWatchlistRepository userWatchlistRepository;
 
-    // 사용자의 관심 목록 조회
-    public List<UserWatchlistEntity> getUserWatchlists(Long userId) {
-        return userWatchlistRepository.findByUserId(userId);
+    // Delete (회원정보 삭제)
+    public void deleteUser(HttpServletRequest request, HttpServletResponse response) {
+        // 현재 로그인된 정보를 가져옴
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName(); // 가져온 username변수
+
+        // DB에서 UserEntity를 가져옴
+        UserEntity user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException(UserConstants.USER_NOT_FOUND_ERROR + username));
+
+        new SecurityContextLogoutHandler().logout(request, response, auth);
+
+        // DB에 해당 user데이터 삭제
+        userRepository.delete(user);
+    }
+
+    // SecurityContext를 업데이트하는 메서드
+    private void updateSecurityContext(UserEntity userEntity) {
+        Authentication currentAuth = SecurityContextHolder.getContext().getAuthentication();
+        // 새로운 UserDetails 생성
+        UserDetails updatedUserDetails = new User(
+                userEntity.getEmail(),          // 수정된 email
+                userEntity.getPassword(),       // 수정된 password
+                currentAuth.getAuthorities()    // 기존 권한
+        );
+
+        // 새로운 인증 토큰 생성
+        Authentication newAuth = new UsernamePasswordAuthenticationToken(
+                updatedUserDetails,
+                currentAuth.getCredentials(),
+                updatedUserDetails.getAuthorities()
+        );
+
+        // SecurityContext에 새 인증 정보 설정
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
+    }
+
+    // 세션에 저장된 SecurityContext에서 인증된 사용자의 Username을 리턴
+    public String getAuthenticatedUsername() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null) {
+            throw new AuthenticationCredentialsNotFoundException("사용자가 인증되지 않았습니다.");
+        }
+        return auth.getName();
     }
 }
