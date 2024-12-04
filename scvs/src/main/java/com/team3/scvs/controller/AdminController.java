@@ -58,12 +58,18 @@ public class AdminController {
             @PageableDefault(page = 0, size = 15, sort = "userId",direction = Sort.Direction.DESC) Pageable pageable,
             Model model
     ) {
-
+        int startPage;
+        int endPage;
         Page<UserDTO> users = adminUserService.getFilteredUsers(filter, input, pageable); // 필터, 검색, 페이징을 통한 검색
-
-        // 처음, 끝페이징
-        int startPage = users.getNumber() > (Math.max(users.getTotalPages() - 3, 0)) ? users.getTotalPages() - 5 : Math.max(0, users.getNumber() - 2);
-        int endPage = users.getNumber() < 2 ? (Math.min(users.getTotalPages() - 1, 4)) : Math.min(users.getTotalPages() - 1, users.getNumber() + 2);
+        if( users.isEmpty()){
+            // 처음, 끝페이징
+            startPage = 0;
+            endPage = 0;
+        }else {
+            // 처음, 끝페이징
+            startPage = users.getNumber() > (Math.max(users.getTotalPages() - 3, 0)) ? users.getTotalPages() - 5 : Math.max(0, users.getNumber() - 2);
+            endPage = users.getNumber() < 2 ? (Math.min(users.getTotalPages() - 1, 4)) : Math.min(users.getTotalPages() - 1, users.getNumber() + 2);
+        }
         // 모델에 결과 담기
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
