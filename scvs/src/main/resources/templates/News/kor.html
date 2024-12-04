@@ -4,7 +4,7 @@
 
 <!-- head part -->
 <head th:replace="~{layouts/head :: head}">
-    <title>Usa</title>
+    <title>Domestic</title>
     <!-- 구글 폰트 '나눔 고딕' 링크 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,7 +14,7 @@
 <body>
 <!-- css part -->
 <th:block layout:fragment="css">
-    <link rel="stylesheet" th:href="@{/css/usa.css}">
+    <link rel="stylesheet" th:href="@{/css/kor.css}">
 </th:block>
 
 <!-- header part -->
@@ -22,15 +22,15 @@
 
 <!-- Main Body Contents -->
 <th:block layout:fragment = "MainBodyContents">
-    <main class="usa-container">
+    <main class="kor-container">
 
-        <!-- 미국 경제 뉴스 리스트 -->
-        <section class="usa">
-            <h2>미국 경제 뉴스</h2>
+        <!-- 국내 경제 뉴스 리스트 -->
+        <section class="kor">
+            <h2>국내 경제 뉴스</h2>
             <br>
 
             <!-- 동적으로 DB에서 가져온 데이터 출력 -->
-            <div th:each="newsItem : ${usaList}" class="news-item">
+            <div th:each="newsItem : ${korList}" class="news-item">
                 <div class="text-content">
                     <div class="source-publishedAt">
                         <!-- 언론사 -->
@@ -40,7 +40,7 @@
                     </div>
                     <h4>
                         <!-- 기사 제목을 클릭하면 뉴스 아이디와 현재 머물고 있는 페이지 값을 상세 조회 메서드로 넘겨주기 -->
-                        <a th:href="@{|/usa/${newsItem.usaEconNewsId}|(page=${usaList.number + 1})}" th:text="${newsItem.title}" class="news-title"></a>
+                        <a th:href="@{|/kor/${newsItem.korEconNewsId}|(page=${korList.number + 1})}" th:text="${newsItem.title}" class="news-title"></a>
                     </h4>
                 </div>
                 <!-- 뉴스 이미지 -->
@@ -50,24 +50,24 @@
             <!-- 페이징 처리 -->
             <div class="pagination">
                 <!-- 첫번째 페이지 -->
-                <a th:href="@{/usa(page=1)}" class="first-page"></a>
+                <a th:href="@{/kor(page=1)}" class="first-page"></a>
                 <!-- 이전 페이지 -->
-                <a th:href="${usaList.first} ? '#' : @{/usa(page=${usaList.number})}" class="previous-page"></a>
+                <a th:href="${korList.first} ? '#' : @{/kor(page=${korList.number})}" class="previous-page"></a>
 
                 <!-- 페이지 번호 -->
                 <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
-                    <!-- 현재 페이지는 링크 없이 숫자만으로 표시 (usaList.number 값은 실제 페이지보다 1이 작은 값) -->
-                    <span th:if="${page == usaList.number + 1}" th:text="${page}" class="current-page"></span>
+                    <!-- 현재 페이지는 링크 없이 숫자만으로 표시 (domesticList.number 값은 실제 페이지보다 1이 작은 값) -->
+                    <span th:if="${page == korList.number + 1}" th:text="${page}" class="current-page"></span>
                     <!-- 현재 페이지 외의 페이지들은 숫자에 링크로 표시 -->
-                    <span th:unless="${page == usaList.number + 1}">
-                        <a th:href="@{/usa(page=${page})}" th:text="${page}" class="page-link"></a>
+                    <span th:unless="${page == korList.number + 1}">
+                        <a th:href="@{/kor(page=${page})}" th:text="${page}" class="page-link"></a>
                     </span>
                 </span>
 
                 <!-- 다음 페이지 -->
-                <a th:href="${usaList.last} ? '#' : @{/usa(page=${usaList.number + 2})}" class="next-page"></a>
+                <a th:href="${korList.last} ? '#' : @{/kor(page=${korList.number + 2})}" class="next-page"></a>
                 <!-- 마지막 페이지 -->
-                <a th:href="@{/usa(page=${usaList.totalPages})}" class="last-page"></a>
+                <a th:href="@{/kor(page=${korList.totalPages})}" class="last-page"></a>
             </div>
         </section>
 
@@ -88,21 +88,21 @@
             </div>
         </aside>
 
-        <!-- 트렌드 순위 -->
+        <!-- 트렌드 순위 (더미데이터) -->
         <aside class="trending-container">
             <div class="trending">
-                <h3>미국 트렌드 순위</h3>
+                <h3>국내 트렌드 순위</h3>
                 <ol>
-                    <li>1. AAPL <span class="volume">50</span></li>
-                    <li>2. NVDA <span class="volume">55</span></li>
-                    <li>3. MSFT <span class="volume">40</span></li>
-                    <li>4. AMZN <span class="volume">10</span></li>
-                    <li>5. META <span class="volume">20</span></li>
-                    <li>6. GOOGL <span class="volume">20</span></li>
-                    <li>7. TSLA <span class="volume">20</span></li>
-                    <li>8. AMGN <span class="volume">20</span></li>
-                    <li>9. COST <span class="volume">20</span></li>
-                    <li>10. NFLX <span class="volume">20</span></li>
+                    <li>1. 삼성전자 <span class="volume">50</span></li>
+                    <li>2. LG에너지솔루션 <span class="volume">55</span></li>
+                    <li>3. 현대차 <span class="volume">40</span></li>
+                    <li>4. SK하이닉스 <span class="volume">10</span></li>
+                    <li>5. 네이버 <span class="volume">20</span></li>
+                    <li>6. 기아 <span class="volume">20</span></li>
+                    <li>7. 셀트리온 <span class="volume">20</span></li>
+                    <li>8. KB금융 <span class="volume">20</span></li>
+                    <li>9. 하나금융지주 <span class="volume">20</span></li>
+                    <li>10. 한국전력 <span class="volume">20</span></li>
                 </ol>
             </div>
         </aside>

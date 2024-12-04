@@ -7,7 +7,7 @@ body {
 
 }
 
-.usa-container {
+.kor-container {
     display: grid; /* 그리드 레이아웃 */
     place-items: center; /* 가로, 세로 가운데 정렬 */
     grid-template-columns: 3fr 2fr; /* 좌측 뉴스 섹션(3/5)과 우측 환율 및 트렌드 섹션(2/5) */
@@ -18,16 +18,16 @@ body {
     height: 79vh;
 }
 
-/* 미국 경제 뉴스 리스트 */
-.usa {
+/* 국내 경제 뉴스 리스트 */
+.kor {
     grid-column: 1 / 3; /* 좌측 */
     grid-row: 1 / 5; /* 상단과 하단 모두 포함 */
     padding: 40px;
 
 }
 
-/* 미국 경제 뉴스 */
-.usa h2 {
+/* 국내 경제 뉴스 */
+.kor h2 {
     font-size: 24px;
     color: #000;
     border-bottom: 2px solid #333; /* 구분선 */
@@ -381,9 +381,9 @@ body {
 
     }
 
-    .usa {
+    .kor {
         grid-column: 1 / 2;
-        grid-row: 2 / 3; /* 미국 경제 뉴스 목록을 가운데에 표시 */
+        grid-row: 2 / 3; /* 국내 경제 뉴스 목록을 가운데에 표시 */
 
     }
 

@@ -20,7 +20,7 @@ public class StocksEntity {
     private Long stockId;
 
     @Column(name = "ticker_id")
-    private long ticker;
+    private long tickerId;
 
     private String market;
     private BigDecimal currentPrice;

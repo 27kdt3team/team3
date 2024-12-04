@@ -268,7 +268,7 @@
     background-color: #f9f9f9; /* 배경색 추가 */
 }
 
-.news h1 {
+h2 {
     text-align: center;
     color: #333;
     font-size: 24px;
@@ -315,16 +315,11 @@
 .market-stats {
     padding: 20px;
     border-radius: 8px;
-    border: 3px solid black;
     background-color: #f9f9f9;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.market-stats h1 {
-    text-align: center;
-    font-size: 24px;
-    color: #333;
-    margin-bottom: 15px;
+    width: 100%; /* wrapper의 너비에 맞춤 */
+    height: 100%; /* wrapper의 높이에 맞춤 */
+    box-sizing: border-box; /* padding 포함 크기 계산 */
 }
 
 .market-stats ul {
@@ -337,8 +332,8 @@
     display: flex; /* 텍스트와 값 정렬 */
     justify-content: space-between; /* 양쪽 정렬 */
     align-items: center; /* 세로 중앙 정렬 */
-    font-size: 16px;
-    padding: 10px 0; /* 리스트 항목 간 간격 */
+    font-size: 14px;
+    padding: 15px 0; /* 리스트 항목 간 간격 */
     border-bottom: 1px solid #ddd; /* 하단 구분선 */
 }
 
