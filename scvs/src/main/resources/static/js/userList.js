@@ -34,6 +34,7 @@ masterCheckbox.addEventListener('click', function() {
 
 // 삭제 버튼 클릭 시 체크박스 선택 여부 확인
 deleteButton.addEventListener('click', function(event) {
+
   // 체크된 체크박스가 하나라도 있는지 확인
   var isAnyChecked = Array.from(checkboxes).some(function(checkbox) {
     return checkbox.checked;
@@ -41,5 +42,16 @@ deleteButton.addEventListener('click', function(event) {
 
   if (!isAnyChecked) {
     event.preventDefault(); // 폼 제출 막기
+  } else {
+    const confirmed = confirm("이 사용자의 계정을 삭제 처리하겠습니까?");
+
+        if (confirmed) {
+            alert("계정이 삭제되었습니다.");
+        } else {
+           event.preventDefault(); // 폼 제출 막기
+        }
+
   }
+
+
 });

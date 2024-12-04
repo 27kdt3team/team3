@@ -19,11 +19,11 @@
                     <a class="nav-link" th:href="@{/}">홈</a>
                 </li>
                 <!-- 로그인 상태에 따라 관심 종목 표시 -->
-                <li class="nav-item" th:if="${isLoggedIn}">
+                <li class="nav-item" sec:authorize="isAuthenticated()">
                     <a class="nav-link btn" th:href="@{/watchlist}">관심 종목</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link btn" th:href="@{/domestic}">국내</a>
+                    <a class="nav-link" th:href="@{/kor}">국내</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link btn" th:href="@{/usa}">미국</a>
@@ -31,19 +31,26 @@
             </ul>
             <ul class="d-flex navbar-nav mx-right account-menu">
                 <!-- 로그아웃 상태 -->
-                <li class="nav-item" sec:authorize ="isAnonymous()" th:href="@{/signup}">
-                    <a class="nav-link btn btn-account-sign" sec:authorize ="isAnonymous()" th:href="@{/signup}">회원가입</a>
+                <li class="nav-item" sec:authorize ="isAnonymous()" >
+                    <a class="nav-link btn btn-account-sign"  th:href="@{/signup}">회원가입</a>
                 </li>
-                <li class="nav-item" sec:authorize ="isAnonymous()" th:href="@{/login}">
-                    <a class="nav-link btn btn-login-out" sec:authorize ="isAnonymous()" th:href="@{/login}">로그인</a>
+                <li class="nav-item" sec:authorize ="isAnonymous()" >
+                    <a class="nav-link btn btn-login-out"  th:href="@{/login}">로그인</a>
                 </li>
 
+
                 <!-- 로그인 상태 -->
-                <li class="nav-item" sec:authorize ="isAuthenticated()" th:href="@{/user/profile}">
-                    <a class="nav-link btn btn-account-sign" sec:authorize ="isAuthenticated()" th:href="@{/user/profile}">내 정보</a>
+                <!-- USER -->
+                <li class="nav-item" sec:authorize ="hasRole('USER')" >
+                    <a class="nav-link btn btn-account-sign"  th:href="@{/user/profile}">내 정보</a>
                 </li>
-                <li class="nav-item" sec:authorize ="isAuthenticated()" th:href="@{/logout}">
-                    <a class="nav-link btn btn-login-out" sec:authorize ="isAuthenticated()" th:href="@{/logout}">로그아웃</a>
+                <!-- ADMIN -->
+                <li class="nav-item" sec:authorize ="hasRole('ADMIN')" >
+                    <a class="nav-link btn btn-account-sign"  th:href="@{/admin/userList}">관리자 기능</a>
+                </li>
+
+                <li class="nav-item" sec:authorize ="isAuthenticated()" >
+                    <a class="nav-link btn btn-login-out"  th:href="@{/logout}">로그아웃</a>
                 </li>
             </ul>
         </div>
