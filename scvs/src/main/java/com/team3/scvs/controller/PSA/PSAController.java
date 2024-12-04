@@ -43,7 +43,6 @@ public class PSAController {
         model.addAttribute("currentPage", page); // 사용자에게 보여줄 페이지 번호
         model.addAttribute("totalPages", psaPage.getTotalPages());
         model.addAttribute("query", query); // 검색어 유지
-        model.addAttribute("isLoggedIn", false); // 로그인 여부 기본값
 
         return "PSA/PSA-list";
     }
@@ -71,16 +70,9 @@ public class PSAController {
         PSA previousPSA = psaService.findPreviousPSA(id);
         PSA nextPSA = psaService.findNextPSA(id);
 
-
-        // 로그인 상태 기본값 및 관리자 여부 설정
-        boolean isLoggedIn = true; // 로그인 여부 확인 로직으로 대체 가능
-        boolean isAdmin = true;    // 관리자 여부 확인 로직으로 대체 가능
-
         // 모델에 데이터 추가
         model.addAttribute("psa", psa);
         model.addAttribute("publishedAt", formattedDate);
-        model.addAttribute("isLoggedIn", isLoggedIn);
-        model.addAttribute("isAdmin", isAdmin);
         model.addAttribute("previousPSA", previousPSA);
         model.addAttribute("nextPSA", nextPSA);
 
@@ -93,8 +85,6 @@ public class PSAController {
     @GetMapping("/PSA-add")
     public String viewPSAAddPage(Model model) {
         // 로그인 상태 기본값 설정 (로그인 관련 로직 없이 기본값만 설정)
-        boolean isLoggedIn = false; // 로그인 여부 확인 로직 추가 가능
-        model.addAttribute("isLoggedIn", isLoggedIn);
 
         return "PSA/PSA-add"; // Thymeleaf 템플릿 경로
     }
@@ -118,9 +108,6 @@ public class PSAController {
         if (psa == null) {
             return "redirect:/error/404"; // ID에 해당하는 공지가 없으면 404 페이지로 리다이렉트
         }
-        // 로그인 상태 기본값 설정
-        boolean isLoggedIn = false; // 실제 로그인 여부 확인 로직으로 대체
-        model.addAttribute("isLoggedIn", isLoggedIn);
 
         model.addAttribute("psa", psa);
         return "PSA/PSA-update"; // 수정 화면 템플릿
