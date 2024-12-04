@@ -5,7 +5,8 @@
 <body>
 
 <th:block layout:fragment="MainBodyContents">
-  <div class="container mt-4">
+  <div class="container mt-4" style="height: 83vh;">
+    <h1 class="text-center mb-3" >사용자 관리</h1>
     <!-- 상단 -->
     <form class="row mb-3 align-items-center" th:action="@{/admin/userList}" method="POST">
       <!-- 라벨 -->
@@ -64,6 +65,11 @@
           <tbody>
           <!-- 데이터 행 -->
 
+          <!-- 데이터가 없을 때 -->
+          <tr th:if="${users.content.isEmpty()}">
+            <td colspan="5" class="text-center">해당 사용자 정보가 없습니다.</td>
+          </tr>
+          <!-- 데이터가 있을 때 -->
           <tr th:each="user, iterStat : ${users.content}">
             <td class="text-center"><input type="checkbox" name="userIds" th:value="${user.userId}"></td> <!-- 삭제 체크리스트 -->
             <td th:text="${user.userId}" class="text-center"></td> <!-- 번호 -->
