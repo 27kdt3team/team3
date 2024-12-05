@@ -32,6 +32,7 @@ class NewsCrawlerPipeline:
         text = re.sub(r"\s+", " ", text).strip() # 긴 공백 문자 제거
         return text
 
+    # 크롤링한 뉴스 기사를 
     def process_item(self, item, spider):
         self.logger.log_info('Inserting item into database.')
         self.logger.log_info(f'Item: {str(item)}')

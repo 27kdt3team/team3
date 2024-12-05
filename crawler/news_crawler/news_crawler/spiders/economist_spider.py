@@ -6,10 +6,10 @@ from news_crawler.news_crawler.user_agents import get_random_user_agent
 class EconomistSpider(scrapy.Spider):
     name = 'economist' # 이름 명시 (CLI로 크롤러를 호출할 때 필수)
     
-    # 서버에서 바로 정보를 요청
-    # 뉴스 목록 페이지 1부터 200까지 각 뉴스 기사 링크를 가져옴
+    # 서버에 GET 요청
     def start_requests(self):
         # 10 articles per page
+        # 크롤링할 페이지만큼 iterate한다
         for i in range(1, 51):
             yield scrapy.Request(f'https://economist.co.kr/article/items/ecn_SC001001000?returnType=ajax&page={i}', headers=get_random_user_agent())
             

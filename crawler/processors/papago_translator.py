@@ -43,28 +43,32 @@ class PapagoTranslator:
             "X-NCP-APIGW-API-KEY": self.client_secret,
         }
         
+    # Papago API의 불규칙한 결과값 때문에 제목이랑 내용을 따로 번역함
     def translate(self, article: Article) -> dict[str, str]:
-        title_result = self.execute_request(article.title)
-        content_result = self.translate_content(article.content)
+        title_result = self.execute_request(article.title) # 기사 제목
+        content_result = self.translate_content(article.content) # 기사 내용
         
         result = None
         # 번역 작업이 둘 다 성공했을 시 번역 성공
         if title_result.get('status') == Status.SUCCESS.value and content_result.get('status') == Status.SUCCESS.value:
             status = Status.SUCCESS.value
             log_msg = LogMsg.TRANSLATION_SUCCESS.value
-            translated_title = title_result.get('text')
-            translated_content = content_result.get('text')
+            translated_title = title_result.get('text') # 번역된 제목
+            translated_content = content_result.get('text') # 번역된 내용
             
+            # 번역 작업 결과
             result = {
-                'status' : status,
-                'log_msg' : log_msg,
-                'title' : translated_title,
-                'content' : translated_content
+                'status' : status, # 작업 성공 여부
+                'log_msg' : log_msg, # 로그 상태 메세지
+                'title' : translated_title, # 번역된 제목
+                'content' : translated_content # 번역된 내용
             }
             
-        # 둘 중에 하나가 실패하거나 동시에 실패 했을 시
+        
         else:
-            reason = ''
+            reason = '' # 실패한 이유
+            
+            # 제목, 내용이 실패하거나 둘 다 실패 했을 시
             if title_result.get('status') == Status.FAILED.value:
                 reason += title_result.get('reason')
                 
@@ -140,7 +144,7 @@ class PapagoTranslator:
         response = requests.post(self.API_URL, headers=headers, data=payload)
         
         try:
-            # API 응답 코드 확인
+            # 서버 응답 코드 확인
             if response.status_code == 200: # 200 OK
                 response_json = response.json()
                 translated_text = response_json['message']['result']['translatedText']
@@ -150,6 +154,7 @@ class PapagoTranslator:
                     'text' : translated_text
                 }
 
+            # 서버 요청이 실패할 시
             else:
                 failed_reason = "Status Code: " + str(response.status_code) + "\nMessage: " + response.text + '. '
                 return {

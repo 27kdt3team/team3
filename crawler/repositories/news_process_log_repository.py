@@ -1,4 +1,6 @@
 from mysql.connector import Error
+from typing import List
+
 from models.news_process_log import NewsProcessLog
 from repositories.base_repository import BaseRepository
 from enums.process import Process
@@ -6,7 +8,8 @@ from enums.process import Process
 
 class NewsProcessLogRepository(BaseRepository):
 
-    def update_logs(self, process: Process, logs: list[NewsProcessLog]) -> None:
+    # 텍스트 가공 로그를 업데이트 한다
+    def update_logs(self, process: Process, logs: List[NewsProcessLog]) -> None:
         if not logs:
             self.logger.log_warning("There are no logs to update.")
             return
@@ -14,6 +17,7 @@ class NewsProcessLogRepository(BaseRepository):
         query = None
         values = None
 
+        # 각 텍스트 가공 단계와 업데이트할 칼럼 매핑
         process_to_column = {
             Process.TRANSLATION: "translated_at",
             Process.KEYWORD_EXTRACTION: "keyword_extracted_at",
@@ -27,6 +31,8 @@ class NewsProcessLogRepository(BaseRepository):
 
         column_name = process_to_column.get(process)
 
+        # 텍스트 가공에 실패했을 경우 해당 기사에 대한 가공은 끝났다고 정의한다 (completed_at = NOW())
+        # 성공했을 경우 completed_at은 null 상태로 남아있는다
         # 실제 테이블용 쿼리문
         # query = f'''
         # UPDATE

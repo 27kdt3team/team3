@@ -27,6 +27,8 @@ class Article:
         self.ticker_id = ticker_id
         self.sentiment = sentiment
         
+    # 객체를 출력할 때
+    # Java의 to_string()과 동일
     def __repr__(self) -> str:
         return f'''
         Article(
@@ -60,6 +62,7 @@ class Article:
             'sentiment' : self.sentiment
         }
     
+    # dictionary로 객체 생성
     @classmethod
     def from_dict(cls, data: dict) -> 'Article':
         return cls(

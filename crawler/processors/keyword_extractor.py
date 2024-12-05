@@ -15,7 +15,7 @@ class KeywordExtractor:
     def get_tickers(self, ticker_dict: Dict[str, str]) -> None:
         self.ticker_dict = ticker_dict
         
-    # 뉴스 기사에 기업명만 남기기 위한 텍스트 가공
+    # 뉴스 기사에 최대한 기업명만 남기기 위한 텍스트 가공
     def remove_noise(self, article) -> str:
         result = re.sub(r'(와|과|은|는|이|가|을|를|에|의|로|으로|도|만|까지|부터|밖에)\b', ' ', article) # 한국어 조사 필터링
         result = re.sub(r'(^[^가-힣a-zA-Z]+|[^가-힣a-zA-Z]+$)', '', result) # 단어 시작과 끝에 있는 특수 문자 필터링
@@ -24,6 +24,7 @@ class KeywordExtractor:
         
         return result
         
+    # 키워드 추출
     def extract(self, article: Article) -> dict:
         if not self.ticker_dict:
             self.logger.log_error('Ticker dict is not set for KeywordExtractor.')

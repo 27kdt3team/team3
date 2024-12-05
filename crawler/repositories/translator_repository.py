@@ -1,11 +1,13 @@
 from mysql.connector import Error
+from typing import List
 from repositories.base_repository import BaseRepository
 from models.article import Article
-from logs.logger import Logger
+
 
 class TranslatorRepository(BaseRepository):
-     
-    def fetch_unprocessed_data(self) -> list[Article]:
+    
+    # 번역이 안된 영문 기사들을 데이터베이스에서 가져온다
+    def fetch_unprocessed_data(self) -> List[Article]:
         # 실제 테이블용 쿼리
         # query = '''
         # SELECT
@@ -42,13 +44,14 @@ class TranslatorRepository(BaseRepository):
         
         try:
             rows = self.fetch_results(query = query)
-            return [Article.from_dict(row) for row in rows]
+            return [Article.from_dict(row) for row in rows] # 가져온 기사 정보를 Article 객체에 담음
         except Error as sql_e:
             self.logger.log_error('Error fetching untranslated articles.')
             self.logger.log_error(sql_e)
             return []
             
-    def save_processed_data(self, articles: list[Article]) -> None:
+    # 번역된 영문 기사들을 데이터베이스에 저장
+    def save_processed_data(self, articles: List[Article]) -> None:
         # 실제 테이블용 쿼리
         # query = '''
         # INSERT INTO

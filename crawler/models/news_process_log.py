@@ -8,6 +8,8 @@ class NewsProcessLog:
         self.status = status
         self.log_msg = log_msg
     
+    # 객체를 print할 때
+    # Java의 to_string() 메소드와 동일
     def __repr__(self) -> str:
         return f'''
     NewsProcessLog(
@@ -17,6 +19,7 @@ class NewsProcessLog:
     )
     '''
     
+    # dictionary로 객체 생성
     @classmethod
     def from_dict(cls, data: dict) -> 'NewsProcessLog':
         return cls(

@@ -1,11 +1,15 @@
 from mysql.connector import Error
 from repositories.base_repository import BaseRepository
 from models.article import Article
+from typing import List
 
 
 class KeywordExtractorRepository(BaseRepository):
 
-    def fetch_unprocessed_data(self) -> list[Article]:
+    # 키워드 추출이 안된 기사들을 데이터베이스에서 가져온다
+    def fetch_unprocessed_data(self) -> List[Article] | None:
+        
+        # 원본이 영문이라면 번역된 기사를 가져온다
         # 실제 테이블용 쿼리
         # query = '''
         # SELECT
@@ -55,13 +59,14 @@ class KeywordExtractorRepository(BaseRepository):
 
         try:
             rows = self.fetch_results(query=query)
-            return [Article.from_dict(row) for row in rows]
+            return [Article.from_dict(row) for row in rows] # Article 배열에 결과 저장
         except Error as sql_e:
             self.logger.log_error("Error fetching unextracted(keyword) articles.")
             self.logger.log_error(sql_e)
-            return []
+            return None
 
-    def save_processed_data(self, articles: list[Article]) -> None:
+    # 키워드 추출된 기사의 정보를 저장: 해당 기사의 뉴스 분류(경제/주식), 티커 id
+    def save_processed_data(self, articles: List[Article]) -> None:
         # 실제 테이블용
         # query = '''
         # INSERT INTO

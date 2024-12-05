@@ -1,9 +1,12 @@
 from mysql.connector import Error
+from typing import Dict
 from repositories.base_repository import BaseRepository
 
 class TickerRepository(BaseRepository):
     
-    def fetch_tickers(self) -> dict[str, str]:
+    # 주식 티커 정보를 dict안에 넣는다
+    # company(key) => ticker_id(value) 
+    def fetch_tickers(self) -> Dict[str, str]:
         query = '''
         SELECT 
             company, ticker_id 
