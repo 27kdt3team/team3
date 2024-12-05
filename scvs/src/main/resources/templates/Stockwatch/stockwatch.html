@@ -9,246 +9,144 @@
 <th:block layout:fragment="MainBodyContents">
     <div class="container">
         <div class="Stock-info"> <!-- 왼쪽 맨 윗 부분-->
-            <img width="30px", height="30px" src="../../static/images/apple.png"/>
-            <div class="stockLogo"> <!-- 로고, 기업명 -->
-                <p>Apple Inc.</p> <!--(회사 명) -->
-                <span class="tinyText">AAPL</span><!--(회사 번호명?) -->
-            </div>
-            <div class="risesFalls"> <!-- -100%  -->
-                <Span>-100% ↓</Span>
-            </div>
-            <!--<div class="risesFalls2">
-                <Span>-100% ↑</Span>
-            </div> -->
-            <div class="stock-price"> <!-- 현재 가격 -->
-                <p>₩282,321.77</p>
-                <span class="tinyText">Last updated 14.30</span><!-- 최신 업데이트 날짜-->
+            <div class="stock-header">
+                <!-- 회사명과 심볼 -->
+                <span class="company-name" th:text="${stockInfo.company}"></span>
+                <span class="symbol" th:text="${stockInfo.symbol}"></span>
+                <span class="current-price">
+                    <span th:if="${stockInfo.market != null}">
+                        <span th:if="${stockInfo.market == 'KOR'}">₩</span>
+                        <span th:if="${stockInfo.market == 'USA'}">$</span>
+                    </span>
+                    <span th:text="${stockInfo.currentPrice}"></span>
+                </span>
             </div>
         </div>
         <div class ="graphInfo"> <!-- 그래프 및 주변부 -->
-            <div class="time-buttons"> <!-- 그래프 지표 선택 버튼 -->
-                <button class="active">1 Day</button>
-                <button>1 Week</button>
-                <button>1 Month</button>
-                <button>3 Month</button>
-                <button>6 Month</button>
-                <button>1 Year</button>
-                <button>5 Year</button>
-                <button>All</button>
-            </div>
-
-            <div class="graph"><!-- flex 그래프 및 주변부-->
-                <div class="graphPrice"><!-- 수직 그래프 옆 가격 표시-->
-                    <p>100000</p>
-                    <p>10</p>
-                    <p>10</p>
-                    <p>10</p>
-                    <p>10</p>
-                    <p>10</p>
-                </div>
-                <div class="temp"> <!-- 그래프+날짜 -->
-                    <img class="graphImage"  src="../../static/images/graph.png"/><!-- 그래프 -->
-                    <div class="graphDate"><!-- 날짜 -->
-                        <div>
-                            <p>Mon</p>
-                            <span>10</span>
-                        </div>
-                        <div>
-                            <p>Tue</p>
-                            <span>10</span>
-                        </div>
-                        <div>
-                            <p>Wed</p>
-                            <span>10</span>
-                        </div>
-                        <div>
-                            <p>Thu</p>
-                            <span>10</span>
-                        </div>
-                        <div>
-                            <p>Fri</p>
-                            <span>10</span>
-                        </div>
-                        <div>
-                            <p>Sat</p>
-                            <span>10</span>
-                        </div>
-                        <div>
-                            <p>Sun</p>
-                            <span>10</span>
-                        </div>
-                        <div>
-                            <p>Mon</p>
-                            <span>10</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+            <div id="stock-graph" style="height: auto; min-width: auto;"></div>
         </div>
-        <div class="market-stats"> <!-- 우측 위 지표-->
-            <div class="marketStatsTable"> <!-- 내부 -->
-                <h2>Market Stats</h2>
-                <ul class="stats-list"> <!-- 지표 나열된 표 -->
+
+        <div class="market-stats-wrapper">
+            <h2>Market Stats</h2>
+            <div class="market-stats" th:if="${marketinfo != null}">
+                <ul>
                     <li>
-                        <div>
-                            <!-- 조그만 아이콘 + 지표명 -->
-                            <img class="icon" src="../../static/images/index2.png">
-                            <span class="stats-index">Open</span>
-                        </div>
-                        <span class="value">277,890.00</span> <!-- 값, 우측 정렬 -->
-                    </li>
-                    <li> <!-- 위와 같은 구조 11개 반복 -->
-                        <div>
-                            <img class="icon" src="../../static/images/index2.png">
-                            <span class="stats-index">Close</span>
-                        </div>
-                        <span class="value">278,000.00</span>
+                        <span>Open:</span>
+                        <span th:text="${marketinfo.open}"></span>
                     </li>
                     <li>
-                        <div>
-                            <img class="icon" src="../../static/images/index3~5.png">
-                            <span class="stats-index">Volume</span>
-                        </div>
-                        <span class="value">220.75K</span>
+                        <span>Close:</span>
+                        <span th:text="${marketinfo.close}"></span>
                     </li>
                     <li>
-                        <div>
-                            <img class="icon" src="../../static/images/index3~5.png">
-                            <span class="stats-index">Day-Range</span>
-                        </div>
-                        <span class="value">3.50%</span>
+                        <span>Volume:</span>
+                        <span th:text="${marketinfo.volume}"></span>
                     </li>
                     <li>
-                        <div>
-                            <img class="icon" src="../../static/images/index3~5.png">
-                            <span class="stats-index">52 Week Range</span>
-                        </div>
-                        <span class="value">25.80%</span>
+                        <span>Day Range:</span>
+                        <span th:text="${marketinfo.dayLow} + ' - ' + ${marketinfo.dayHigh}"></span>
                     </li>
                     <li>
-                        <div>
-                            <img class="icon" src="../../static/images/index6~9.png">
-                            <span class="stats-index">ROE</span>
-                        </div>
-                        <span class="value">6.50%</span>
+                        <span>ROE:</span>
+                        <span th:text="${marketinfo.returnOnEquity} + '%'"></span>
                     </li>
                     <li>
-                        <div>
-                            <img class="icon" src="../../static/images/index6~9.png">
-                            <span class="stats-index">P/E Ratio</span>
-                        </div>
-                        <span class="value">5.24</span>
+                        <span>EV:</span>
+                        <span th:text="${marketinfo.enterpriseValue}"></span>
                     </li>
                     <li>
-                        <div class="stats-index">
-                            <img class="icon" src="../../static/images/index6~9.png">
-                            <span>P/B Ratio</span>
-                        </div>
-                        <span class="value">0.55</span>
+                        <span>EV/EBITDA:</span>
+                        <span th:text="${marketinfo.enterpriseToEBITDA}"></span>
                     </li>
                     <li>
-                        <div class="stats-index">
-                            <img class="icon" src="../../static/images/index6~9.png">
-                            <span>P/C Ratio</span>
-                        </div>
-                        <span class="value">6.70</span>
-                    </li>
-                    <li>
-                        <div class="stats-index">
-                            <img class="icon" src="../../static/images/index10~11.png">
-                            <span>EV</span>
-                        </div>
-                        <span class="value">28.14</span>
-                    </li>
-                    <li>
-                        <div class="stats-index">
-                            <img class="icon" src="../../static/images/index10~11.png">
-                            <span>EV/EBITDA</span>
-                        </div>
-                        <span class="value">4.20</span>
+                        <span>P/B Ratio:</span>
+                        <span th:text="${marketinfo.priceToBook}"></span>
                     </li>
                 </ul>
             </div>
+            <div class="no-data" th:if="${marketinfo == null}">
+                <p>마켓 정보가 없습니다</p>
+            </div>
         </div>
+
         <div class="news"> <!-- 왼쪽 아래 뉴스 페이지 -->
-            <h3>News</h3>
-            <div class="newsIndex"> <!-- 뉴스 제목, 날짜, 사진 포함된 1 단락-->
-                <div>
-                    <!-- 언론사 및 날짜 -->
-                    <span class="media-company-color">NewsLetter - </span> <span class="date-color">27 dec 2020</span>
-                    <div class="newsTitle"> <!-- 뉴스 제목 및 감정표현 -->
-                        <p>Penn's Expanding Political Climate Gears Up Fo 2020 Election</p>
-                        <img class="imotion" src="../../static/images/positive.png"/>
+            <section class="stock-news">
+                <!-- 동적으로 DB에서 가져온 데이터 출력 -->
+                <div th:each="newsItem : ${stockNews}" class="news-item">
+                    <div class="text-content">
+                        <div class="source-publishedAt">
+                            <!-- 언론사 -->
+                            <p class="source" th:text="${newsItem.source}"></p>
+                            <!-- 작성일 -->
+                            <p class="publishedAt" th:text="${#temporals.format(newsItem.publishedAt, 'yyyy-MM-dd HH:mm:ss')}"></p>
+                        </div>
+                        <h4>
+                            <!-- 기사 제목을 클릭하면 뉴스 ID와 현재 페이지 값을 상세 조회 메서드로 넘겨주기 -->
+                            <a th:href="@{|/stocknews/${newsItem.stockNewsId}|(page=${stockNews.number + 1})}"
+                               th:text="${newsItem.title}"
+                               class="news-title"></a>
+                        </h4>
                     </div>
+                    <!-- 뉴스 이미지 -->
+                    <img th:src="${newsItem.imageLink}" alt="Unable to load image" width="180" height="90" class="news-image">
                 </div>
-                <img class="newsIndexImage"  src="../../static/images/picture1.png"/> <!-- 뉴스 이미지 -->
-                <!-- 위와 같은 구조 3개 -->
-            </div>
-            <div class="newsIndex">
-                <div>
-                    <span class="media-company-color">서울 신문 - </span> <span class="date-color">27 dec 2020</span>
-                    <div class="newsTitle">
-                        <p>Things To Look For In A Financial Trading Platformaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
-                        <img class="imotion" src="../../static/images/negative.png"/>
-                    </div>
-                </div>
-                <img class="newsIndexImage" src="../../static/images/picture2.png"/>
-            </div>
-            <div class="newsIndex">
-                <div>
-                    <span class="media-company-color">한국 경제 - </span> <span class="date-color">27 dec 2020</span>
-                    <div class="newsTitle">
-                        <p>The Only Thing That Overcomes Hard Luck Is Hard Workaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p>
-                        <img class="imotion" src="../../static/images/nutral.png"/>
-                    </div>
-                </div>
-                <img class="newsIndexImage" src="../../static/images/picture3.png"/>
-            </div>
 
+                <!-- 페이징 처리 -->
+                <!-- 페이징 처리 -->
+                <div class="pagination">
+                    <!-- 첫번째 페이지 -->
+                    <a th:href="@{/stockwatch(tickerId=${tickerId}, page=1)}" class="first-page"></a>
 
+                    <!-- 이전 페이지 -->
+                    <a th:href="${stockNews.first} ? '#' : @{/stockwatch(tickerId=${tickerId}, page=${stockNews.number})}" class="previous-page"></a>
 
-            <!-- 페이징 처리 -->
-            <!-- 주연님 페이징 부분 복사 붙여넣기 했습니다. -->
-            <div class="pagination">
-                <!-- 첫번째 페이지 -->
-                <a th:href="@{/usa(page=1)}" class="first-page"></a>
-                <!-- 이전 페이지 -->
-                <a th:href="${usaList.first} ? '#' : @{/usa(page=${usaList.number})}" class="previous-page"></a>
-
-                <!-- 페이지 번호 -->
-                <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
-                    <!-- 현재 페이지는 링크 없이 숫자만으로 표시 (usaList.number 값은 실제 페이지보다 1이 작은 값) -->
-                    <span th:if="${page == usaList.number + 1}" th:text="${page}" class="current-page"></span>
-                    <!-- 현재 페이지 외의 페이지들은 숫자에 링크로 표시 -->
-                    <span th:unless="${page == usaList.number + 1}">
-                        <a th:href="@{/usa(page=${page})}" th:text="${page}" class="page-link"></a>
+                    <!-- 페이지 번호 -->
+                    <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
+                        <!-- 현재 페이지는 링크 없이 숫자만으로 표시 -->
+                        <span th:if="${page == stockNews.number + 1}" th:text="${page}" class="current-page"></span>
+                                        <!-- 현재 페이지 외의 페이지들은 숫자에 링크로 표시 -->
+                        <span th:unless="${page == stockNews.number + 1}">
+                            <a th:href="@{/stockwatch(tickerId=${tickerId}, page=${page})}" th:text="${page}" class="page-link"></a>
+                        </span>
                     </span>
-                </span>
 
-                <!-- 다음 페이지 -->
-                <a th:href="${usaList.last} ? '#' : @{/usa(page=${usaList.number + 2})}" class="next-page"></a>
-                <!-- 마지막 페이지 -->
-                <a th:href="@{/usa(page=${usaList.totalPages})}" class="last-page"></a>
-            </div>
+                    <!-- 다음 페이지 -->
+                    <a th:href="${stockNews.last} ? '#' : @{/stockwatch(tickerId=${tickerId}, page=${stockNews.number + 2})}" class="next-page"></a>
+
+                    <!-- 마지막 페이지 -->
+                    <a th:href="@{/stockwatch(tickerId=${tickerId}, page=${stockNews.totalPages})}" class="last-page"></a>
+                </div>
+
+            </section>
         </div>
 
 
+        <div class="community"> <!-- 우측 아래 토론방 -->
+            <h2>토론방</h2>
+            <div>
+                <span>최신 댓글</span>
+                <br>
+                <span th:if="${latestComment != null}" th:text="${latestComment.nickname}">닉네임</span>
+                <span th:if="${latestComment != null}" th:text="' : ' + ${latestComment.comment}">댓글 내용</span>
+                <span th:if="${latestComment == null}">최신 댓글이 없습니다.</span>
+            </div>
+            <hr>
+            <div class="comment-summary">
+                <form th:action="@{/community}" method="get" style="display: inline;">
+                    <!-- tickerId 히든 필드 -->
+                    <input type="hidden" name="tickerId" th:value="${tickerId}">
 
-
-        <div class="community"> <!--우측 아래 토론방 -->
-            <h3>토론방 바로가기</h3>
-            <p class="cDate">13:32 기준</p>
-            <div class="communityMove"> <!-- 토론방 박스 안 -->
-                <!-- 이모티콘 + 글자-->
-                <p><img src="../../static/images/discuss.png" width="22", height="15"/> &nbsp;(가장 최신 comment)</p>
-
-                <hr class="communityBorder">
-                <p class="communityComment">12,345개의 의견 보기 ></p>
+                    <!-- 클릭 가능한 링크 -->
+                    <button type="submit" style="background: none; border: none; color: inherit; cursor: pointer; padding: 0; font: inherit;">
+                        <span th:if="${totalComments > 0}" th:text="${totalComments} + '개의 의견 보기 >'">0개의 의견 보기 ></span>
+                        <span th:if="${totalComments == 0}">댓글이 없습니다.</span>
+                    </button>
+                </form>
             </div>
         </div>
     </div>
-
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script th:src="@{/js/stockwatch.js}"></script>
 </th:block>
 
 </body>

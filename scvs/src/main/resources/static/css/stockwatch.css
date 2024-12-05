@@ -1,396 +1,139 @@
-/* Base styling for the container */
 .container {
     width: 100%;
-    max-width: 1200px;
-    height: 718px;
     margin: 0 auto;
     padding: 20px;
     display: grid;
-    grid-template-columns: 1fr 6fr 4fr 1fr;
-    grid-template-rows: repeat(12, 1fr);
+    grid-template-columns: 4fr 2fr;
+    grid-template-rows: auto;
+    gap: 10px;
+    background-color: #f9f9f9;
+}
+
+/* Stock Info Section */
+.Stock-info {
+    grid-column: 1 / 2; /* 첫 번째 열 */
+    grid-row: 1 / 2;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #fff; /* 배경색 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 그림자 */
+    font-family: Arial, sans-serif;
+}
+
+/* 회사명과 심볼 */
+.stock-header {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.company-name {
+    font-size: 1.4em;
+    font-weight: bold;
+}
+
+.symbol {
+    font-size: 0.9em;
+    color: #666;
+}
+
+/* 현재 가격 및 투표 */
+.stock-price {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
     gap: 20px;
 }
 
-
-
-
-
-
-/* Stock Info Section */
-.Stock-info { /*왼쪽 맨위 부분 전체 박스*/
-    font-weight: bold; /*폰트 굵게*/
-    color: #333; /*배경 색*/
-    font-size: 20px;
-    white-space: nowrap; /*줄 바뀜 방지*/
-    grid-column: 2 / 3; /* 칸 크기 조절 */
-    grid-row: 1 / 2;
-    height: 30px; /*박스 높이 조절*/
-    padding: 20px;
-    border: none; /*테두리 없음*/
-    line-height: 30%; /*띄어 쓰기 조절*/
-    display: flex; /*가로 배치*/
-       /* Align content to space out items */
-    align-items: center; /* 수직 중앙 정렬 */
-
+.current-price {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #333;
+    margin-right: 130px;
 }
-
-
-.risesFalls {/* 가격 값(value) 옆에 등락 박스(-100)*/
-
-    display: flex; /*가로 배치*/
-    text-align: center; /* 정렬 */
-    align-items: center;
-    height: 45%; /* 높이 */
-    border-radius:25px; /* 둥근 테두리 */
-    background-color: #d74444; /* 배경 색 */
-    color: white; /* 글씨 색 및 크기*/
-    font-size: 8px;
-}
-/* 가격이 떨어졌을 때 배경색만 바꿧습니다
-.risesFalls2 {
-
-    display: flex;
-    text-align: center;
-    align-items: center;
-    height: 45%;
-    border-radius:25px;
-    background-color: #0783c7;
-    color: white;
-    font-size: 8px;
-}
-*/
-
-
-
-.stockLogo { /*로고 및 기업명*/
-
-    margin-left: 1%; /* 마진 */
-    margin-right: 55%;
-
-}
-
-/* Stock Price Styling */
-.stock-price { /* 박스 내 우측 현재 가격 및 최신 업데이트 날짜*/
-    margin-left: 1%; /* 마진 및 정렬 */
-    text-align: right;
-
-}
-
-.tinyText { /* 최신 갱신일 표시하는 작은 글자 */
-
-    font-size: 10px; /* 폰트 크기 및 색상 */
-    color: #989898;
-}
-
-
-
-
-
-
-
-
 
 /* Graph Section */
-.graphInfo { /* 그래프 단락 전체 박스 */
-
-    grid-column: 2 / 3; /* 크기 비율 조정 */
-    grid-row: 2 / 7;
-    padding: 20px; /* 패딩 및 마진*/
-    margin-left: 10px;
-    border-top: 1px solid #ececec; /* 테두리  */
-    align-items: center; /* 정렬 수직 가운데로*/
-}
-
-.time-buttons { /* day, week 등 선택하는 버튼 */
-  display: flex; /* 가로 배치 */
-  justify-content: space-around; /* 일정 간격으로 정렬 */
-  margin-bottom: 20px; /* 마진 */
-  margin-right: 0px;
-}
-
-.time-buttons button { /* 버튼 내부 상세*/
-
-
-  border: 1px solid #ddd; /* 테주리 */
-  background: #fff; /* 배경 */
-  padding: 6px 10px; /* 패딩 */
-  border-radius: 30px; /* 버튼 원형 테두리 */
-  cursor: pointer;
-  font-size: 8px; /* 글자 크기 및 굵기,  줄바뀜 방지*/
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-.time-buttons button.active { /* 버튼이 눌렸을 경우, gpt 부분입니다*/
-  background: #000; /* 배경, 글자 색, 굵기*/
-  color: #fff;
-  font-weight: bold;
-}
-
-.graph { /*그래프 및 주변부 */
-    display: flex; /* 가로 배치 */
-    /* */
-
-}
-
-.graphPrice { /* 그래프 옆 가격 */
-
-    font-size: 8px; /* 글자 크기 및 색상 */
-    color: #97979b;
-
-}
-
-.graphImage { /* 그래프 크기 */
-
-    width: 95%;
-    height: 50%;
-}
-
-.graphDate { /* 그래프 아래 날짜 및 요일 */
-
-    position: relative; /* 좌측으로 약간 이동 */
-    right: 3%;
-
-    display: flex; /* 가로배치 및 일정 간격으로 정렬*/
-    justify-content: space-around;
-    font-size: 8px; /* 글자 크기 및 색상(mon, tue) */
-    color: #d9d8de;
-}
-
-.graphDate span { /* */
-
-    color: #97979b; /*(10, 11, 12, 13)*/
-}
-
-
-
-
-
-
-
-
-/* Market Stats Section */
-.market-stats { /* 우측 위 지표들 박스 */
-    grid-column: 3 / 4; /* 칸 나눔 */
-    grid-row: 1 / 7;
-    padding: 20px; /*패딩*/
-    border: none; /* 테두리 x */
-    display: flex; /*  */
-    flex-direction: column; /* 수직방향으로 쌓음? 정확히 모르겠습니다*/
-    gap: 10px;
-}
-
-.marketStatsTable { /* 박스 내부 상세 */
-
-    border: 1px solid #949494; /* 테두리 및 패딩 */
+.graphInfo {
+    grid-column: 1 / 2; /* 전체 열을 차지 */
+    grid-row: 2 / 4;
     padding: 20px;
     border-radius: 8px;
-    background-color: white;
+    background-color: #fff; /* 배경색 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 그림자 */
 }
-
-.marketStatsTable h2 { /* 큰 글씨(market stats) 상세*/
-
-    font-size: 15px; /* 폰트 크기, 굵기, 마진 */
-    margin-bottom: 15px;
-    font-weight: bold;
-}
-
-/* Stats List Styling */
-.stats-list { /* 지표 나열된 표 전체 */
-
-    font-size: 10px; /* 폰트 사이즈 */
-    list-style: none;
-    padding: 0; /* 마진, 패딩 gpt*/
-    margin: 0;
-}
-
-.stats-list li { /* 표 내부 li */
-
-    display: flex; /* 가로 정렬 */
-    align-items: center; /* 수직 가우데 정렬 및 일정 간격으로 정렬 */
-    justify-content: space-between;
-    padding: 5px 0; /* 패딩 및 바텀 테두리만(연한색) */
-    border-bottom: 1px solid #eee;
-}
-
-.stats-list li:last-child { /* 마지막 속성 테두리 x*/
-    border-bottom: none;
-}
-
-.stats-index { /* 테두리 내 왼쪽 지표*/
-
-    color: #434343; /* 색상, 크기, 굵기 */
-    font-size: 10px;
-    font-weight: 600;
-
-}
-
-.icon {/* 테두리 내 아이콘 */
-
-    width: 15px; /* 넓이, 높이, 패딩 */
-    height: 15px;
-    padding-right: 5px;
-    flex: 0 0 30px;
-}
-
-.value {/* 테두리 내 우측 값 */
-
-    font-size: 10px; /* 크기, 굵기, 색상, 우측 정렬 */
-    font-weight: bold;
-    color: #434343;
-    text-align: right;
-}
-
-
-
-
-
-
-
-
-
 
 /* News Section */
-.news { /* 왼쪽 아래 뉴스 페이지 */
-
-    grid-column: 2 / 3;  /* 크기 비율 조절 */
-    grid-row: 7 / 12;
-    padding: 20px; /* 패딩 */
-    padding-top:1px;
-    border: none; /* 테두리 x */
-    display: flex; /* */
-    flex-direction: column; /* 세로로 쌓음 */
-    line-height: 30%; /* 줄 바꿈 간격 조절*/
-
-    font-size: 16px; /* 글씨 크기 및 굵기*/
-    font-weight: 500;
-    gap: 13px;
-}
-
-.newsIndex { /* 언론사, 날짜, 제목등이 포함된 1 단락*/
-    position: relative; /**/
-    bottom: 5%;
-    /*위치 이동*/
-    display: flex; /* 가로 배치 */
-    justify-content: center; /* 가로축 가운데 정렬 */
-    margin-bottom: -7%; /* 마진(음수), 패딩*/
+.news {
+    grid-column: 1 / 3; /* 첫 번째 열 */
+    grid-row: 5 / 7; /* 세 번째 행 */
     padding: 20px;
-    border: none;
+    border-radius: 8px;
+    background-color: #fff; /* 배경색 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 그림자 */
+}
+.news-item {
+    display: flex; /* 플렉스 레이아웃 */
+    align-items: center; /* 수직 가운데 정렬 */
+    margin-bottom: 20px;
+    gap: 20px; /* 텍스트와 이미지 간격 */
+    border-bottom: 1px solid #ccc; /* 구분선 */
+    padding-bottom: 10px; /* 구분선과의 간격 */
+    width: 75vw;
 }
 
-.media-company-color { /*언론사*/
+/* 기사 정보 */
+.news-item .text-content {
+    display: flex; /* 플렉스 레이아웃 */
+    flex-direction: column; /* 세로 정렬 */
+    flex-grow: 1; /* 이미지 위치를 우측으로 고정 */
 
+}
+
+.news-item .text-content .source-publishedAt {
+    display: flex; /* 플렉스 레이아웃 */
+    gap: 10px; /* media와 date 간 간격 */
     font-size: 10px;
-    color: #5e5c5c;
-    display: inline;
-
-  }
-
-.date-color { /*날짜*/
-
-    font-size: 10px;
-    color: #989898;
-    display: inline;
-
-  }
-
-.imotion { /* 감정 표현 */
-
-    width: 50px;
-    height: 20px;
-}
-
-.newsTitle { /* 단락 내부 뉴스 제목 */
-    line-height: 100%; /* 줄 바꿈 간격 조절 */
-}
-
-.newsIndexImage{ /* 뉴스 사진 */
-
-    margin-left: 100px;
-    height: 70px;
-    width: 100px;
-}
-
-
-
-
-
-
-
-
-
-
-
-/* Community Section */
-.community { /* 우측 아래 토론방 */
-    grid-column: 3 / 4; /* 크기 비율 조절 */
-    grid-row: 7 / 12;
-    padding: 20px; /* 패딩*/
-    border: none;
-}
-
-.cDate { /* 날짜 표시 작은 글자*/
-    text-align: right; /* 우측 정렬 및 크기, 색상 */
-    font-size: 10px;
-    color: #949494;
 
 }
 
-.communityMove { /* 토론방 박스 안 */
-
-    border-radius: 8px; /*둥근 태두리, 패딩, 사이즈 */
-    border: 1px solid #949494;
-    padding: 15px;
-    font-size: 12px;
-}
-
-.communityComment { /*12,345 개의 의견 보기*/
-
-    text-align: center; /* 정렬 및 크기, 색상 */
-    font-size: 10px;
-    color: #777777;
-}
-
-.communityBorder { /* 회색 선 hr  */
-
-    border: none; /* 크기 및 색상 */
-    height: 1px;
-    background-color: #e1e1e1;
-    width: auto;
-
+.source {
+    color: #555;
+    font-weight: demi-light;
 
 }
 
-/* Media Query for Responsive Design */
-@media (max-width: 768px) {
-    .container {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto;
-        padding: 10px;
-    }
-    .Stock-info, .graph, .market-stats, .news, .community {
-        grid-column: 1;
-        grid-row: auto;
-    }
-    .graph {
-        padding: 10px;
-    }
-    .market-stats {
-        padding: 10px;
-    }
+.publishedAt {
+    color: #777;
+    font-weight: light;
+
 }
-/**/
 
+/* 기사 제목 */
+.news-item h4 {
+    font-size: 18px;
+    cursor: pointer; /* 마우스 커서가 손 모양으로 바뀜 */
+    margin: 0;
 
+}
 
+/* 제목 링크 */
+.news-item h4 a.news-title {
+    text-decoration: none; /* 밑줄 제거 */
+    color: #000;
+    font-weight: semi-bold;
 
+}
 
+/* 이미지 스타일 */
+.news-item img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover; /* 이미지가 잘리더라도 1:1 비율 유지 */
+    background-color: #ccc;
 
-
-
-
-
-
+}
 
 /* 페이징 */
 .pagination {
@@ -525,4 +268,69 @@
 .last-page:hover::before {
     background-color: #ccc; /* 막대 직사각형의 색상 변화 */
 
+}
+
+
+/* Market Stats Section */
+.market-stats-wrapper {
+    grid-column: 2 / 3; /* 두 번째 열 */
+    grid-row: 1 / 3; /* 첫 번째 행 */
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #fff; /* 배경색 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 그림자 */
+}
+
+.market-stats {
+    padding: 20px;
+    border-radius: 8px;
+    width: 100%; /* wrapper의 너비에 맞춤 */
+    height: 100%; /* wrapper의 높이에 맞춤 */
+    box-sizing: border-box; /* padding 포함 크기 계산 */
+}
+
+.market-stats ul {
+    list-style: none; /* 기본 리스트 스타일 제거 */
+    padding: 0;
+    margin: 0;
+}
+
+.market-stats li {
+    display: flex; /* 텍스트와 값 정렬 */
+    justify-content: space-between; /* 양쪽 정렬 */
+    align-items: center; /* 세로 중앙 정렬 */
+    font-size: 14px;
+    padding: 15px 0; /* 리스트 항목 간 간격 */
+    border-bottom: 1px solid #ddd; /* 하단 구분선 */
+}
+
+.market-stats li:last-child {
+    border-bottom: none; /* 마지막 항목의 구분선 제거 */
+}
+
+.market-stats li span:first-child {
+    font-weight: bold; /* 항목 이름 강조 */
+    color: #555;
+}
+
+.market-stats li span:last-child {
+    color: #000; /* 값 강조 */
+}
+
+.no-data {
+    text-align: center;
+    font-size: 18px;
+    color: #ff0000;
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+/* Community Section */
+.community {
+    grid-column: 2 / 3; /* 두 번째 열 */
+    grid-row: 3 / 4;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #fff; /* 배경색 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 그림자 */
 }

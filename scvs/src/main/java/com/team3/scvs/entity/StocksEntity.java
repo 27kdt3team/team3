@@ -18,9 +18,8 @@ public class StocksEntity {
     @Id
     private Long stockId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ticker_id")
-    private TickerEntity tickerId;
+    @Column(name = "ticker_id")
+    private long tickerId;
 
     private String market;
     private BigDecimal currentPrice;
@@ -34,6 +33,7 @@ public class StocksEntity {
     private BigDecimal returnOnAssets;
     private BigDecimal returnOnEquity;
     private BigDecimal enterpriseValue;
+    @Column(name = "enterprise_to_EBITDA")
     private BigDecimal enterpriseToEBITDA;
     private BigDecimal priceToBook;
     private BigDecimal priceToSales;
