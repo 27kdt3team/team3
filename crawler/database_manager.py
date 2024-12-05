@@ -172,7 +172,8 @@ class DatabaseManager:
         ON DUPLICATE KEY UPDATE
             rate = VALUES(rate),
             change_value = VALUES(change_value),
-            change_percent = VALUES(change_percent);
+            change_percent = VALUES(change_percent),
+            last_updated = VALUES(last_updated);
         '''
         
         # Scrapy에서 크롤링한 기사 정보
