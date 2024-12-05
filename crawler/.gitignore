@@ -17,12 +17,15 @@ pip-log.txt
 
 # Environments
 .env
-.venv
+!.env.example
+.crawler-env
+crawler-env/
 venv/
 ENV/
 env.bak/
 venv.bak/
-crawler-env/
+secrets.json
+!example_secrets.json
 
 # Sample CSVs
 crawl_samples/
@@ -36,3 +39,6 @@ crawl_samples/
 
 # MacOS
 .DS_Store
+
+# Windows
+Thumbs.db
