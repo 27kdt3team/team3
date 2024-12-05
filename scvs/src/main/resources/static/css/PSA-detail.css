@@ -30,6 +30,7 @@
 /* 내용 */
 .PSA-content {
     white-space: pre-line; /* 줄바꿈(\n)을 HTML에서 적용 */
+    min-height: 600px; /* 최소 높이 설정 */
     font-size: 1rem;
     line-height: 1.6;
     margin-bottom: 30px;
