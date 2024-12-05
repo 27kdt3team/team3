@@ -14,7 +14,7 @@ body {
     grid-template-rows: auto auto; /* 상단과 하단 */
     gap: 10px; /* 그리드 간격 */
     margin: 20px auto; /* 상하 20px, 좌우 자동으로 가운데 정렬이 되도록 설정 */
-    max-width: 1200px; /* 최대 너비 */
+    max-width: 70vw; /* 최대 너비 */
     height: 79vh;
 }
 
