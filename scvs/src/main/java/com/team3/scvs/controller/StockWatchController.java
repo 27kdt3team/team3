@@ -50,6 +50,8 @@ public class StockWatchController {
         CommunityCommentViewDTO latestComment = stocksService.getLatestComment(communityId);
         long totalComments = stocksService.getTotalComments(communityId);
 
+        // 로그인 구현되면 삭제
+        model.addAttribute("isLoggedIn", true);
         model.addAttribute("stockInfo", stockInfo);
         model.addAttribute("marketinfo", marketinfo);
         model.addAttribute("latestComment", latestComment);

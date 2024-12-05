@@ -11,14 +11,14 @@
         <!-- 왼쪽: 관심 목록 테이블 -->
         <div class="watchlist-wrapper">
             <h3 class="title-position">내 관심 종목</h3>
-            <div class="watchlist">
-                <form class="watchlistSearchForm"> <!--검색 창 -->
+            <div class="watchlist" style = "overflow-y: auto; height: 700px;">
+                <form id="watchlistSearchForm" class="watchlistSearchForm"> <!--검색 창 -->
                     <div class="mb-3">
-                        <input  type="text" class="watchlistSearchInput" placeholder="Search">
-                        <button type="button" class="cancel-btn">Cancel</button>
+                        <input id="watchlistSearchInput" type="text" class="watchlistSearchInput" placeholder="Search">
+                        <button id="cancelSearchBtn" type="button" class="cancel-btn">Cancel</button>
                     </div>
                 </form>
-                <table class="watchlistTable"> <!--왼쪽 관심 종목 테이블 -->
+                <table id="watchlistTable" class="watchlistTable"> <!--왼쪽 관심 종목 테이블 -->
                     <thead>
                     <tr>
                         <th>Company</th>
@@ -33,8 +33,14 @@
                         </td>
                     </tr>
                     <tr class="forTablecolor" th:each="stock : ${watchlistStocks}">
-                        <td th:text="${stock.ticker.company}">Company</td>
-                        <td th:text="${stock.ticker.symbol}"> <img class="symbolImg" src="flag.png"/> Symbol</td>
+                        <td>
+                            <a th:href="@{/stockwatch(tickerId=${stock.ticker.tickerId})}" th:text="${stock.ticker.company}">
+                                Company
+                            </a>
+                        </td>
+                        <td th:text="${stock.ticker.symbol}">
+                            <img class="symbolImg" src="flag.png"/> Symbol
+                        </td>
                         <td>
                             <form th:action="@{/watchlist/delete}" method="post">
                                 <input type="hidden" name="userId" th:value="${userId}">
@@ -47,24 +53,24 @@
                     </tbody>
                 </table>
                 <div class="loadMoreContainer"> <!-- 왼쪽 더 보기 -->
-                    <button class="loadMoreBtn">더 보기<p>V</p></button>
+                    <button id="loadMoreBtn" class="loadMoreBtn">더보기</button>
                 </div>
             </div>
         </div>
 
         <!--내 관심 종목, 전체 관심 종목 사이 선 -->
         <div class="divider"></div>
-        <!-- 오른쪽, 관심 목록 테이블 -->
+        <!-- 오른쪽: 전체 관심 종목 테이블 -->
         <div class="alltickers-wrapper">
             <h3 class="title-position">전체 관심 종목</h3>
-            <div class="allTickers">
-                <form class="allTickerSearchForm"><!-- 검색창-->
+            <div class="allTickers" style = "overflow-y: auto; height: 700px;">
+                <form id="allTickerSearchForm" class="allTickerSearchForm"><!-- 검색창-->
                     <div class="mb-3">
-                        <input type="text" class="allTickersSearchInput" placeholder="Search">
-                        <button type="button"  class="cancel-btn">Cancel</button>
+                        <input id="allTickersSearchInput" type="text" class="allTickersSearchInput" placeholder="Search">
+                        <button id="cancelALLTickersSearchBtn" type="button" class="cancel-btn">Cancel</button>
                     </div>
                 </form>
-                <table class="allTickersTable"><!--오륹쪽 관심 목록 테이블-->
+                <table id="allTickersTable" class="allTickersTable"> <!--오른쪽 관심 목록 테이블-->
                     <thead>
                     <tr>
                         <th>Company</th>
@@ -75,7 +81,9 @@
                     <tbody>
                     <tr class="forTablecolor" th:each="ticker : ${allTickers}">
                         <td th:text="${ticker.company}">Company</td>
-                        <td th:text="${ticker.symbol}"> <img class="symbolImg" src="flag.png"/> Symbol</td>
+                        <td th:text="${ticker.symbol}">
+                            <img class="symbolImg" src="flag.png"/> Symbol
+                        </td>
                         <td>
                             <form th:action="@{/watchlist/add}" method="post">
                                 <input type="hidden" name="userId" th:value="${userId}">
@@ -85,11 +93,10 @@
                             </form>
                         </td>
                     </tr>
-
                     </tbody>
                 </table>
-                <div class="allTickersLoadMoreContainer" > <!-- 더 보기-->
-                    <button class="allTickersLoadMoreBtn">더 보기<p>V</p></button>
+                <div class="allTickersLoadMoreContainer"> <!-- 더 보기-->
+                    <button id="allTickersLoadMoreBtn" class="allTickersLoadMoreBtn">더 보기<p>V</p></button>
                 </div>
             </div>
         </div>

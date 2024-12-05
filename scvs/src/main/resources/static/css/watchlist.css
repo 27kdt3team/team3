@@ -106,8 +106,6 @@
 }
 */
 
-
-
 .loadMoreBtn, .allTickersLoadMoreBtn {/*더 보기 버튼*/
     border: none; /*테두리 제거*/
     margin-top:20px;
@@ -123,11 +121,6 @@
     display: flex; /* flexbox 활성화 */
     justify-content: center; /* 수평 가운데 정렬 */
     align-items: flex-end; /* 세로 방향에서 아래로 정렬 */
-}
-
-
-.loadMoreBtn:hover, .allTickersLoadMoreBtn:hover {
-    background-color: #45a049;
 }
 
 /*사이 검은 선*/
