@@ -19,3 +19,4 @@ public class CommunityEntity {
     @Column(name = "ticker_id")
     private long tickerId;
 }
+

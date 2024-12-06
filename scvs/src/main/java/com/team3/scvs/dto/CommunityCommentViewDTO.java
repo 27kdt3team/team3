@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor // 기본 생성자 생성
 @AllArgsConstructor // 모든 필드를 받는 생성자 생성
 public class CommunityCommentViewDTO {
-    private Long id;
+    private long id;
     private long userId;
     private long communityId;
     private String nickname;

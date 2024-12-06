@@ -1,7 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
 
     // 비밀번호 검증 함수
-    document.getElementById("password").addEventListener("input", () => {
+    document.getElementById("password").addEventListener("input", async() => {
+
         const passwordInput = document.getElementById("password").value; // 비밀번호 입력 값
         const passwordValidation = document.getElementById("password-validation"); // 입력란 밑 경고메세지
         const passwordInputElement = document.getElementById("password");     // password를 받아옴 나중에 제출할때 검증할때 사용
@@ -13,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
             passwordValidation.textContent = "비밀번호는 필수 항목입니다.";
             passwordValidation.style.color = "red";
             isPasswordValid = false;
+            return;
         }
 
         // 비밀번호 규격 체크 (8자 이상, 64자 이하, 특수문자, 대/소문자, 숫자 포함)
@@ -21,14 +23,21 @@ document.addEventListener("DOMContentLoaded", () => {
             passwordValidation.textContent = "비밀번호는 8자 이상 64자 이하, 특수문자, 영어, 숫자를 포함하여야 합니다.";
             passwordValidation.style.color = "red";
             isPasswordValid = false;
+            return;
+        }
+        // 비밀번호 중복 확인
+        isPasswordValid = await checkPasswordDuplicate(passwordInput); // 서버에서 중복 체크 결과 받기
+
+        if(!isPasswordValid) {
+            passwordValidation.textContent = "동일한 비밀번호는 사용할 수 없습니다.";
+            passwordValidation.style.color = "red";
+            return;
         } else {
             // 성공 메시지
             passwordValidation.textContent = "사용 가능한 비밀번호입니다.";
             passwordValidation.style.color = "green";
             isPasswordValid = true;
         }
-
-
         // 비밀번호 검증 상태 변수 설정( 회원가입 제출시 비밀번호란 검증)
         passwordInputElement.dataset.isValid = isPasswordValid;
     });
@@ -74,5 +83,32 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+
+// 비밀번호 중복 체크 함수
+async function checkPasswordDuplicate(passwordInput) {
+    try {
+        // 비동기 요청을 보낼 API 경로
+        const response = await fetch('/api/check-password', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'  // 요청 본문이 JSON 형식임을 명시
+            },
+            body: JSON.stringify({ password: passwordInput })  // 패스워드를 JSON 형태로 전송
+        });
+
+        const data = await response.json();  // 응답을 JSON 형태로 파싱
+
+        // 서버에서 받은 응답을 처리
+        if (data) { // 비밀번호가 일치하면 false
+            return false;
+        } else { // 비밀번호가 일치하지 않으면 true
+            return true;
+        }
+    } catch (error) {
+        // 오류 처리
+        console.error('Error:', error);
+        return false;
+    }
+}
 
 
