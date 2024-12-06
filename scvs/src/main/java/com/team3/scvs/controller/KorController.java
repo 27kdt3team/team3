@@ -1,6 +1,9 @@
 package com.team3.scvs.controller;
 
+import com.team3.scvs.dto.ForexDTO;
+import com.team3.scvs.dto.IndexDTO;
 import com.team3.scvs.dto.KorDTO;
+import com.team3.scvs.service.IndexService;
 import com.team3.scvs.service.KorService;
 import com.team3.scvs.service.ForexService;
 import lombok.RequiredArgsConstructor;
@@ -13,11 +16,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Controller
 @RequiredArgsConstructor //자동으로 생성자 생성
 public class KorController {
     private final KorService korService;
     private final ForexService forexService;
+    private final IndexService indexService;
 
     @ModelAttribute("isLoggedIn")
     public boolean setDefaultIsLoggedIn() {
@@ -32,6 +39,11 @@ public class KorController {
         Page<KorDTO> korList = korService.getKorList(pageable); //페이징된 국내 경제 뉴스 데이터 리스트
         ForexDTO forex = forexService.getKrwUsdForex(); //환율 데이터
 
+        //지수 데이터 필터링 (KOSPI와 KOSDAQ만)
+        List<IndexDTO> indices = indexService.getIndices().stream()
+                .filter(index -> "KOSPI".equals(index.getTitle()) || "KOSDAQ".equals(index.getTitle()))
+                .collect(Collectors.toList());
+
         //페이징
         int blockLimit = 10; //한번에 보여질 페이지 번호의 개수
         int startPage = (((int)(Math.ceil((double)pageable.getPageNumber() / blockLimit))) - 1) * blockLimit + 1;
@@ -43,6 +55,7 @@ public class KorController {
         model.addAttribute("endPage", endPage); //마지막 페이지
 
         model.addAttribute("forex", forex); //환율 데이터
+        model.addAttribute("indices", indices); //지수 데이터 (KOSPI와 KOSDAQ만)
 
         //뷰 템플릿
         return "News/kor";
