@@ -1,5 +1,4 @@
-.container {
-    width: 100%;
+.community-container {
     margin: 0 auto;
     padding: 20px;
     display: grid;
@@ -7,6 +6,7 @@
     grid-template-rows: auto;
     gap: 20px;
     background-color: #f9f9f9;
+    max-width: 70vw; /* 최대 너비 */
 }
 .Stock-info {
     grid-column: 1 / 2;
@@ -361,7 +361,7 @@ h2 {
 }
 
 @media (max-width: 970px) {
-    .container {
+    .community-container {
         display: flex; /* 플렉스 레이아웃으로 전환 */
         flex-direction: column; /* 세로로 배치 */
         gap: 20px; /* 간격 추가 */
