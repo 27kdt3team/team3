@@ -77,7 +77,6 @@ public class ConvertUtil {
                 entity.getMarket()
         );
     }
-
     public CommunityCommentViewDTO convertToDTO(CommunityCommentViewEntity entity) {
         return new CommunityCommentViewDTO(
                 entity.getId(),
@@ -89,5 +88,20 @@ public class ConvertUtil {
                 entity.getUpdatedAt(),
                 entity.getTimeAgo()
         );
+    }
+  
+    public StockNewsDTO convertToDTO(StockNewsEntity entity) {
+        return StockNewsDTO.builder()
+                .stockNewsId(entity.getStockNewsId())
+                .title(entity.getTitle())
+                .source(entity.getSource())
+                .imageLink(entity.getImageLink())
+                .content(entity.getContent())
+                .sentiment(entity.getSentiment())
+                .publishedAt(entity.getPublishedAt())
+                .link(entity.getLink())
+                .tickerId(entity.getTickerId())
+                .market(entity.getMarket())
+                .build();
     }
 }
