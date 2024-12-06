@@ -1,28 +1,59 @@
+from news_crawler.spider_manager import SpiderManager
+from services.translation_service import TranslationService
+from services.keyword_extraction_service import KeywordExtractionService
+from services.sentiment_analysis_service import SentimentAnalysisService
+from repositories.news_process_log_repository import NewsProcessLogRepository
+from services.export_service import ExportService
+from enums.process import Process
+from logs.logger import Logger
 
+
+# 작업 Controller
 class ProcessManager:
-    
-    # 작업 순서도
-    # 크롤링 -> 번역 -> 키워드 추출 -> 감정 평가
-    def run():
-        # 크롤링 끝남
-        crawling_done_flag = True
-        if crawling_done_flag:
-            # 데이터베이스에서 Country가 'USA"인 애들만 잡아서 번역
-            translation_done_flag = True
-        
-        # Country가 'Korea'인 애들은? 미국 애들 번역 다 끝날 때까지 기다려야 하나?
-        # 그냥 미국 애들 번역할 때 한국 애들은 키워드 추출 작업하면 안되나? 
-        
-        # batch -> 어떤 기준으로 잡아야 할지...
-        if translation_done_flag:
-            # 키워드 추출
-            keyword_extract_done = True
-            
-        
-        
-        
-            
-        
-        
-        pass
-    
+
+    def __init__(self) -> None:
+        self.logger = Logger(self.__class__.__name__)
+        self.log_repo = NewsProcessLogRepository()
+
+    # 크롤러 호출
+    def crawl(self) -> None:
+        self.logger.log_info("Crawling articles from the web.")
+
+        spider_manager = SpiderManager()
+        spider_manager.run_spiders()
+
+    # Papago API로 영문 기사 한국어로 번역
+    def translate(self) -> None:
+        translation_service = TranslationService()
+        process_logs = translation_service.process()
+
+        self.log_repo.update_logs(process=Process.TRANSLATION, logs=process_logs)
+
+    # 키워드 추출
+    def extract_keywords(self) -> None:
+        keyword_service = KeywordExtractionService()
+        process_logs = keyword_service.process()
+
+        self.log_repo.update_logs(process=Process.KEYWORD_EXTRACTION, logs=process_logs)
+
+    # Clova Studio API로 감정평가 작업
+    def analyze_sentiment(self) -> None:
+        sentiment_service = SentimentAnalysisService()
+        process_logs = sentiment_service.process()
+
+        self.log_repo.update_logs(process=Process.SENTIMENT_ANALYSIS, logs=process_logs)
+
+    # 모든 작업이 끝난 기사를 뉴스 기사 테이블들로 삽입
+    # kor_econ_news, kor_stock_news, usa_econ_news, usa_stock_news
+    def export(self) -> None:
+        export_service = ExportService()
+        process_logs = export_service.process()
+        self.log_repo.update_logs(process=Process.COMPLETED, logs=process_logs)
+
+    # 모든 작업 실행
+    def run(self) -> None:
+        self.crawl()
+        self.translate()
+        self.extract_keywords()
+        self.analyze_sentiment()
+        self.export()
