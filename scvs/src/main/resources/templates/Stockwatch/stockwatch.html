@@ -7,7 +7,7 @@
 </th:block>
 <body>
 <th:block layout:fragment="MainBodyContents">
-    <div class="container">
+    <div class="stock-container">
         <div class="Stock-info"> <!-- 왼쪽 맨 윗 부분-->
             <div class="stock-header">
                 <!-- 회사명과 심볼 -->
@@ -90,7 +90,7 @@
                         </h4>
                     </div>
                     <!-- 뉴스 이미지 -->
-                    <img th:src="${newsItem.imageLink}" alt="Unable to load image" width="180" height="90" class="news-image">
+                    <img th:if="${newsItem.imageLink != null}" th:src="${newsItem.imageLink}" alt="Unable to load image" width="180" height="90" class="news-image">
                 </div>
 
                 <!-- 페이징 처리 -->
