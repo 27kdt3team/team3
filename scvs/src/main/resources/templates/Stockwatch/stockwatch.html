@@ -90,7 +90,7 @@
                         </h4>
                     </div>
                     <!-- 뉴스 이미지 -->
-                    <img th:src="${newsItem.imageLink}" alt="Unable to load image" width="180" height="90" class="news-image">
+                    <img th:if="${newsItem.imageLink != null}" th:src="${newsItem.imageLink}" alt="Unable to load image" width="180" height="90" class="news-image">
                 </div>
 
                 <!-- 페이징 처리 -->
