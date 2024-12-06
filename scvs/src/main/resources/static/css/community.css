@@ -360,3 +360,10 @@ h2 {
     font-weight: bold;
 }
 
+@media (max-width: 970px) {
+    .container {
+        display: flex; /* 플렉스 레이아웃으로 전환 */
+        flex-direction: column; /* 세로로 배치 */
+        gap: 20px; /* 간격 추가 */
+    }
+}
