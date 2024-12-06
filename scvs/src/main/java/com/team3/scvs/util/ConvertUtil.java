@@ -14,6 +14,34 @@ public class ConvertUtil {
                 entity.getCurrentprice()
         );
     }
+
+    public CommunityCommentDTO convertToDTO(CommunityCommentEntity entity) {
+        return new CommunityCommentDTO(
+                entity.getCommunityCommentId(),
+                entity.getCommunity().getCommunityId(),
+                entity.getUser().getUserId(),
+                entity.getComment(),
+                entity.getPublishedAt(),
+                entity.getUpdatedAt()
+        );
+    }
+
+    public CommunityVoteDTO convertToDTO(CommunityVoteEntity entity) {
+        return new CommunityVoteDTO(
+                entity.getCommunityVoteId(),
+                entity.getCommunity().getCommunityId(),
+                entity.getPositiveVotes(),
+                entity.getNegativeVotes()
+        );
+    }
+
+    public CommunityDTO convertToDTO(CommunityEntity entity) {
+        return new CommunityDTO(
+                entity.getCommunityId(),
+                entity.getTickerId()
+        );
+    }
+
     public StocksDTO convertToDTO(StocksEntity entity) {
         return new StocksDTO(
                 entity.getStockId(),
@@ -38,6 +66,17 @@ public class ConvertUtil {
                 entity.getDebtToEquity()
         );
     }
+
+    public StocksNewsDTO convertToDTO(StocksNewsEntity entity) {
+        return new StocksNewsDTO(
+                entity.getId(),
+                entity.getTitle(),
+                entity.getTickerId(),
+                entity.getSentiment(),
+                entity.getPublishedAt(),
+                entity.getMarket()
+        );
+    }
     public CommunityCommentViewDTO convertToDTO(CommunityCommentViewEntity entity) {
         return new CommunityCommentViewDTO(
                 entity.getId(),
@@ -50,13 +89,7 @@ public class ConvertUtil {
                 entity.getTimeAgo()
         );
     }
-
-    public CommunityDTO convertToDTO(CommunityEntity entity) {
-        return new CommunityDTO(
-                entity.getCommunityId(),
-                entity.getTickerId()
-        );
-    }
+  
     public StockNewsDTO convertToDTO(StockNewsEntity entity) {
         return StockNewsDTO.builder()
                 .stockNewsId(entity.getStockNewsId())

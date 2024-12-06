@@ -7,5 +7,4 @@ import java.util.Optional;
 
 public interface CommunityRepository extends JpaRepository<CommunityEntity, Long> {
     Optional<CommunityEntity> findByTickerId(Long tickerId);
-
 }

@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor // 모든 필드를 받는 생성자 생성
 @Table(name = "vw_stocks")
 public class StocksEntity {
+
     @Id
     private Long stockId;
 
@@ -40,5 +41,4 @@ public class StocksEntity {
     private BigDecimal earningsPerShare;
     private BigDecimal currentRatio;
     private BigDecimal debtToEquity;
-
 }
