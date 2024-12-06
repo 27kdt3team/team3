@@ -61,9 +61,9 @@ h2 {
 }
 
 .news-images {
-    width: 180px;
+    width: 90px;
     height: 90px;
-    object-fit: scale-down;
+    object-fit: cover;
 }
 
 .news-link {
