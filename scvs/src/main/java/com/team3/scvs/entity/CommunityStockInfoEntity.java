@@ -24,3 +24,4 @@ public class CommunityStockInfoEntity {
     @Column(name = "current_price")
     private long currentprice;
 }
+

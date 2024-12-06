@@ -91,6 +91,7 @@
 }
 
 .PSA-pagination a {
+    display: inline-block; /* 크기 통일 */
     margin: 0 5px; /* 링크 간격 */
     padding: 5px 10px; /* 링크 내부 여백 */
     border: 1px solid #ddd; /* 링크 테두리 */

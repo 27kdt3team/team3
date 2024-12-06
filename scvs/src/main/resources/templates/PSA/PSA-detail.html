@@ -25,12 +25,12 @@
             <!-- 버튼 그룹 -->
             <div class="PSA-actions">
                 <!-- 좌측 하단 수정/삭제 버튼 -->
-                <div class="btn-group" role="group" aria-label="Action buttons">
+                <div role="group" aria-label="Action buttons">
                     <!-- 수정 버튼: 관리자 권한에서만 노출 -->
                     <a th:href="@{/PSA/update/{id}(id=${psa.id})}" class="btn btn-warning" sec:authorize="hasRole('ROLE_ADMIN')">수정</a>
 
                     <!-- 삭제 버튼: 관리자 권한에서만 노출 -->
-                    <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" sec:authorize="hasRole('ROLE_ADMIN')">삭제</a>
+                    <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" sec:authorize="hasRole('ROLE_ADMIN')" style="margin-left: 10px;">삭제</a>
                 </div>
                 <!-- 우측 하단 목록 버튼 -->
                 <div class="PSA-back-button">

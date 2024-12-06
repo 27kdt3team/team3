@@ -8,23 +8,147 @@
 <body>
 <th:block layout:fragment="MainBodyContents">
     <div class="container">
-        <div class="Stock-info">
-            <p>주식 정보</p>
+        <div class="Stock-info"> <!-- 왼쪽 맨 윗 부분-->
+            <div class="stock-header">
+                <!-- 회사명과 심볼 -->
+                <span class="company-name" th:text="${stockInfo.company}"></span>
+                <span class="symbol" th:text="${stockInfo.symbol}"></span>
+                <span class="current-price">
+                    <span th:if="${stockInfo.market != null}">
+                        <span th:if="${stockInfo.market == 'KOR'}">₩</span>
+                        <span th:if="${stockInfo.market == 'USA'}">$</span>
+                    </span>
+                    <span th:text="${stockInfo.currentPrice}"></span>
+                </span>
+            </div>
         </div>
-        <div class = "graph">
-            <p> 그래프</p>
+        <div class ="graphInfo"> <!-- 그래프 및 주변부 -->
+            <div id="stock-graph" style="height: auto; min-width: auto;"></div>
         </div>
-        <div class="market-stats">
-            <p>회사정보</p>
+
+        <div class="market-stats-wrapper">
+            <h2>Market Stats</h2>
+            <div class="market-stats" th:if="${marketinfo != null}">
+                <ul>
+                    <li>
+                        <span>Open:</span>
+                        <span th:text="${marketinfo.open}"></span>
+                    </li>
+                    <li>
+                        <span>Close:</span>
+                        <span th:text="${marketinfo.close}"></span>
+                    </li>
+                    <li>
+                        <span>Volume:</span>
+                        <span th:text="${marketinfo.volume}"></span>
+                    </li>
+                    <li>
+                        <span>Day Range:</span>
+                        <span th:text="${marketinfo.dayLow} + ' - ' + ${marketinfo.dayHigh}"></span>
+                    </li>
+                    <li>
+                        <span>ROE:</span>
+                        <span th:text="${marketinfo.returnOnEquity} + '%'"></span>
+                    </li>
+                    <li>
+                        <span>EV:</span>
+                        <span th:text="${marketinfo.enterpriseValue}"></span>
+                    </li>
+                    <li>
+                        <span>EV/EBITDA:</span>
+                        <span th:text="${marketinfo.enterpriseToEBITDA}"></span>
+                    </li>
+                    <li>
+                        <span>P/B Ratio:</span>
+                        <span th:text="${marketinfo.priceToBook}"></span>
+                    </li>
+                </ul>
+            </div>
+            <div class="no-data" th:if="${marketinfo == null}">
+                <p>마켓 정보가 없습니다</p>
+            </div>
         </div>
-        <div class="news">
-            <p>뉴스</p>
+
+        <div class="news"> <!-- 왼쪽 아래 뉴스 페이지 -->
+            <section class="stock-news">
+                <!-- 동적으로 DB에서 가져온 데이터 출력 -->
+                <div th:each="newsItem : ${stockNews}" class="news-item">
+                    <div class="text-content">
+                        <div class="source-publishedAt">
+                            <!-- 언론사 -->
+                            <p class="source" th:text="${newsItem.source}"></p>
+                            <!-- 작성일 -->
+                            <p class="publishedAt" th:text="${#temporals.format(newsItem.publishedAt, 'yyyy-MM-dd HH:mm:ss')}"></p>
+                            <p class="sentiment" th:text="${newsItem.sentiment}"></p>
+                        </div>
+                        <h4>
+                            <!-- 기사 제목을 클릭하면 뉴스 ID와 현재 페이지 값을 상세 조회 메서드로 넘겨주기
+                             나중에 상세 페이지 나오면 이부분 고치시면 됩니다!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+                            <a th:href="@{|/stocknews/${newsItem.stockNewsId}|(page=${stockNews.number + 1})}"
+                               th:text="${newsItem.title}"
+                               class="news-title"></a>
+                        </h4>
+                    </div>
+                    <!-- 뉴스 이미지 -->
+                    <img th:src="${newsItem.imageLink}" alt="Unable to load image" width="180" height="90" class="news-image">
+                </div>
+
+                <!-- 페이징 처리 -->
+                <!-- 페이징 처리 -->
+                <div class="pagination">
+                    <!-- 첫번째 페이지 -->
+                    <a th:href="@{/stockwatch(tickerId=${tickerId}, page=1)}" class="first-page"></a>
+
+                    <!-- 이전 페이지 -->
+                    <a th:href="${stockNews.first} ? '#' : @{/stockwatch(tickerId=${tickerId}, page=${stockNews.number})}" class="previous-page"></a>
+
+                    <!-- 페이지 번호 -->
+                    <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
+                        <!-- 현재 페이지는 링크 없이 숫자만으로 표시 -->
+                        <span th:if="${page == stockNews.number + 1}" th:text="${page}" class="current-page"></span>
+                                        <!-- 현재 페이지 외의 페이지들은 숫자에 링크로 표시 -->
+                        <span th:unless="${page == stockNews.number + 1}">
+                            <a th:href="@{/stockwatch(tickerId=${tickerId}, page=${page})}" th:text="${page}" class="page-link"></a>
+                        </span>
+                    </span>
+
+                    <!-- 다음 페이지 -->
+                    <a th:href="${stockNews.last} ? '#' : @{/stockwatch(tickerId=${tickerId}, page=${stockNews.number + 2})}" class="next-page"></a>
+
+                    <!-- 마지막 페이지 -->
+                    <a th:href="@{/stockwatch(tickerId=${tickerId}, page=${stockNews.totalPages})}" class="last-page"></a>
+                </div>
+
+            </section>
         </div>
-        <div class="community">
-            <p>토론방</p>
+
+
+        <div class="community"> <!-- 우측 아래 토론방 -->
+            <h2>토론방</h2>
+            <div>
+                <span>최신 댓글</span>
+                <br>
+                <span th:if="${latestComment != null}" th:text="${latestComment.nickname}">닉네임</span>
+                <span th:if="${latestComment != null}" th:text="' : ' + ${latestComment.comment}">댓글 내용</span>
+                <span th:if="${latestComment == null}">최신 댓글이 없습니다.</span>
+            </div>
+            <hr>
+            <div class="comment-summary">
+                <form th:action="@{/community}" method="get" style="display: inline;">
+                    <!-- tickerId 히든 필드 -->
+                    <input type="hidden" name="tickerId" th:value="${tickerId}">
+
+                    <!-- 클릭 가능한 링크 -->
+                    <button type="submit" style="background: none; border: none; color: inherit; cursor: pointer; padding: 0; font: inherit;">
+                        <span th:if="${totalComments > 0}" th:text="${totalComments} + '개의 의견 보기 >'">0개의 의견 보기 ></span>
+                        <span th:if="${totalComments == 0}">댓글창 이동 ></span>
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
-
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script th:src="@{/js/stockwatch.js}"></script>
 </th:block>
 
 </body>
