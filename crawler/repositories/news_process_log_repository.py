@@ -33,26 +33,9 @@ class NewsProcessLogRepository(BaseRepository):
 
         # 텍스트 가공에 실패했을 경우 해당 기사에 대한 가공은 끝났다고 정의한다 (completed_at = NOW())
         # 성공했을 경우 completed_at은 null 상태로 남아있는다
-        # 실제 테이블용 쿼리문
-        # query = f'''
-        # UPDATE
-        #     news_process_logs
-        # SET
-        #     {column_name} = NOW(),
-        #     completed_at = CASE
-        #         WHEN %s = 'FAILED' THEN NOW()
-        #         ELSE completed_at
-        #     END,
-        #     process_status = %s,
-        #     log_msg = %s,
-        # WHERE
-        #     raw_news_id = %s
-        # '''
-
-        # 테스트용
-        query = f"""
+        query = f'''
         UPDATE
-            test_logs
+            news_process_logs
         SET
             {column_name} = NOW(),
             completed_at = CASE
@@ -60,10 +43,11 @@ class NewsProcessLogRepository(BaseRepository):
                 ELSE completed_at
             END,
             process_status = %s,
-            log_msg = %s
+            log_msg = %s,
         WHERE
             raw_news_id = %s
-        """
+        '''
+
         values = [
             (log.status, log.status, log.log_msg, log.raw_news_id) for log in logs
         ]

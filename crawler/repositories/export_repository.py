@@ -8,75 +8,42 @@ class ExportRepository(BaseRepository):
 
     # 텍스트 가공 단계를 다 거친 뉴스 기사들을 데이터베이스에서 가져온다
     def fetch_processed_data(self) -> List[Article]:
-        # 실제 테이블용 쿼리
-        # query = '''
-        # SELECT
-        #     rn.raw_news_id,
-        #     rn.country,
-        #     CASE
-        #         WHEN rn.country = 'KOR' THEN rn.title
-        #         ELSE tn.title
-        #     END AS title,
-        #     rn.image_link,
-        #     rn.source,
-        #     CASE
-        #         WHEN rn.country = 'KOR' THEN rn.content
-        #         ELSE tn.content
-        #     END AS content,
-        #     rn.published_at,
-        #     rn.link,
-        #     ken.news_type,
-        #     ken.ticker_id,
-        #     san.sentiment,
-        #     tn.title as translated_title,
-        #     tn.content as translated_content
-        # FROM
-        #     raw_news rn
-        # JOIN
-        #     keyword_extracted_news ken ON ken.raw_news_id = rn.raw_news_id
-        # JOIN
-        #     news_process_logs npl ON npl.raw_news_id = rn.raw_news_id
-        # LEFT JOIN
-        #     sentiment_analyzed_news san ON san.raw_news_id = rn.raw_news_id            
-        # LEFT JOIN
-        #     translated_news tn ON tn.raw_news_id = rn.raw_news_id
-        # WHERE
-        #     npl.completed_at IS NULL
-        #     AND npl.process_status = 'SUCCESS';
-        # '''
 
+        # 번역된 뉴스 기사라면 translated_news 테이블에서 번역된 기사 제목과 내용을 가져온다
         query = """
-        SELECT 
-            tn.raw_news_id,
-            tn.country,
+        SELECT
+            rn.raw_news_id,
+            rn.country,
             CASE
-                WHEN tn.country = 'KOR' THEN tn.title
-                ELSE ttn.title
+                WHEN rn.country = 'KOR' THEN rn.title
+                ELSE tn.title
             END AS title,
-            tn.image_link,
-            tn.source,
+            rn.image_link,
+            rn.source,
             CASE
-                WHEN tn.country = 'KOR' THEN tn.content
-                ELSE ttn.content
+                WHEN rn.country = 'KOR' THEN rn.content
+                ELSE tn.content
             END AS content,
-            tn.published_at,
-            tn.link,
-            tken.news_type,
-            tken.ticker_id,
-            tsan.sentiment
+            rn.published_at,
+            rn.link,
+            ken.news_type,
+            ken.ticker_id,
+            san.sentiment,
+            tn.title as translated_title,
+            tn.content as translated_content
         FROM
-            test_news tn
+            raw_news rn
         JOIN
-            test_keyword_extracted_news tken ON tken.raw_news_id = tn.raw_news_id
-        JOIN 
-            test_logs tl ON tl.raw_news_id = tn.raw_news_id
+            keyword_extracted_news ken ON ken.raw_news_id = rn.raw_news_id
+        JOIN
+            news_process_logs npl ON npl.raw_news_id = rn.raw_news_id
         LEFT JOIN
-            test_sentiment_analyzed_news tsan ON tsan.raw_news_id = tn.raw_news_id
+            sentiment_analyzed_news san ON san.raw_news_id = rn.raw_news_id            
         LEFT JOIN
-            test_translated_news ttn ON ttn.raw_news_id = tn.raw_news_id
+            translated_news tn ON tn.raw_news_id = rn.raw_news_id
         WHERE
-            tl.completed_at IS NULL
-            AND tl.process_status = 'SUCCESS';
+            npl.completed_at IS NULL
+            AND npl.process_status = 'SUCCESS';
         """
 
         try:
@@ -89,13 +56,10 @@ class ExportRepository(BaseRepository):
     # 경제 뉴스를 데이터베이스에 입력
     def insert_econ_news(self, country: str, econ_articles: List[Article]) -> None:
         # 나라와 테이블 매핑
-        country_to_table = {
-            'KOR' : 'kor_econ_news',
-            'USA' : 'usa_econ_news'
-        }
-        
-        table = country_to_table.get(country) # 해당 나라에 맞는 테이블명
-        if not table: # 매핑이 안된 country일 경우 조기 반환
+        country_to_table = {"KOR": "kor_econ_news", "USA": "usa_econ_news"}
+
+        table = country_to_table.get(country)  # 해당 나라에 맞는 테이블명
+        if not table:  # 매핑이 안된 country일 경우 조기 반환
             self.logger.log_error(f"Not a valid country: {country}")
             return
 
@@ -126,18 +90,15 @@ class ExportRepository(BaseRepository):
 
     # 주식 뉴스를 데이터베이스에 입력
     def insert_stock_news(self, country: str, stock_articles: list[Article]) -> None:
-        
+
         # 나라와 테이블 매핑
-        country_to_table = {
-            "KOR" : "kor_stock_news",
-            "USA" : "usa_stock_news"
-        }
-        
-        table = country_to_table.get(country) # 해당 나라에 맞는 테이블명
-        if not table: # 매핑이 안된 country일 경우 조기 반환
+        country_to_table = {"KOR": "kor_stock_news", "USA": "usa_stock_news"}
+
+        table = country_to_table.get(country)  # 해당 나라에 맞는 테이블명
+        if not table:  # 매핑이 안된 country일 경우 조기 반환
             self.logger.log_error(f"Not a valid country: {country}")
             return
-        
+
         query = f"""
         INSERT INTO
             {table} (title, source, image_link, content, published_at, link, ticker_id, sentiment)
