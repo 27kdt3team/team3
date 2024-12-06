@@ -32,7 +32,7 @@
         <p class="publishedAt" th:text="${#temporals.format(kor.publishedAt, 'yyyy-MM-dd HH:mm:ss')}"></p>
         <!-- 기사 이미지 -->
         <div class="image">
-            <img th:src="${kor.imageLink}" alt="Unable to load image" class="article-image">
+            <img th:if="${kor.imageLink != null}" th:src="${kor.imageLink}" alt="Unable to load image" class="article-image">
         </div>
         <!-- 기사 내용 -->
         <div class="content" th:text="${kor.content}"></div>
