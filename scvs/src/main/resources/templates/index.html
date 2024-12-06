@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base}">
+
+<th:block layout:fragment="css">
+    <link rel="stylesheet" href="css/index.css">
+</th:block>
+
+<body>
+
+<th:block layout:fragment="MainBodyContents">
+    <!-- 메인 뷰 -->
+    <main class="container">
+        <!--국내 경제 뉴스, 미국 경제 뉴스-->
+        <section class="news"> <!--국내 경제 뉴스, 미국 경제 뉴스 2개 클래스로 구성됐습니다.-->
+            <div class="news-column"><!--국내 경제 뉴스-->
+                <h2>국내 경제 뉴스</h2>
+                <br>
+                <!--뉴스 언론사, 날짜표시, 데이터를 받아와야 할텐데 그 부분 처리 x-->
+                <div th:each="knews : ${korNews}">
+                    <div th:replace="Partials/newsItem.html::newsItem(
+                    ${knews.source},
+                    ${knews.publishedAt},
+                    ${knews.title},
+                    ${knews.imageLink},
+                    '/kor/'+${knews.korEconNewsId}+'?page=1'
+                )"></div>
+                </div>
+
+                <!-- 국내 주식 더보기 국내 뉴스 탭으로 화면전환 기능x-->
+                <button class="more-btn" onclick="location.href='/kor'">국내 소식 더 보기...</button>
+            </div>
+            <div class="divider"></div><!-- 국내 경제 뉴스, 미국 경제 뉴스 섹션 사이에 검은 선을 만드는 용도 입니다.-->
+
+            <div class="news-column"><!-- 미국 경제 뉴스, 위의 국내 경제 뉴스랑 같습니다.-->
+                <h2>미국 경제 뉴스</h2>
+                <br>
+                <div th:each="usanews : ${usaNews}">
+                    <div th:replace="Partials/newsItem.html::newsItem(
+                    ${usanews.source},
+                    ${usanews.publishedAt},
+                    ${usanews.title},
+                    ${usanews.imageLink},
+                    '/usa/'+${usanews.usaEconNewsId}+'?page=1'
+                )"></div>
+                </div>
+                <!-- 미국 소식 더 보기 미국 뉴스 탭으로 화면전환 기능x-->
+                <button class="more-btn" onclick="location.href='/usa'">미국 소식 더 보기...</button>
+            </div>
+            <div class="divider"></div><!-- 미국 경제 뉴스, 주요 경제 지표 섹션 사이에 검은 선을 만드는 용도 입니다.-->
+        </section>
+
+
+        <!-- 우측 경제 지표 탭 입니다.-->
+        <aside class="stats">
+            <h2>주요 경제 지표</h2>
+            <p><span th:text="${#temporals.format(forex.lastUpdated, 'yyyy-MM-dd HH:mm:ss')}"></span>기준</p>
+            <!-- forex apply -->
+            <div th:replace="Partials/statItem.html::statItem(
+                    'images/indicesForex/forex.png',
+                    ${forex.forexName},
+                    ${forex.rate},
+                    ${forex.changeValue},
+                    ${forex.changePercent}
+                )"></div>
+
+            <!-- indicex apply -->
+            <div th:each="index : ${indices}">
+                <div th:replace="Partials/statItem.html::statItem(
+                     ${index.title == 'KOSPI' or index.title == 'KOSDAQ'} ? 'images/indicesForex/kor.png' : 'images/indicesForex/usa.png',
+                    ${index.title},
+                    ${index.currentValue},
+                    ${index.changeValue},
+                    ${index.changePercent}
+                )"></div>
+            </div>
+
+        </aside>
+    </main>
+</th:block>
+
+</body>
+</html>
