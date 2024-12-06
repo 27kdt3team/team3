@@ -3,30 +3,26 @@ import yfinance as yf
 # 주식 심볼을 사용하여 Ticker 객체 생성
 # Ticker ID 예: Apple Inc의 주식 심볼 AAPL
 #               삼성전자의 주식 심볼 005930.KS
-#               펄어비스 주식 심볼 263750.KQ
-class YfIndexApiService:
+class YfStockApiService:
     def __init__(self):
         pass
     
-    def check_market(self, ticker):
-        # KOSPI 검사
-        kospi_ticker = ticker + ".KS"
-        kospi_info = yf.Ticker(kospi_ticker)
-        if kospi_info.info is not None:
-            print("KOSPI")
-            return ".KS"
-
-        # KOSDAQ 검사
-        kosdaq_ticker = ticker + ".KQ"
-        kosdaq_info = yf.Ticker(kosdaq_ticker)
-        if kospi_info.info is not None:
-            print("KOSDAQ")
-            return ".KQ"
-
-        return ""
+    def get_stock_table(self, ticker):
+        # 국내 ticker이면 "kor_stock_news"로 아님 "usa_stock_news"로
+        if ticker.isdigit() and len(ticker) == 6:
+            return "kor_stock_news"
+        else:
+            return "usa_stock_news"
     
-    def test(self, ticker_name):
-        ticker = "005930" + self.check_market(ticker_name)
+    def convert_ticker(self, ticker):
+        # 국내 ticker이면 ".KS를 붙임"
+        if self.get_stock_table(ticker) == "kor_stock_news":
+            return ticker + ".KS"
+        else:
+            return ticker    
+    
+    def get_stock_info(self, ticker_name):
+        ticker = self.convert_ticker(ticker_name)
         yf_ticker = yf.Ticker(ticker)  
         info = yf_ticker.info
 
@@ -67,8 +63,32 @@ class YfIndexApiService:
         print(f"earnings_per_share : {earnings_per_share}")
         print(f"current_ratio: {current_ratio}")
         print(f"debt_to_equity: {debt_to_equity}")
+        
+        stock_info = {
+            "table" : self.get_stock_table(ticker_name),
+            "current_price" : current_price,
+            "close" : close,
+            "open" : open,
+            "volume" : volume,
+            "fiftytwo_week_low": fiftytwo_week_low,
+            "fiftytwo_week_high": fiftytwo_week_high,
+            "day_low": day_low,
+            "day_high": day_high,
+            "return_on_assets": return_on_assets,
+            "return_on_equity": return_on_equity,
+            "enterprice_value": enterprice_value,
+            "enterprice_to_EBITDA": enterprice_to_EBITDA,
+            "price_to_book": price_to_book,
+            "price_to_sales": price_to_sales,
+            "earnings_per_share": earnings_per_share,
+            "current_ratio": current_ratio,
+            "debt_to_equity": debt_to_equity
+        }
+        
+        return stock_info
 
 # Example usage:
 if __name__ == "__main__":
-    yfinance = YfIndexApiService()
-    yfinance.test("005930")
+    yfinance = YfStockApiService()
+    xxx = yfinance.get_stock_info("005930")
+    print(xxx)

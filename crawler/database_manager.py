@@ -121,7 +121,6 @@ class DatabaseManager:
         #   change_percent = VALUES(change_percent);
         # '''
         
-        # 테스트 테이블용 쿼리
         query = '''
         INSERT INTO indices (title, current_value, change_value, change_percent) 
         VALUES (%s, %s, %s, %s)
@@ -131,7 +130,7 @@ class DatabaseManager:
             change_percent = VALUES(change_percent);
         '''
         
-        # Scrapy에서 크롤링한 기사 정보
+        # api로 크롤링한 환율 정보
         values = (
             item['title'],
             item['current_value'],
@@ -165,7 +164,6 @@ class DatabaseManager:
         #   change_percent = VALUES(change_percent);
         # '''
         
-        # 테스트 테이블용 쿼리
         query = '''
         INSERT INTO forex (forex_name, rate, change_value, change_percent, last_updated) 
         VALUES (%s, %s, %s, %s, NOW())
@@ -176,7 +174,7 @@ class DatabaseManager:
             last_updated = VALUES(last_updated);
         '''
         
-        # Scrapy에서 크롤링한 기사 정보
+        # api로 크롤링한 환율 정보
         values = (
             item['title'],
             item['current_value'],
@@ -198,4 +196,4 @@ class DatabaseManager:
         finally:
             cursor.close()
 
-        
+    
