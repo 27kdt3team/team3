@@ -19,3 +19,4 @@ public interface CommunityCommentViewRepository extends JpaRepository<CommunityC
     // 특정 communityId에 대한 댓글 수 가져오기
     long countByCommunityId(long communityId);
 }
+

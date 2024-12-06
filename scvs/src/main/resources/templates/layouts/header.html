@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light" th:fragment="header">
     <div class="container">
@@ -18,25 +19,40 @@
                     <a class="nav-link" th:href="@{/}">홈</a>
                 </li>
                 <!-- 로그인 상태에 따라 관심 종목 표시 -->
-                <li class="nav-item" th:if="${isLoggedIn}">
-                    <a class="nav-link" th:href="@{/watchlist}">관심 종목</a>
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link btn" th:href="@{/watchlist?userId={userId}(userId=${userId})}">관심 종목</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/domestic}">국내</a>
+                    <a class="nav-link" th:href="@{/kor}">국내</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/usa}">미국</a>
+                    <a class="nav-link btn" th:href="@{/usa}">미국</a>
                 </li>
             </ul>
-            <div class="d-flex">
+            <ul class="d-flex navbar-nav mx-right account-menu">
                 <!-- 로그아웃 상태 -->
-                <a class="btn btn-secondary me-2" th:if="${!isLoggedIn}" th:href="@{/signup}">회원가입</a>
-                <a class="btn btn-dark" th:if="${!isLoggedIn}" th:href="@{/login}">로그인</a>
+                <li class="nav-item" sec:authorize ="isAnonymous()" >
+                    <a class="nav-link btn btn-account-sign"  th:href="@{/signup}">회원가입</a>
+                </li>
+                <li class="nav-item" sec:authorize ="isAnonymous()" >
+                    <a class="nav-link btn btn-login-out"  th:href="@{/login}">로그인</a>
+                </li>
+
 
                 <!-- 로그인 상태 -->
-                <a class="btn btn-secondary me-2" th:if="${isLoggedIn}" th:href="@{/profile}">내 정보</a>
-                <a class="btn btn-dark" th:if="${isLoggedIn}" th:href="@{/logout}">로그아웃</a>
-            </div>
+                <!-- USER -->
+                <li class="nav-item" sec:authorize ="hasRole('USER')" >
+                    <a class="nav-link btn btn-account-sign"  th:href="@{/user/profile}">내 정보</a>
+                </li>
+                <!-- ADMIN -->
+                <li class="nav-item" sec:authorize ="hasRole('ADMIN')" >
+                    <a class="nav-link btn btn-account-sign"  th:href="@{/admin/userList}">관리자 기능</a>
+                </li>
+
+                <li class="nav-item" sec:authorize ="isAuthenticated()" >
+                    <a class="nav-link btn btn-login-out"  th:href="@{/logout}">로그아웃</a>
+                </li>
+            </ul>
         </div>
     </div>
 </nav>
