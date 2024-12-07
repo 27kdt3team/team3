@@ -2,7 +2,6 @@ package com.team3.scvs.controller;
 
 
 import com.team3.scvs.dto.*;
-import com.team3.scvs.entity.*;
 import com.team3.scvs.service.CommunityService;
 import com.team3.scvs.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +51,7 @@ public class CommunityController {
         StocksDTO stocksinfo = stockinfoOptional.orElse(null);
 
         // 뉴스 제목 가져오기
-        List<StocksNewsDTO> stocknewsinfo = communityService.getStocksNewsTitle(tickerId);
+        List<StockNewsTitleDTO> stocknewsinfo = communityService.getStocksNewsTitle(tickerId);
 
         // 모델에 데이터 추가
         model.addAttribute("userId", userId);
@@ -153,33 +152,4 @@ public class CommunityController {
         // 수정 후 기존 페이지로 리다이렉트
         return "redirect:/community?tickerId=" + tickerId;
     }
-
-
-    @GetMapping("/domestic/id")
-    public String getNewsDetail(@PathVariable("id") String id, Model model) {
-        // region 추출 (kor_ 또는 usa_)
-        String region;
-        if (id.startsWith("kor_")) {
-            region = "kor";
-        } else if (id.startsWith("usa_")) {
-            region = "usa";
-        } else {
-            throw new IllegalArgumentException("Invalid ID format: " + id);
-        }
-
-        // ID에서 접두사 제거 (실제 뉴스 ID만 추출)
-        String actualId = id.substring(id.indexOf("_") + 1);
-
-        // ID에 해당하는 뉴스 데이터를 가져오기
-        // 나중에 상세페이지 구현 후 Entity 확인해서 수정
-        //NewsDTO news = newsService.getNewsById(actualId);
-
-        // 뉴스 데이터와 지역 정보를 모델에 추가
-        //model.addAttribute("newsDetail", news);
-        model.addAttribute("region", region); // 지역 정보 추가
-
-        return "news-detail"; // 상세 페이지를 보여줄 Thymeleaf 템플릿 이름
-    }
-
-
 }

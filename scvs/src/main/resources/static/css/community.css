@@ -1,5 +1,4 @@
-.container {
-    width: 100%;
+.community-container {
     margin: 0 auto;
     padding: 20px;
     display: grid;
@@ -7,6 +6,7 @@
     grid-template-rows: auto;
     gap: 20px;
     background-color: #f9f9f9;
+    max-width: 70vw; /* 최대 너비 */
 }
 .Stock-info {
     grid-column: 1 / 2;
@@ -87,7 +87,8 @@
     grid-row: 2 / 6;    /* 그리드 내 높이 */
     padding: 20px;
     border-radius: 8px;
-    background-color: #f9f9f9; /* 배경색 추가 */
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column; /* 내부 요소를 세로 정렬 */
     gap: 20px; /* 내부 요소 간 간격 */
@@ -265,7 +266,8 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
-    background-color: #f9f9f9; /* 배경색 추가 */
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 h2 {
@@ -309,14 +311,14 @@ h2 {
     padding: 20px;
     border-radius: 8px;
     display: flex;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     flex-direction: column;
     gap: 10px;
 }
 .market-stats {
     padding: 20px;
     border-radius: 8px;
-    background-color: #f9f9f9;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     width: 100%; /* wrapper의 너비에 맞춤 */
     height: 100%; /* wrapper의 높이에 맞춤 */
     box-sizing: border-box; /* padding 포함 크기 계산 */
@@ -358,3 +360,10 @@ h2 {
     font-weight: bold;
 }
 
+@media (max-width: 970px) {
+    .community-container {
+        display: flex; /* 플렉스 레이아웃으로 전환 */
+        flex-direction: column; /* 세로로 배치 */
+        gap: 20px; /* 간격 추가 */
+    }
+}

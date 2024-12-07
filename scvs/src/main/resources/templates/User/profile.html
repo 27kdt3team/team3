@@ -29,7 +29,7 @@
                 <!-- Email 수정 입력-->
                 <div class="form-group">
                     <label for="email">이메일: </label>
-                    <span th:text="*{email}">이메일 표시</span>
+                    <span id="current-email" th:text="*{email}">이메일 표시</span>
                     <div>
                         <input type="text" id="email" th:field="*{email}"  placeholder="이메일을 입력하세요"  />
                         <button type="button" id="check-email-duplicate">중복확인</button>
@@ -40,7 +40,7 @@
                 <!-- Nickname 수정 입력-->
                 <div class="form-group">
                     <label for="nickname">닉네임: </label>
-                    <span th:text="*{nickname}">닉네임 표시</span>
+                    <span id="current-nickname" th:text="*{nickname}">닉네임 표시</span>
                     <div>
                         <input type="text" id="nickname"  th:field="*{nickname}" placeholder="닉네임을 입력하세요" />
                         <button type="button" id="check-nickname-duplicate">중복확인</button>

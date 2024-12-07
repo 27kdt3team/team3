@@ -7,7 +7,7 @@
 </th:block>
 <body>
 <th:block layout:fragment="MainBodyContents">
-    <div class="container">
+    <div class="community-container">
         <div class="Stock-info">
             <div class="stock-header">
                 <!-- 회사명과 심볼 -->
@@ -58,7 +58,7 @@
                 </div>
             </form>
             <!-- 댓글 리스트 -->
-            <div class="comment-list" style="overflow-y: auto; height: 700px;">
+            <div class="comment-list" style="overflow-y: auto; height: 600px;">
                 <th:block th:if="${commentList != null}">
                     <th:block th:each="comment : ${commentList}">
                         <div class="comment-item">
@@ -148,7 +148,8 @@
             <ul>
                 <!-- 반복문으로 뉴스 제목 출력 -->
                 <li th:each="news : ${stocknewsinfo}">
-                    <a th:href="@{/domestic/id(id=${news.id})}" th:text="${news.title}"></a>
+                    <a th:href="@{|/stocknews/${news.tickerId}/${news.Id}|(page=1)}"
+                       th:text="${news.title}"></a>
                 </li>
             </ul>
         </div>

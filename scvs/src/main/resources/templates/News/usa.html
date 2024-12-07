@@ -44,7 +44,7 @@
                     </h4>
                 </div>
                 <!-- 뉴스 이미지 -->
-                <img th:src="${newsItem.imageLink}" alt="Unable to load image" width="180" height="90" class="news images">
+                <img th:if="${newsItem.imageLink != null}" th:src="${newsItem.imageLink}" alt="Unable to load image" width="180" height="90" class="news images">
             </div>
 
             <!-- 페이징 처리 -->
@@ -71,8 +71,10 @@
             </div>
         </section>
 
-        <!-- 환율 정보 -->
-        <aside class="exchange-rate-container">
+        <!-- 사이드바 -->
+        <aside class="side-container">
+
+            <!-- 환율 정보 -->
             <div class="rate">
                 <div class="currency-symbol">₩ / $</div>
                 <!-- 환율 -->
@@ -86,25 +88,25 @@
                 <!-- 업데이트 날짜 -->
                 <div class="currency-date" th:text="${#temporals.format(forex.lastUpdated, 'yyyy-MM-dd HH:mm:ss')} + ' 기준'"></div>
             </div>
-        </aside>
 
-        <!-- 트렌드 순위 -->
-        <aside class="trending-container">
-            <div class="trending">
-                <h3>미국 트렌드 순위</h3>
-                <ol>
-                    <li>1. AAPL <span class="volume">50</span></li>
-                    <li>2. NVDA <span class="volume">55</span></li>
-                    <li>3. MSFT <span class="volume">40</span></li>
-                    <li>4. AMZN <span class="volume">10</span></li>
-                    <li>5. META <span class="volume">20</span></li>
-                    <li>6. GOOGL <span class="volume">20</span></li>
-                    <li>7. TSLA <span class="volume">20</span></li>
-                    <li>8. AMGN <span class="volume">20</span></li>
-                    <li>9. COST <span class="volume">20</span></li>
-                    <li>10. NFLX <span class="volume">20</span></li>
-                </ol>
+            <!-- 미국 지표 -->
+            <div class="indices-container">
+                <h3>미국 지표</h3>
+                <div th:each="index : ${indices}">
+                    <div class="index-item">
+                        <p class="index-title" th:text="${index.title}"></p>
+                        <p class="index-value" th:text="${index.currentValue}"></p>
+                        <div class="index-change">
+                            <!-- 도형으로 상승/하락/유지 표시 -->
+                            <span class="triangle"
+                                  th:classappend="${index.changeValue > 0} ? 'up' : (${index.changeValue < 0} ? 'down' : 'stay')"></span>
+                            <!-- 변동값과 변동률 -->
+                            <span th:text="${index.changeValue} + ' (' + ${index.changePercent} + '%)'"></span>
+                        </div>
+                    </div>
+                </div>
             </div>
+
         </aside>
 
     </main>

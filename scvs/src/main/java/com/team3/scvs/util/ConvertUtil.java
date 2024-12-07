@@ -67,8 +67,8 @@ public class ConvertUtil {
         );
     }
 
-    public StocksNewsDTO convertToDTO(StocksNewsEntity entity) {
-        return new StocksNewsDTO(
+    public StockNewsTitleDTO convertToDTO(StockNewsTitleEntity entity) {
+        return new StockNewsTitleDTO(
                 entity.getId(),
                 entity.getTitle(),
                 entity.getTickerId(),
@@ -77,7 +77,6 @@ public class ConvertUtil {
                 entity.getMarket()
         );
     }
-
     public CommunityCommentViewDTO convertToDTO(CommunityCommentViewEntity entity) {
         return new CommunityCommentViewDTO(
                 entity.getId(),
@@ -89,5 +88,30 @@ public class ConvertUtil {
                 entity.getUpdatedAt(),
                 entity.getTimeAgo()
         );
+    }
+  
+    public StockNewsDTO convertToDTO(StockNewsEntity entity) {
+        return StockNewsDTO.builder()
+                .stockNewsId(entity.getStockNewsId())
+                .title(entity.getTitle())
+                .source(entity.getSource())
+                .imageLink(entity.getImageLink())
+                .content(entity.getContent())
+                .sentiment(entity.getSentiment())
+                .publishedAt(entity.getPublishedAt())
+                .link(entity.getLink())
+                .tickerId(entity.getTickerId())
+                .market(entity.getMarket())
+                .build();
+    }
+
+    // convert (UserEntity >> UserDTO)
+    public UserDTO convertToDTO(UserEntity userEntity) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setEmail(userEntity.getEmail());
+        userDTO.setNickname(userEntity.getNickname());
+        userDTO.setUserrole(userEntity.getUserrole());
+        userDTO.setUserId(userEntity.getUserId());
+        return userDTO;
     }
 }

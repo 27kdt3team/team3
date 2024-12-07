@@ -5,8 +5,10 @@
 <body>
 
 <th:block layout:fragment="MainBodyContents">
-  <div class="container mt-4" style="height: 83vh;">
-    <h1 class="text-center mb-3" >사용자 관리</h1>
+  <div class="container mt-4" style="height: 950px;">
+    <h1 class="text-center mb-3" style="cursor: pointer;" onclick="window.location.href='/admin/userList'">사용자 관리</h1>
+
+
     <!-- 상단 -->
     <form class="row mb-3 align-items-center" th:action="@{/admin/userList}" method="POST">
       <!-- 라벨 -->
@@ -52,14 +54,14 @@
 
       <!-- 중단 유저 리스트 -->
       <div class="d-flex justify-content-center">
-        <table class="table table-bordered">
+        <table id="userTable" class="table table-bordered">
           <thead class="table-dark">
           <tr>
-            <th scope="col" class="col-1 text-center" style="width: 4%;"><input type="checkbox" id="selectAll" onclick="toggleCheckboxes(this)"></th>
-            <th scope="col" class="col-1 text-center" style="width: 4%;">번호</th>
-            <th scope="col" class="col-3">이메일</th>
-            <th scope="col" class="col-3">닉네임</th>
-            <th scope="col" class="col-2">역할</th>
+            <th scope="col" onclick="sortTable(0)" class="col-1 text-center" style="width: 5%;"><input type="checkbox" id="selectAll" onclick="toggleCheckboxes(this)"><span class="sort-icon"></span></th>
+            <th scope="col" onclick="sortTable(1)" class="col-2 text-center" style="cursor: pointer; width: 6%;">번호<span class="sort-icon">▲</span></th>
+            <th scope="col" onclick="sortTable(2)" class="col-3" style="cursor: pointer;">이메일<span class="sort-icon">▲</span></th>
+            <th scope="col" onclick="sortTable(3)" class="col-3" style="cursor: pointer;">닉네임<span class="sort-icon">▲</span></th>
+            <th scope="col" onclick="sortTable(4)" class="col-2" style="cursor: pointer;">역할 <span class="sort-icon">▲</span></th>
           </tr>
           </thead>
           <tbody>

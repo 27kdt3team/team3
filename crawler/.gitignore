@@ -1,0 +1,44 @@
+# Compiled Python files
+*.pyc
+*.pyo
+*.pyd
+
+# Bytecode cache
+__pycache__/
+*.log
+*.pot
+*.mo
+
+# pip environment
+pip-log.txt
+
+# Pytest
+.pytest_cache/
+
+# Environments
+.env
+!.env.example
+.crawler-env
+crawler-env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+secret.json
+!example-secret.json
+
+# Sample CSVs
+crawl_samples/
+
+# JetBrains IDEs (e.g., PyCharm)
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+
+# MacOS
+.DS_Store
+
+# Windows
+Thumbs.db
