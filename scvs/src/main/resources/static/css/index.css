@@ -71,6 +71,10 @@ h2 {
     text-decoration: unset;
 }
 
+.news-title{
+    overflow: hidden;
+    max-height: 10vh;
+}
   
 /*뉴스의 제목과 화면 구조를 꾸미는 클래스 입니다.
       국내 5개 미국 5개 */
