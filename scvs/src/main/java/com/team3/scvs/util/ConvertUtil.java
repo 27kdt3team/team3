@@ -15,17 +15,6 @@ public class ConvertUtil {
         );
     }
 
-    public CommunityCommentDTO convertToDTO(CommunityCommentEntity entity) {
-        return new CommunityCommentDTO(
-                entity.getCommunityCommentId(),
-                entity.getCommunity().getCommunityId(),
-                entity.getUser().getUserId(),
-                entity.getComment(),
-                entity.getPublishedAt(),
-                entity.getUpdatedAt()
-        );
-    }
-
     public CommunityVoteDTO convertToDTO(CommunityVoteEntity entity) {
         return new CommunityVoteDTO(
                 entity.getCommunityVoteId(),
