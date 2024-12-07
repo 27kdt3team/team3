@@ -26,8 +26,6 @@ public class CommunityService {
     private final StocksRepository stocksRepository;
     private final StocksNewsRepository stocksNewsRepository;
 
-    private final ConvertUtil convert = new ConvertUtil();
-
     //주식 기초 정보
     public CommunityStockInfoDTO getStockInfo(Long tickerId) {
         // 엔티티 조회
@@ -37,7 +35,7 @@ public class CommunityService {
             return null;
         }
         // DTO로 변환하여 반환
-        return convert.convertToDTO(entity);
+        return ConvertUtil.convertToDTO(entity);
     }
     // 주식 투표 정보
     public CommunityVoteDTO getVoteInfo(long communityId) {
@@ -53,7 +51,7 @@ public class CommunityService {
             voteInfo = communityVoteRepository.save(voteInfo);
         }
         // DTO로 변환하여 반환
-        return convert.convertToDTO(voteInfo);
+        return ConvertUtil.convertToDTO(voteInfo);
     }
     // 주식 투표
     public boolean castVote(UserVoteDTO userVoteDTO, String voteType) {
@@ -106,13 +104,13 @@ public class CommunityService {
         }
 
         // convertToDTO 메서드를 사용하여 CommunityDTO로 변환
-        return convert.convertToDTO(community);
+        return ConvertUtil.convertToDTO(community);
     }
     //토론방에 댓글 정보
     public List<CommunityCommentViewDTO> getComments(Long communityId) {
         return communityCommentViewRepository.findAllByCommunityIdOrderByPublishedAtDesc(communityId)
                 .stream()
-                .map(convert::convertToDTO)
+                .map(ConvertUtil::convertToDTO)
                 .collect(Collectors.toList());
     }
     // 댓글 추가
@@ -169,13 +167,13 @@ public class CommunityService {
     }
     // 주식에 다양한 정보
     public Optional<StocksDTO> getStocksInfo(Long tickerId) {
-        return stocksRepository.findByTickerId(tickerId).map(convert::convertToDTO);
+        return stocksRepository.findByTickerId(tickerId).map(ConvertUtil::convertToDTO);
     }
 
     //주식 관련 뉴스
     public List<StocksNewsDTO> getStocksNewsTitle(Long tickerId) {
         return stocksNewsRepository.findLatestByTickerId(tickerId).stream()
-                .map(convert::convertToDTO)
+                .map(ConvertUtil::convertToDTO)
                 .limit(5)
                 .collect(Collectors.toList());
     }

@@ -5,7 +5,7 @@ import com.team3.scvs.entity.*;
 
 public class ConvertUtil {
     // Entity -> DTO 변환 메서드
-    public CommunityStockInfoDTO convertToDTO(CommunityStockInfoEntity entity){
+    public static CommunityStockInfoDTO convertToDTO(CommunityStockInfoEntity entity){
         return new CommunityStockInfoDTO(
                 entity.getTickerId(),
                 entity.getSymbol(),
@@ -15,18 +15,7 @@ public class ConvertUtil {
         );
     }
 
-    public CommunityCommentDTO convertToDTO(CommunityCommentEntity entity) {
-        return new CommunityCommentDTO(
-                entity.getCommunityCommentId(),
-                entity.getCommunity().getCommunityId(),
-                entity.getUser().getUserId(),
-                entity.getComment(),
-                entity.getPublishedAt(),
-                entity.getUpdatedAt()
-        );
-    }
-
-    public CommunityVoteDTO convertToDTO(CommunityVoteEntity entity) {
+    public static CommunityVoteDTO convertToDTO(CommunityVoteEntity entity) {
         return new CommunityVoteDTO(
                 entity.getCommunityVoteId(),
                 entity.getCommunity().getCommunityId(),
@@ -35,14 +24,14 @@ public class ConvertUtil {
         );
     }
 
-    public CommunityDTO convertToDTO(CommunityEntity entity) {
+    public static CommunityDTO convertToDTO(CommunityEntity entity) {
         return new CommunityDTO(
                 entity.getCommunityId(),
                 entity.getTickerId()
         );
     }
 
-    public StocksDTO convertToDTO(StocksEntity entity) {
+    public static StocksDTO convertToDTO(StocksEntity entity) {
         return new StocksDTO(
                 entity.getStockId(),
                 entity.getTickerId(),
@@ -67,7 +56,7 @@ public class ConvertUtil {
         );
     }
 
-    public StocksNewsDTO convertToDTO(StocksNewsEntity entity) {
+    public static StocksNewsDTO convertToDTO(StocksNewsEntity entity) {
         return new StocksNewsDTO(
                 entity.getId(),
                 entity.getTitle(),
@@ -77,7 +66,7 @@ public class ConvertUtil {
                 entity.getMarket()
         );
     }
-    public CommunityCommentViewDTO convertToDTO(CommunityCommentViewEntity entity) {
+    public static CommunityCommentViewDTO convertToDTO(CommunityCommentViewEntity entity) {
         return new CommunityCommentViewDTO(
                 entity.getId(),
                 entity.getUserId(),
@@ -90,7 +79,7 @@ public class ConvertUtil {
         );
     }
   
-    public StockNewsDTO convertToDTO(StockNewsEntity entity) {
+    public static StockNewsDTO convertToDTO(StockNewsEntity entity) {
         return StockNewsDTO.builder()
                 .stockNewsId(entity.getStockNewsId())
                 .title(entity.getTitle())
@@ -106,7 +95,7 @@ public class ConvertUtil {
     }
 
     // convert (UserEntity >> UserDTO)
-    public UserDTO convertToDTO(UserEntity userEntity) {
+    public static UserDTO convertToDTO(UserEntity userEntity) {
         UserDTO userDTO = new UserDTO();
         userDTO.setEmail(userEntity.getEmail());
         userDTO.setNickname(userEntity.getNickname());
