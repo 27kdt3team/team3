@@ -104,4 +104,14 @@ public class ConvertUtil {
                 .market(entity.getMarket())
                 .build();
     }
+
+    // convert (UserEntity >> UserDTO)
+    public UserDTO convertToDTO(UserEntity userEntity) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setEmail(userEntity.getEmail());
+        userDTO.setNickname(userEntity.getNickname());
+        userDTO.setUserrole(userEntity.getUserrole());
+        userDTO.setUserId(userEntity.getUserId());
+        return userDTO;
+    }
 }
