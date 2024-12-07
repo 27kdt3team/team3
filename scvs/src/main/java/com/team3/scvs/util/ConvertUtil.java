@@ -15,6 +15,7 @@ public class ConvertUtil {
         );
     }
 
+
     public static CommunityVoteDTO convertToDTO(CommunityVoteEntity entity) {
         return new CommunityVoteDTO(
                 entity.getCommunityVoteId(),

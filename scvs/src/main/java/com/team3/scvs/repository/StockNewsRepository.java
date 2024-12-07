@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 
-public interface StockNewsRepository extends JpaRepository<StockNewsEntity, Long> {
+public interface StockNewsRepository extends JpaRepository<StockNewsEntity, String> {
 
     Page<StockNewsEntity> findByTickerId(Long tickerId, Pageable pageable);
 
