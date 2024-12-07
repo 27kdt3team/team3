@@ -1,13 +1,11 @@
 package com.team3.scvs.service;
 
 import com.team3.scvs.dto.IndexDTO;
-import com.team3.scvs.entity.IndicesEntity;
 import com.team3.scvs.repository.IndexRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
