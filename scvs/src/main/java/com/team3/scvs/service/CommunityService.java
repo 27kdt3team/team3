@@ -24,7 +24,7 @@ public class CommunityService {
     private final CommunityCommentViewRepository communityCommentViewRepository;
     private final UserVoteRepository userVoteRepository;
     private final StocksRepository stocksRepository;
-    private final StocksNewsRepository stocksNewsRepository;
+    private final StocksNewsTitleRepository stocksNewsRepository;
 
     //주식 기초 정보
     public CommunityStockInfoDTO getStockInfo(Long tickerId) {
@@ -171,10 +171,10 @@ public class CommunityService {
     }
 
     //주식 관련 뉴스
-    public List<StocksNewsDTO> getStocksNewsTitle(Long tickerId) {
+    public List<StockNewsTitleDTO> getStocksNewsTitle(Long tickerId) {
         return stocksNewsRepository.findLatestByTickerId(tickerId).stream()
-                .map(ConvertUtil::convertToDTO)
-                .limit(5)
+                .map(convert::convertToDTO)
+                .limit(3)
                 .collect(Collectors.toList());
     }
 

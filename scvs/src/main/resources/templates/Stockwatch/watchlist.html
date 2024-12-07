@@ -38,8 +38,21 @@
                                 Company
                             </a>
                         </td>
-                        <td th:text="${stock.ticker.symbol}">
-                            <img class="symbolImg" src="flag.png"/> Symbol
+                        <td>
+                            <!-- 길이가 6자일 경우 kor.png -->
+                            <img th:if="${stock.ticker.symbol != null && #strings.length(stock.ticker.symbol) == 6}"
+                                 th:src="@{'images/indicesForex/kor.png'}"
+                                 alt="kor image"
+                                 width="30" height="30"/>
+
+                            <!-- 길이가 6자가 아닌 경우 usa.png -->
+                            <img th:if="${stock.ticker.symbol != null && #strings.length(stock.ticker.symbol) != 6}"
+                                 th:src="@{'images/indicesForex/usa.png'}"
+                                 alt="usa image"
+                                 width="30" height="30"/>
+
+                            <!-- Symbol 텍스트 -->
+                            <span th:text="${stock.ticker.symbol}"></span>
                         </td>
                         <td>
                             <form th:action="@{/watchlist/delete}" method="post">
@@ -81,8 +94,21 @@
                     <tbody>
                     <tr class="forTablecolor" th:each="ticker : ${allTickers}">
                         <td th:text="${ticker.company}">Company</td>
-                        <td th:text="${ticker.symbol}">
-                            <img class="symbolImg" src="flag.png"/> Symbol
+                        <td>
+                            <!-- 길이가 6자일 경우 kor.png -->
+                            <img th:if="${ticker.symbol != null && #strings.length(ticker.symbol) == 6}"
+                                 th:src="@{'images/indicesForex/kor.png'}"
+                                 alt="kor image"
+                                 width="30" height="30"/>
+
+                            <!-- 길이가 6자가 아닌 경우 usa.png -->
+                            <img th:if="${ticker.symbol != null && #strings.length(ticker.symbol) != 6}"
+                                 th:src="@{'images/indicesForex/usa.png'}"
+                                 alt="usa image"
+                                 width="30" height="30"/>
+
+                            <!-- Symbol 텍스트 -->
+                            <span th:text="${ticker.symbol}"></span>
                         </td>
                         <td>
                             <form th:action="@{/watchlist/add}" method="post">
@@ -96,7 +122,7 @@
                     </tbody>
                 </table>
                 <div class="allTickersLoadMoreContainer"> <!-- 더 보기-->
-                    <button id="allTickersLoadMoreBtn" class="allTickersLoadMoreBtn">더 보기<p>V</p></button>
+                    <button id="allTickersLoadMoreBtn" class="allTickersLoadMoreBtn">더보기</button>
                 </div>
             </div>
         </div>

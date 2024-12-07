@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 public class StockNewsDTO {
 
-    private Long stockNewsId;
+    private String stockNewsId;
 
     private String title;
 
