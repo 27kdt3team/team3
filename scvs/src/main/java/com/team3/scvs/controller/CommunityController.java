@@ -2,7 +2,6 @@ package com.team3.scvs.controller;
 
 
 import com.team3.scvs.dto.*;
-import com.team3.scvs.entity.*;
 import com.team3.scvs.service.CommunityService;
 import com.team3.scvs.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +51,7 @@ public class CommunityController {
         StocksDTO stocksinfo = stockinfoOptional.orElse(null);
 
         // 뉴스 제목 가져오기
-        List<StocksNewsDTO> stocknewsinfo = communityService.getStocksNewsTitle(tickerId);
+        List<StockNewsTitleDTO> stocknewsinfo = communityService.getStocksNewsTitle(tickerId);
 
         // 모델에 데이터 추가
         model.addAttribute("userId", userId);

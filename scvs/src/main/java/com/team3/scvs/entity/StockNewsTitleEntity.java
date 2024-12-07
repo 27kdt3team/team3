@@ -16,8 +16,8 @@ import java.time.LocalDateTime;
 @Immutable //읽기전용 Entity
 @NoArgsConstructor  // 기본 생성자 생성
 @AllArgsConstructor // 모든 필드를 받는 생성자 생성
-@Table(name = "vw_stocks_news")
-public class StocksNewsEntity {
+@Table(name = "vw_stock_title_news")
+public class StockNewsTitleEntity {
 
     @Id
     @Column(name = "stocker_news_id")
