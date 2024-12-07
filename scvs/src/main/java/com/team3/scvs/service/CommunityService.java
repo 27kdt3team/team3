@@ -24,7 +24,7 @@ public class CommunityService {
     private final CommunityCommentViewRepository communityCommentViewRepository;
     private final UserVoteRepository userVoteRepository;
     private final StocksRepository stocksRepository;
-    private final StocksNewsRepository stocksNewsRepository;
+    private final StocksNewsTitleRepository stocksNewsRepository;
 
     private final ConvertUtil convert = new ConvertUtil();
 

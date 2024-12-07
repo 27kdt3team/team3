@@ -9,9 +9,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface StocksNewsRepository extends JpaRepository<StockNewsTitleEntity, String> {
+public interface StocksNewsTitleRepository extends JpaRepository<StockNewsTitleEntity, String> {
 
-    @Query("SELECT s FROM StocksNewsEntity s WHERE s.tickerId = :tickerId ORDER BY s.publishedAt DESC")
+    @Query("SELECT s FROM StockNewsTitleEntity s WHERE s.tickerId = :tickerId ORDER BY s.publishedAt DESC")
     List<StockNewsTitleEntity> findLatestByTickerId(@Param("tickerId") long tickerId);
 
 }
