@@ -66,7 +66,7 @@ public class StockWatchController {
     //url: /stocknews/1/1?page=1
     @GetMapping("/stocknews/{tickerId}/{stockNewsId}")
     public String findById(@PathVariable Long tickerId,
-                           @PathVariable Long stockNewsId,
+                           @PathVariable String stockNewsId,
                            Model model,
                            @PageableDefault(page = 1) Pageable pageable) {
         StockNewsDTO stockNewsDTO = stocksService.findById(stockNewsId, tickerId); //vm_stock_news에서 stockNewsId와 tickerId로 데이터 조회

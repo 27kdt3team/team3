@@ -60,7 +60,7 @@ public class StocksService {
     }
 
     //뉴스 상세 페이지 조회
-    public StockNewsDTO findById(Long stockNewsId, Long tickerId) {
+    public StockNewsDTO findById(String stockNewsId, Long tickerId) {
         //주어진 stockNewsId로 엔티티 조회
         Optional<StockNewsEntity> optionalStockNewsEntity = stockNewsRepository.findById(stockNewsId);
 
