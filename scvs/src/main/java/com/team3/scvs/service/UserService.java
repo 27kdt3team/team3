@@ -69,13 +69,8 @@ public class UserService {
     }
     // 패스워드 중복확인, 비밀번호 수정에 사용
     public boolean isPasswordDuplicate(String password) {
-        // 현재 세션에서 Id값인 username을 불러옴
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null) {
-            // Authentication 객체가 null인 경우 예외
-            throw new AuthenticationCredentialsNotFoundException("사용자가 인증되지 않았습니다.");
-        }
-        String username = auth.getName(); // 가져온 username변수
+
+        String username = getAuthenticatedUsername(); // 가져온 username변수
 
         // DB에서 username으로 조회
         UserEntity userEntity = userRepository.findByEmail(username)
@@ -91,11 +86,12 @@ public class UserService {
             throw new IllegalArgumentException("UserDTO cannot be null.");
         }
 
-        // UserDTO > UserEntity > DB에 저장
+        // UserDTO에서 UserEntity로 저장 > DB에 저장
         UserEntity userEntity = new UserEntity();
         userEntity.setEmail(userDTO.getEmail());
         userEntity.setPassword(passwordEncoder.encode(userDTO.getPassword())); // 비밀번호 암호화
         userEntity.setNickname(userDTO.getNickname());
+        userEntity.setUserrole("ROLE_USER");
 
         userRepository.save(userEntity); // db저장 실행
     }
@@ -103,13 +99,8 @@ public class UserService {
     // Read(User ReadDB에서 값을 가져와 UserDTO를 리턴 (로그인에서는 사용하지 않음))
     public UserDTO getUser(){
 
-        // 현재 세션에서 Id값인 username을 불러옴
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null) {
-            // Authentication 객체가 null인 경우 예외
-            throw new AuthenticationCredentialsNotFoundException("사용자가 인증되지 않았습니다.");
-        }
-        String username = auth.getName(); // 가져온 username변수
+        // 현재 로그인된 email를 저장
+        String username = getAuthenticatedUsername();
 
         // DB에서 username으로 조회
         UserEntity userEntity = userRepository.findByEmail(username)
@@ -125,13 +116,14 @@ public class UserService {
     public void setDtoFromEntity(UserDTO userDTO , UserEntity userEntity){
         userDTO.setEmail(userEntity.getEmail());
         userDTO.setNickname(userEntity.getNickname());
+        userDTO.setUserrole(userEntity.getUserrole());
     }
 
     // Update(회원정보 수정, 세션업데이트)
     public void updateUser(UserDTO userDTO) {
-        // 세션에서 로그인정보를 가져옴
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName(); // 가져온 username변수
+        // 현재 로그인된 email를 저장
+        String username = getAuthenticatedUsername(); // 가져온 username변수
+
         // DB에서 UserEntity를 가져옴
         UserEntity user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException(UserConstants.USER_NOT_FOUND_ERROR + username));
@@ -161,7 +153,7 @@ public class UserService {
 
     // Delete (회원정보 삭제)
     public void deleteUser(HttpServletRequest request, HttpServletResponse response) {
-        // 세션에서 로그인정보를 가져옴
+        // 현재 로그인된 정보를 가져옴
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName(); // 가져온 username변수
 
@@ -194,5 +186,22 @@ public class UserService {
 
         // SecurityContext에 새 인증 정보 설정
         SecurityContextHolder.getContext().setAuthentication(newAuth);
+    }
+
+    // 세션에 저장된 SecurityContext에서 인증된 사용자의 Username을 리턴
+    public String getAuthenticatedUsername() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null) {
+            throw new AuthenticationCredentialsNotFoundException("사용자가 인증되지 않았습니다.");
+        }
+        return auth.getName();
+    }
+
+    public Long getUserId(String userName){
+        UserEntity userEntity = userRepository.findByEmail(userName).orElse(null);
+        if(userEntity == null){
+            return -1L;
+        }
+        return userEntity.getUserId();
     }
 }
