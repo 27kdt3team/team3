@@ -176,7 +176,7 @@ public class CommunityService {
     public List<StockNewsTitleDTO> getStocksNewsTitle(Long tickerId) {
         return stocksNewsRepository.findLatestByTickerId(tickerId).stream()
                 .map(convert::convertToDTO)
-                .limit(5)
+                .limit(3)
                 .collect(Collectors.toList());
     }
 
