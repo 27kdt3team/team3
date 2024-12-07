@@ -63,7 +63,7 @@ public class StocksService {
 
         if (optionalStockNewsEntity.isPresent() && optionalStockNewsEntity.get().getTickerId() == tickerId) {//데이터가 존재하고 티커 아이디가 일치하는 경우
             //엔티티를 dto 객체로 바꿔서 반환
-            return convert.convertToDTO(optionalStockNewsEntity.get());
+            return ConvertUtil.convertToDTO(optionalStockNewsEntity.get());
 
         } else {//데이터가 존재하지 않으면
             return null;
