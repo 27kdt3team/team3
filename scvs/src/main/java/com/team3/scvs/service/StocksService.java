@@ -47,6 +47,7 @@ public class StocksService {
         return stocksRepository.findByTickerId(tickerId).map(convert::convertToDTO);
     }
 
+    //뉴스 리스트 조회
     public Page<StockNewsDTO> getStockNewsList(Long tickerId, Pageable pageable) {
         int page = pageable.getPageNumber() - 1; //실제 사용자가 요청한 페이지 값에서 하나 뺀 값 (page 인덱스는 0부터 시작)
         int pageLimit = 3; //한 페이지에 보여줄 기사 개수
@@ -58,6 +59,21 @@ public class StocksService {
         return stockNewsEntities.map(convert::convertToDTO);
     }
 
+    //뉴스 상세 페이지 조회
+    public StockNewsDTO findById(Long stockNewsId, Long tickerId) {
+        //주어진 stockNewsId로 엔티티 조회
+        Optional<StockNewsEntity> optionalStockNewsEntity = stockNewsRepository.findById(stockNewsId);
+
+        if (optionalStockNewsEntity.isPresent() && optionalStockNewsEntity.get().getTickerId() == tickerId) {//데이터가 존재하고 티커 아이디가 일치하는 경우
+            //엔티티를 dto 객체로 바꿔서 반환
+            return convert.convertToDTO(optionalStockNewsEntity.get());
+
+        } else {//데이터가 존재하지 않으면
+            return null;
+
+        }
+
+    }
 
     public CommunityDTO getOrCreateCommunity(Long tickerId) {
         // tickerId로 CommunityEntity 조회
