@@ -67,8 +67,8 @@ public class ConvertUtil {
         );
     }
 
-    public StocksNewsDTO convertToDTO(StocksNewsEntity entity) {
-        return new StocksNewsDTO(
+    public StockNewsTitleDTO convertToDTO(StockNewsTitleEntity entity) {
+        return new StockNewsTitleDTO(
                 entity.getId(),
                 entity.getTitle(),
                 entity.getTickerId(),
