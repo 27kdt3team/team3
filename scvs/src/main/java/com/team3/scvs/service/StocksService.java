@@ -15,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,8 +27,6 @@ public class StocksService {
     private final CommunityRepository communityRepository;
     private final StockNewsRepository stockNewsRepository;
 
-    private final ConvertUtil convert = new ConvertUtil();
-
     //주식 기초 정보
     public CommunityStockInfoDTO getStockInfo(Long tickerId) {
         // 엔티티 조회
@@ -39,12 +36,12 @@ public class StocksService {
             return null;
         }
         // DTO로 변환하여 반환
-        return convert.convertToDTO(entity);
+        return ConvertUtil.convertToDTO(entity);
     }
 
     // 주식에 다양한 정보
     public Optional<StocksDTO> getStocksInfo(Long tickerId) {
-        return stocksRepository.findByTickerId(tickerId).map(convert::convertToDTO);
+        return stocksRepository.findByTickerId(tickerId).map(ConvertUtil::convertToDTO);
     }
 
     //뉴스 리스트 조회
@@ -56,7 +53,7 @@ public class StocksService {
                 (tickerId,PageRequest.of(page, pageLimit, Sort.by(Sort.Direction.DESC, "publishedAt")));
 
         // map 메서드를 이용해 ConvertUtil의 convertToDTO를 사용하여 변환
-        return stockNewsEntities.map(convert::convertToDTO);
+        return stockNewsEntities.map(ConvertUtil::convertToDTO);
     }
 
     //뉴스 상세 페이지 조회
@@ -87,7 +84,7 @@ public class StocksService {
         }
 
         // convertToDTO 메서드를 사용하여 CommunityDTO로 변환
-        return convert.convertToDTO(community);
+        return ConvertUtil.convertToDTO(community);
     }
 
     // 특정 communityId에 대한 최신 댓글 가져오기
@@ -109,7 +106,7 @@ public class StocksService {
                     "방금"                   // timeAgo
             );
         }
-        return convert.convertToDTO(entity);
+        return ConvertUtil.convertToDTO(entity);
     }
     // 특정 communityId에 대한 전체 댓글 수 가져오기
     public long getTotalComments(long communityId) {
