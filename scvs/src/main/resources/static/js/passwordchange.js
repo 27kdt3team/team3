@@ -26,6 +26,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if(!isPasswordValid) {
             passwordValidation.textContent = "동일한 비밀번호는 사용할 수 없습니다.";
             passwordValidation.style.color = "red";
+            isPasswordValid = false;
+            passwordInputElement.dataset.isValid = isPasswordValid;
             return;
         } else {
             // 성공 메시지
