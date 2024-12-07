@@ -1,4 +1,4 @@
-package com.team3.scvs.controller.PSA;
+package com.team3.scvs.controller;
 
 import com.team3.scvs.entity.PSA;
 import com.team3.scvs.service.PSAService;

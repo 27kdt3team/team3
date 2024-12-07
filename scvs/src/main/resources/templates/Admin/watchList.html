@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base}">
+<body>
+<th:block layout:fragment="MainBodyContents">
+    <div class="container mt-4" style="height: 83vh;">
+        <h1 class="text-center mb-3">관심 종목 관리</h1>
+
+        <!-- 상단 -->
+        <form class="row mb-3 align-items-center" th:action="@{/admin/watchList}" method="POST">
+            <!-- 라벨 -->
+            <div class="col-md-1">
+                <label for="filterDropdown">검색 필터</label>
+            </div>
+
+            <!-- 드롭다운: 종목 이름, 종목 코드 -->
+            <div class="col-md-2">
+                <select class="form-select" name="filterDropdown" id="filterDropdown">
+                    <option value="company" th:selected="${filterDropdown == 'company'}">종목 이름</option>
+                    <option value="symbol" th:selected="${filterDropdown == 'symbol'}">종목 코드</option>
+                </select>
+            </div>
+
+            <!-- 검색 입력란 -->
+            <div class="col-md-7">
+                <input type="text" class="form-control" name="findInput" id="findInput" placeholder="검색어를 입력하세요" th:value="${findInput}">
+            </div>
+
+            <!-- 조회 버튼 -->
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">조회</button>
+            </div>
+        </form>
+        <!-- 상단 끝 -->
+
+        <!-- 상단과 중단 사이 -->
+        <form th:action="@{/admin/deleteWatchList}" method="POST">
+            <input type="hidden" name="page" th:value="${tickers.number}"> <!-- 현재 페이지 -->
+            <input type="hidden" name="filterDropdown" th:value="${filterDropdown}"> <!-- 필터 유지 -->
+            <input type="hidden" name="findInput" th:value="${findInput}"> <!-- 검색 유지 -->
+
+            <div class="row mb-3 align-items-center">
+                <div class="col-md-6">
+                    <button id="deleteSubmit" class="btn btn-danger">삭제</button> <!-- 삭제 버튼 -->
+                </div>
+                <div class="col-md-6 text-end">
+                    <span>검색 결과: <strong th:text="${tickers.content.size()}">0</strong>건</span> <!-- 검색 건수 -->
+                </div>
+            </div>
+            <!-- 상단과 중단 사이 끝 -->
+
+            <!-- 중단 종목 리스트 -->
+            <div class="d-flex justify-content-center">
+                <table class="table table-bordered">
+                    <thead class="table-dark">
+                    <tr>
+                        <th scope="col" class="col-1 text-center" style="width: 4%;"><input type="checkbox" id="selectAll" onclick="toggleCheckboxes(this)"></th>
+                        <th scope="col" class="col-1 text-center" style="width: 4%;">번호</th>
+                        <th scope="col" class="col-4">종목 이름</th>
+                        <th scope="col" class="col-4">종목 코드</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- 데이터가 없을 때 -->
+                    <tr th:if="${tickers.content.isEmpty()}">
+                        <td colspan="4" class="text-center">해당 관심 종목이 없습니다.</td>
+                    </tr>
+                    <!-- 데이터가 있을 때 -->
+                    <tr th:each="ticker, iterStat : ${tickers.content}">
+                        <td class="text-center"><input type="checkbox" name="tickerIds" th:value="${ticker.tickerId}"></td> <!-- 삭제 체크리스트 -->
+                        <td th:text="${iterStat.index + 1}" class="text-center"></td> <!-- 번호 -->
+                        <td th:text="${ticker.company}"></td> <!-- 종목 이름 -->
+                        <td th:text="${ticker.symbol}"></td> <!-- 종목 코드 -->
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+
+        <!-- 하단 페이징 -->
+        <div class="d-flex justify-content-end mt-3">
+            <div class="pagination">
+                <form method="post" action="/admin/watchList">
+                    <input type="hidden" name="filterDropdown" th:value="${filterDropdown}"> <!-- 필터 유지 -->
+                    <input type="hidden" name="findInput" th:value="${findInput}"> <!-- 검색 유지 -->
+                    <ul class="pagination">
+                        <!-- 페이징 버튼들 -->
+                        <li class="page-item" th:classappend="${tickers.number > 0} ? '' : 'disabled'">
+                            <button type="submit" class="page-link" name="page" value="0">맨 처음</button>
+                        </li>
+                        <li class="page-item" th:classappend="${tickers.hasPrevious} ? '' : 'disabled'">
+                            <button type="submit" class="page-link" name="page" th:value="${tickers.number - 1}">이전</button>
+                        </li>
+                        <li class="page-item" th:each="i : ${#numbers.sequence(startPage, endPage)}">
+                            <button type="submit" class="page-link" name="page" th:value="${i}" th:classappend="${i == tickers.number} ? 'active' : ''" th:text="${i + 1}"></button>
+                        </li>
+                        <li class="page-item" th:classappend="${tickers.hasNext} ? '' : 'disabled'">
+                            <button type="submit" class="page-link" name="page" th:value="${tickers.number + 1}">다음</button>
+                        </li>
+                        <li class="page-item" th:classappend="${tickers.number < tickers.totalPages - 1} ? '' : 'disabled'">
+                            <button type="submit" class="page-link" name="page" th:value="${tickers.totalPages - 1}">맨 마지막</button>
+                        </li>
+                    </ul>
+                </form>
+            </div>
+        </div>
+        <!-- 하단 페이징 끝 -->
+
+    </div>
+
+    <script th:src="@{/js/watchList.js}"></script>
+</th:block>
+</body>
+</html>
+w
