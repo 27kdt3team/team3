@@ -114,4 +114,22 @@ public class ConvertUtil {
         userDTO.setUserId(userEntity.getUserId());
         return userDTO;
     }
+
+    public static PSADTO convertToDTO(PSAEntity psaEntity) {
+        return new PSADTO(
+                psaEntity.getId(),
+                psaEntity.getTitle(),
+                psaEntity.getContent(),
+                psaEntity.getPublishedAt()
+        );
+    }
+
+    public static PSAEntity convertToEntity(PSADTO psaDTO) {
+        return new PSAEntity(
+                psaDTO.getId(),
+                psaDTO.getTitle(),
+                psaDTO.getContent(),
+                psaDTO.getPublishedAt()
+        );
+    }
 }
