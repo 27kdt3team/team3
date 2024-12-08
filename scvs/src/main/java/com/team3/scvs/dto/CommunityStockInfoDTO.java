@@ -14,3 +14,4 @@ public class CommunityStockInfoDTO {
     private String market;
     private long currentPrice;
 }
+

@@ -15,6 +15,17 @@ public class ConvertUtil {
         );
     }
 
+    public CommunityCommentDTO convertToDTO(CommunityCommentEntity entity) {
+        return new CommunityCommentDTO(
+                entity.getCommunityCommentId(),
+                entity.getCommunity().getCommunityId(),
+                entity.getUser().getUserId(),
+                entity.getComment(),
+                entity.getPublishedAt(),
+                entity.getUpdatedAt()
+        );
+    }
+
     public CommunityVoteDTO convertToDTO(CommunityVoteEntity entity) {
         return new CommunityVoteDTO(
                 entity.getCommunityVoteId(),
@@ -56,8 +67,8 @@ public class ConvertUtil {
         );
     }
 
-    public StocksNewsDTO convertToDTO(StocksNewsEntity entity) {
-        return new StocksNewsDTO(
+    public StockNewsTitleDTO convertToDTO(StockNewsTitleEntity entity) {
+        return new StockNewsTitleDTO(
                 entity.getId(),
                 entity.getTitle(),
                 entity.getTickerId(),
@@ -66,7 +77,6 @@ public class ConvertUtil {
                 entity.getMarket()
         );
     }
-
     public CommunityCommentViewDTO convertToDTO(CommunityCommentViewEntity entity) {
         return new CommunityCommentViewDTO(
                 entity.getId(),
@@ -79,26 +89,29 @@ public class ConvertUtil {
                 entity.getTimeAgo()
         );
     }
-
-
-    // Entity를 DTO로 변환
-    public static PSADTO convertToDTO(PSAEntity psaEntity) {
-        return new PSADTO(
-                psaEntity.getId(),
-                psaEntity.getTitle(),
-                psaEntity.getContent(),
-                psaEntity.getPublishedAt()
-        );
+  
+    public StockNewsDTO convertToDTO(StockNewsEntity entity) {
+        return StockNewsDTO.builder()
+                .stockNewsId(entity.getStockNewsId())
+                .title(entity.getTitle())
+                .source(entity.getSource())
+                .imageLink(entity.getImageLink())
+                .content(entity.getContent())
+                .sentiment(entity.getSentiment())
+                .publishedAt(entity.getPublishedAt())
+                .link(entity.getLink())
+                .tickerId(entity.getTickerId())
+                .market(entity.getMarket())
+                .build();
     }
 
-    // DTO를 Entity로 변환
-    public static PSAEntity convertToEntity(PSADTO psaDTO) {
-        return new PSAEntity(
-                psaDTO.getId(),
-                psaDTO.getTitle(),
-                psaDTO.getContent(),
-                psaDTO.getPublishedAt()
-        );
+    // convert (UserEntity >> UserDTO)
+    public UserDTO convertToDTO(UserEntity userEntity) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setEmail(userEntity.getEmail());
+        userDTO.setNickname(userEntity.getNickname());
+        userDTO.setUserrole(userEntity.getUserrole());
+        userDTO.setUserId(userEntity.getUserId());
+        return userDTO;
     }
-
 }
