@@ -15,17 +15,6 @@ public class ConvertUtil {
         );
     }
 
-    public CommunityCommentDTO convertToDTO(CommunityCommentEntity entity) {
-        return new CommunityCommentDTO(
-                entity.getCommunityCommentId(),
-                entity.getCommunity().getCommunityId(),
-                entity.getUser().getUserId(),
-                entity.getComment(),
-                entity.getPublishedAt(),
-                entity.getUpdatedAt()
-        );
-    }
-
     public CommunityVoteDTO convertToDTO(CommunityVoteEntity entity) {
         return new CommunityVoteDTO(
                 entity.getCommunityVoteId(),
@@ -90,4 +79,26 @@ public class ConvertUtil {
                 entity.getTimeAgo()
         );
     }
+
+
+    // Entity를 DTO로 변환
+    public static PSADTO convertToDTO(PSAEntity psaEntity) {
+        return new PSADTO(
+                psaEntity.getId(),
+                psaEntity.getTitle(),
+                psaEntity.getContent(),
+                psaEntity.getPublishedAt()
+        );
+    }
+
+    // DTO를 Entity로 변환
+    public static PSAEntity convertToEntity(PSADTO psaDTO) {
+        return new PSAEntity(
+                psaDTO.getId(),
+                psaDTO.getTitle(),
+                psaDTO.getContent(),
+                psaDTO.getPublishedAt()
+        );
+    }
+
 }
