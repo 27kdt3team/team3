@@ -1,16 +1,36 @@
-from datetime import datetime
+from repositories.crawler_repository import CrawlerRepository
 
-# Specific timestamp as a string (e.g., '2024-12-06 15:00:00')
-timestamp_str = '2024-12-05 15:00:00'
+repo = CrawlerRepository()
 
-# Convert the string to a datetime object
-timestamp = datetime.strptime(timestamp_str, '%Y-%m-%d %H:%M:%S')
+latest_published_dates = repo.get_latest_published_dates_by_website()
+result = {key: value for publish_date in latest_published_dates for key, value in publish_date.items()}
+# print(result)
 
-# Get the current time
-current_time = datetime.now()
+print(result.get('이코노미스트'))
 
-# Calculate the time difference
-time_difference = current_time - timestamp
+print(result.get('한국경제'))
 
-# Print the time difference
-print(f"Time difference: {time_difference}")
+print(result.get('매일경제'))
+
+print(result.get('Business Insider'))
+
+print(result.get('The Motley Fool'))
+
+print(result.get('Zack\'s'))
+
+
+
+
+
+
+# list_of_dicts = [{'a': 1}, {'b': 2}, {'c': 3}]
+
+# # Using dictionary comprehension
+# result = {key: value for d in list_of_dicts for key, value in d.items()}
+# print(result)
+
+# # Using dict.update()
+# result = {}
+# for d in list_of_dicts:
+#     result.update(d)
+# print(result)

@@ -20,9 +20,8 @@ class SentimentAnalysisService(BaseService):
         self.logger.log_info("Analyzing sentiment from articles.")
 
         # 데이터베이스에서 아직 감정 평가 안된 기사들을 가져오기
-        articles: list[Article] = (
-            self.repository.fetch_unprocessed_data()
-        )  # Article 객체 배열
+        articles: list[Article] = self.repository.fetch_unprocessed_data()
+          # Article 객체 배열
 
         process_logs = []  # 가공 로그
         sentiment_analyzed_articles = []  # 감정평가

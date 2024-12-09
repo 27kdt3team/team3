@@ -9,19 +9,49 @@ from news_crawler.news_crawler.user_agents import get_random_user_agent
 class ZacksSpider(scrapy.Spider):
     name = 'zacks'
     
+    def __init__(self, latest_published_at: datetime, max_page: int = 125):
+        self.latest_published_at = latest_published_at
+        self.max_page = max_page
+    
     def start_requests(self) -> Iterable[Request]:
-        for i in range(1, 51):
-            random_header = get_random_user_agent()
-            yield scrapy.Request(url = f'https://www.zacks.com/blog/archive.php?page={i}&type=json&g=69', headers = random_header)
+        yield scrapy.Request(
+            url = 'https://www.zacks.com/blog/archive.php?page=1&type=json&g=69', 
+            headers = get_random_user_agent(),
+            meta = {"page" : 1}
+        )
             
     def parse(self, response):
+        stop_crawl_flag = False
+        
         response_json = json.loads(response.body)
         selector = Selector(text = response_json['response'])
-        article_links = selector.xpath("//h1[@class='truncated_text_single']/div/a/@href").getall()
-        print(len(article_links))
-        for article_link in article_links:
-            random_header = get_random_user_agent()
-            yield response.follow(url = 'https://www.zacks.com' + article_link, headers = random_header, meta={'dont_redirect': True}, callback = self.parse_article, errback = self.handle_redirect)
+        
+        articles = selector.xpath("//div[@class='listitem']")
+        for article in articles:
+            article_date_str = article.xpath(".//time/text()").get().replace("Published on ", "").strip()
+            article_date = datetime.strptime(article_date_str, "%B %d,%Y")
+            
+            if self.latest_published_at and self.latest_published_at > article_date:
+                stop_crawl_flag = True
+                
+            article_link = article.xpath(".//h1[@class='truncated_text_single']/div/a/@href").get()
+            yield response.follow(
+                url = 'https://www.zacks.com' + article_link, 
+                headers = get_random_user_agent(), 
+                meta={'dont_redirect': True}, 
+                callback = self.parse_article, 
+                errback = self.handle_redirect
+            )
+        
+        current_page = response.meta["page"]
+        if not stop_crawl_flag and current_page < self.max_page:
+            next_page = current_page + 1
+            yield scrapy.Request(
+                url = f"https://www.zacks.com/blog/archive.php?page={next_page}&type=json&g=69",
+                headers = get_random_user_agent(),
+                callback = self.parse,
+                meta = {"page" : next_page}
+            )
             
     def parse_article(self, response):
         article_dict = {}
@@ -48,8 +78,12 @@ class ZacksSpider(scrapy.Spider):
     def handle_redirect(self, redirect):
         if redirect.value.response.status == 302:
             self.logger.info(f"Retrying URL: {redirect.request.url} due to 302 status code")
-            random_header = get_random_user_agent()
-            yield scrapy.Request(url = redirect.request.url, headers = random_header,callback = self.parse_article, meta = {'dont_redirect' : True})
+            yield scrapy.Request(
+                url = redirect.request.url, 
+                headers = get_random_user_agent(),
+                callback = self.parse_article, 
+                meta = {'dont_redirect' : True}
+            )
     
     def convert_datetime(self, datetime_str) -> str:
         datetime_object = datetime.strptime(datetime_str, "%B %d, %Y")

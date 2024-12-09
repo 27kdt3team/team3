@@ -1,14 +1,12 @@
-import os, sys
-
 from pykis import PyKis, KisAuth
 import requests
 from datetime import datetime
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from database_manager import DatabaseManager
+from logs.logger import Logger
 
 class KisIndexApiService:
+    
     def __init__(self, base_url):
+        self.logger = Logger(self.__class__.__name__)
         self.base_url = base_url
         self.app_key = None
         self.app_secret = None
@@ -25,10 +23,9 @@ class KisIndexApiService:
         print("APPSECRET: ", self.app_secret)
         print("TOKEN: ", self.access_token)
         
-
     def revoke_access_token(self):
         if not self.access_token:
-            print("No access token to revoke.")
+            self.logger.log_error("No access token to revoke.")
             return
 
         url = f"{self.base_url}/oauth2/revokeP"
@@ -43,9 +40,9 @@ class KisIndexApiService:
         if response.status_code == 200:
             response_json = response.json()
             if response_json.get("code") == "200":
-                print("KIS API access token destroyed.")
+                self.logger.log_warning("KIS API access token destroyed.")
         else:
-            print(f"Failed to revoke access token: {response.status_code}, {response.text}")
+            self.logger.log_error(f"Failed to revoke access token: {response.status_code} - {response.text}")
 
     def get_korea_index(self, title, fid):
         url = f"{self.base_url}/uapi/domestic-stock/v1/quotations/inquire-index-price"
@@ -62,18 +59,23 @@ class KisIndexApiService:
             "FID_INPUT_ISCD": fid
         }
 
-        response = requests.get(url, headers=headers, params=params)
-        if response.status_code == 200:
-            jsonResult = response.json()
-            index = {
-                "title" : title,
-                "current_value" : jsonResult["output"]["bstp_nmix_prpr"],
-                "change_value" : jsonResult["output"]["bstp_nmix_prdy_vrss"],
-                "change_percent" : jsonResult["output"]["bstp_nmix_prdy_ctrt"]
-            }            
-            return index
-        else:
-            print(f"Failed to get Korea index: {response.status_code}, {response.text}")
+        try:
+            response = requests.get(url, headers=headers, params=params)
+            if response.status_code == 200:
+                jsonResult = response.json()
+                index = {
+                    "title" : title,
+                    "current_value" : jsonResult["output"]["bstp_nmix_prpr"],
+                    "change_value" : jsonResult["output"]["bstp_nmix_prdy_vrss"],
+                    "change_percent" : jsonResult["output"]["bstp_nmix_prdy_ctrt"]
+                }            
+                return index
+            else:
+                self.logger.log_error(f"Failed to get Korea index: {response.status_code} - {response.text}.")
+                return None    
+        except requests.exceptions as req_e:
+            self.logger.log_error(f"Error making requests to KIS API: {response.status_code} - {req_e}.")
+            self.logger.log_error(req_e)
             return None
 
     def get_usa_index(self, title, market_code, iscd):
