@@ -214,7 +214,7 @@
     font-size: 0.9em; /* 글꼴 크기 */
     outline: none; /* 포커스 시 외곽선 제거 */
     background-color: #fafafa; /* 기본 배경색 */
-    width: 82%; /* 입력창 최대 너비 제한 */
+    width: 75%; /* 입력창 최대 너비 제한 */
 }
 
 .comment-edit-input:focus {
