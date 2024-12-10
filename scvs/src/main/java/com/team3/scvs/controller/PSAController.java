@@ -1,6 +1,7 @@
 package com.team3.scvs.controller;
 
-import com.team3.scvs.entity.PSA;
+import com.team3.scvs.dto.PSADTO;
+import com.team3.scvs.entity.PSAEntity;
 import com.team3.scvs.service.PSAService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,7 +31,7 @@ public class PSAController {
             Model model) {
 
         // 공지사항 페이지 데이터 가져오기
-        Page<PSA> psaPage;
+        Page<PSADTO> psaPage;
         if (query.isEmpty()) {
             // 검색어가 없는 경우 전체 조회
             psaPage = psaService.findAllPSAsPaginated(page - 1, size);
@@ -54,24 +55,24 @@ public class PSAController {
     @GetMapping("/PSA-detail/{id}")
     public String viewPSADetail(@PathVariable Long id, Model model) {
         // 데이터베이스에서 공지사항 조회
-        PSA psa = psaService.findPSAById(id);
+        PSADTO psaDTO = psaService.findPSAById(id); // <변경됨> DTO로 조회
 
-        if (psa == null) {
+        if (psaDTO == null) {
             // 해당 ID의 공지사항이 없는 경우 404 페이지로 리다이렉트
             return "redirect:/error/404";
         }
 
         // 작성일을 문자열로 변환
-        String formattedDate = (psa.getPublishedAt() != null)
-                ? psa.getPublishedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
+        String formattedDate = (psaDTO.getPublishedAt() != null)
+                ? psaDTO.getPublishedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
                 : "작성일 정보 없음";
 
         // 이전 글, 다음 글 호출
-        PSA previousPSA = psaService.findPreviousPSA(id);
-        PSA nextPSA = psaService.findNextPSA(id);
+        PSADTO previousPSA = psaService.findPreviousPSA(id);
+        PSADTO nextPSA = psaService.findNextPSA(id);
 
         // 모델에 데이터 추가
-        model.addAttribute("psa", psa);
+        model.addAttribute("psa", psaDTO);
         model.addAttribute("publishedAt", formattedDate);
         model.addAttribute("previousPSA", previousPSA);
         model.addAttribute("nextPSA", nextPSA);
@@ -90,9 +91,9 @@ public class PSAController {
     }
 
     @PostMapping("/PSA-add")
-    public String addPSA(@ModelAttribute PSA psa) {
+    public String addPSA(@ModelAttribute PSADTO psaDTO) {
         // 기존 savePSA 메서드를 호출하여 데이터 저장
-        psaService.savePSA(psa);
+        psaService.savePSA(psaDTO);
 
         // 저장 후 목록 화면으로 리다이렉트
         return "redirect:/PSA-list";
@@ -104,24 +105,19 @@ public class PSAController {
 
     @GetMapping("/PSA/update/{id}")
     public String viewUpdatePSAPage(@PathVariable Long id, Model model) {
-        PSA psa = psaService.findPSAById(id);
-        if (psa == null) {
+        PSADTO psaDTO = psaService.findPSAById(id);
+        if (psaDTO == null) {
             return "redirect:/error/404"; // ID에 해당하는 공지가 없으면 404 페이지로 리다이렉트
         }
 
-        model.addAttribute("psa", psa);
+        model.addAttribute("psa", psaDTO);
         return "PSA/PSA-update"; // 수정 화면 템플릿
     }
 
     @PostMapping("/PSA/update/{id}")
     public String updatePSA(@PathVariable Long id, @RequestParam String title, @RequestParam String content) {
-        PSA psa = psaService.findPSAById(id);
-        if (psa != null) {
-            psa.setTitle(title);
-            psa.setContent(content);
-            psaService.savePSA(psa); // 수정된 내용 저장
-        }
-        return "redirect:/PSA-detail/" + id; // 수정 후 상세 화면으로 리다이렉트
+        psaService.updatePSA(id, title, content); // <변경됨> 서비스 계층에 변경된 DTO 데이터 전달
+        return "redirect:/PSA-detail/" + id;
     }
 
     /**
