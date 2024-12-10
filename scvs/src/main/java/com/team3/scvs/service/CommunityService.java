@@ -173,7 +173,7 @@ public class CommunityService {
     //주식 관련 뉴스
     public List<StockNewsTitleDTO> getStocksNewsTitle(Long tickerId) {
         return stocksNewsRepository.findLatestByTickerId(tickerId).stream()
-                .map(convert::convertToDTO)
+                .map(ConvertUtil::convertToDTO)
                 .limit(3)
                 .collect(Collectors.toList());
     }
