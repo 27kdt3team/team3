@@ -85,14 +85,13 @@ class BaseRepository(ABC):
     # DQL문 실행을 위한 함수
     # all: 결과 전체를 가져온다
     def fetch_results(self, query: str, all: bool = True) -> List:
-        try:
-            # 데이터베이스 연결이 안되어있으면 미리 연결
-            if self.connection == None or not self.connection.is_connected():
-                self.connect()
-                
-            # 데이터베이스에서 가져오는 값을 dictionary로 받는다
-            cursor = self.connection.cursor(dictionary=True)
+        # 데이터베이스 연결이 안되어있으면 미리 연결
+        if self.connection == None or not self.connection.is_connected():
+            self.connect()
             
+        # 데이터베이스에서 가져오는 값을 dictionary로 받는다
+        cursor = self.connection.cursor(dictionary=True)
+        try:
             # 여러 값을 받는 경우 fetchall()로 결과 값들을 가져온다
             if all:
                 cursor.execute(query)
