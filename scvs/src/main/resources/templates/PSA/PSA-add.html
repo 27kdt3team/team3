@@ -12,6 +12,11 @@
     <div class="PSA-container">
         <h1 class="PSA-title">공지사항 추가</h1>
 
+        <!-- 에러 메시지 -->
+        <div th:if="${error}" class="error-message">
+            <p th:text="${error}"></p>
+        </div>
+
         <!-- 공지 추가 폼 -->
         <form th:action="@{/PSA-add}" method="post" class="PSA-add-form">
             <!-- 제목 입력 -->
