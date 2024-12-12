@@ -5,16 +5,15 @@ import com.team3.scvs.dto.*;
 import com.team3.scvs.service.StocksService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
 import java.util.Optional;
 
 
@@ -62,4 +61,32 @@ public class StockWatchController {
         model.addAttribute("endPage", endPage); //마지막 페이지
         return "Stockwatch/stockwatch"; // 경로는 templates 폴더 내 위치 기준
     }
+
+    //주식 뉴스 상세 페이지 조회
+    //url: /stocknews/1/1?page=1
+    @GetMapping("/stocknews/{tickerId}/{stockNewsId}")
+    public String findById(@PathVariable Long tickerId,
+                           @PathVariable String stockNewsId,
+                           Model model,
+                           @PageableDefault(page = 1) Pageable pageable) {
+        StockNewsDTO stockNewsDTO = stocksService.findById(stockNewsId, tickerId); //vm_stock_news에서 stockNewsId와 tickerId로 데이터 조회
+
+        if (stockNewsDTO == null) {//뉴스 데이터가 없는 경우
+            model.addAttribute("errorMessage", "뉴스 데이터를 찾을 수 없습니다.");
+
+            //에러 페이지로 이동
+            return "Error/404";
+
+        }
+
+        //모델에 데이터 추가하여 뷰에 전달
+        model.addAttribute("stocknews", stockNewsDTO); //뉴스 상세 데이터
+        model.addAttribute("tickerId", tickerId); //종목 티커 아이디 데이터
+        model.addAttribute("page", pageable.getPageNumber()); //현재 페이지
+
+        //뷰 템플릿
+        return "News/stocknews";
+
+    }
+
 }

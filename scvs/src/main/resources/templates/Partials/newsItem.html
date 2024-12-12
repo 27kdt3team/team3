@@ -6,7 +6,7 @@
     <p class="media-company-color"><th:block th:text="${author}"/> -</p>
     <p class="date-color"> <th:block th:text="${#temporals.format(date, 'yyyy-MM-dd HH:mm:ss')}"/></p>
     <div class="news-item">
-      <h4><th:block th:text="${title}"/></h4>
+      <h4 class="news-title"><th:block th:text="${title}"/></h4>
       <img th:if="${image != null}" th:src="${image}" alt="News Image" class="news-images">
     </div>
   </a>

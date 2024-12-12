@@ -8,7 +8,10 @@ from news_crawler.news_crawler.spiders.businessinsider_spider import BusinessIns
 from news_crawler.news_crawler.spiders.motleyfool_spider import MotelyFoolSpider
 from news_crawler.news_crawler.spiders.zacks_spider import ZacksSpider
 
+from repositories.crawler_repository import CrawlerRepository
 from scrapy.crawler import CrawlerProcess
+from typing import Dict
+from datetime import datetime
 
 
 class SpiderManager:
@@ -29,14 +32,22 @@ class SpiderManager:
 
     def __init__(self):
         self.process = CrawlerProcess(self.crawler_settings)
-
+        self.repository = CrawlerRepository
+        
+    def get_latest_published_dates(self) -> Dict[str, datetime]:
+        latest_published_dates = self.repository.get_latest_published_dates_by_website()        
+        result = {key: value for publish_date in latest_published_dates for key, value in publish_date.items()}
+        return result
+        
     def run_spiders(self):
-        self.process.crawl(MaeilSpider)
-        self.process.crawl(HankyungSpider)
-        self.process.crawl(EconomistSpider)
+        latest_published_at = self.get_latest_published_dates()
+        
+        self.process.crawl(MaeilSpider, latest_published_at.get('매일경제'))
+        self.process.crawl(HankyungSpider, latest_published_at.get('한국경제'))
+        self.process.crawl(EconomistSpider, latest_published_at.get('이코노미스트'))
 
-        self.process.crawl(BusinessInsiderSpider)
-        self.process.crawl(MotelyFoolSpider)
-        self.process.crawl(ZacksSpider)
+        self.process.crawl(BusinessInsiderSpider, latest_published_at.get('Business Insider'))
+        self.process.crawl(MotelyFoolSpider, latest_published_at.get('The Motley Fool'))
+        self.process.crawl(ZacksSpider, latest_published_at.get('Zack\'s'))
 
         self.process.start()

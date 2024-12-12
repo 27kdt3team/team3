@@ -20,17 +20,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 이메일 중복 확인 버튼 이벤트 리스너
     document.getElementById("check-email-duplicate").addEventListener("click", async () => {
+        const originalEmail = document.getElementById("current-email").textContent;
         const emailInput = document.getElementById("email").value; // 이메일 입력 값
         const emailValidation = document.getElementById("email-validation"); // 입력란 밑 경고메세지
         const emailInputElement = document.getElementById("email");     // email을 받아옴 나중에 제출할때 검증할때 사용
         let isEmailValid = false; // 이메일 검증 상태 변수
+
+        // 수정하지 않은 경우 처리
+        if (originalEmail === emailInput) {
+            document.getElementById("email-validation").textContent = "현재 이메일과 동일합니다. 중복 확인이 필요 없습니다.";
+            emailValidation.style.color = "green";
+            isEmailValid = true;
+            emailInputElement.dataset.isValid = isEmailValid;
+            return;
+        }
         // 이메일 필수 항목 체크
         if (emailInput === "") { // 입력값이 없으면 실행
             emailValidation.textContent = "이메일은 필수 항목입니다.";
             emailValidation.style.color = "red";
             isEmailValid = false;
             return;
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput)) { // 이메일형식 @ . 을 검사
+        } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(emailInput)) { // 이메일형식 @ . 을 검사
             emailValidation.textContent = "이메일 형식이 아닙니다.";
             emailValidation.style.color = "red";
             isEmailValid = false;
@@ -44,10 +54,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
      // 닉네임 중복 확인 버튼 이벤트 리스너
       document.getElementById("check-nickname-duplicate").addEventListener("click", async () => {
+          const originalNickname = document.getElementById("current-nickname").textContent;
           const nicknameInput = document.getElementById("nickname").value; // 닉네임 입력값
           const nicknameValidation = document.getElementById("nickname-validation"); //입력란 밑 경고메세지
           const nicknameInputElement = document.getElementById("nickname");     // nickname을 받아옴 나중에 제출할때 검증할때 사용
           let isNicknameValid = false; // 이메일 검증 상태 변수
+
+
+          // 수정하지 않은 경우 처리
+          if (originalNickname === nicknameInput) {
+              document.getElementById("nickname-validation").textContent = "현재 닉네임과 동일합니다. 중복 확인이 필요 없습니다.";
+              nicknameValidation.style.color = "green";
+              isNicknameValid = true;
+              return;
+          }
 
           // 닉네임이 비어있으면
           if (nicknameInput === "") {

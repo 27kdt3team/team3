@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
             loginValidation.textContent = "이메일을 입력하세요.";
             loginValidation.style.color = "red";
             return;
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput)) { // 이메일형식 @ . 을 검사
+        } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(emailInput)) { // 이메일형식 @ . 을 검사
             loginValidation.textContent = "이메일 형식이 아닙니다.";
             loginValidation.style.color = "red";
             return;

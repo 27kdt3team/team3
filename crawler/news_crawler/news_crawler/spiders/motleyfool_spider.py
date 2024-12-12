@@ -43,26 +43,48 @@ class MotelyFoolSpider(scrapy.Spider):
         "cf_clearance": "vLtD0ptC9V_bAIm2_aZKjDg6MoC6n.GiRW3fpKHanqs-1733098860-1.2.1.1-L0E5zsnR.D3yIO2UZX2Uz2dU4SxVKxIwfd7m7KnuQIgypiQtcm28VZdZvk729zNEBGI1tCNCF2a2I5hbSG1D2NPKwrwyECT0Xm5SVpxG.C1OEvSexv5eo3kl.zl1uZOgnwbWJCy1IO_LsOjAz9h9Q3olpKhzv1ARyLmSfgYVLyDNyK7ae89ZEtOxTdM5m2lHxcQuTYWx9CTUPRlV8YylqdvHa0LiZVwXEUi7gBAqip8LrZqxfJ63ERPRsaclE9EU3gX2ODO5EXDdqMc7SXzIrQMKWZeVjZbgACvH8bDIia6NLpdhtKEvO1u1Ydd8sKMNGdrBTcbjLCeyENO4_9.mbnkxSNudvN33pyxIp2zfD2E2xnmtigCrgf3M83zqtdLy7.3ze3kO2eM0dBu7xfLTMslhPAqddHISvMBBK.J_KWw"
     }
     
+    def __init__(self, latest_published_at: datetime, max_page: int = 200):
+        self.latest_published_at = latest_published_at.replace(hour=0, minute=0, second=0, microsecond=0)
+        self.max_page = max_page
+    
     def start_requests(self) -> Iterable[Request]:
-        for i in range(1, 51):
-            yield scrapy.Request(url = f'https://www.fool.com/market-trends/filtered_articles_by_page/?page={i}', 
-                             headers = self.headers, 
-                             cookies = self.cookies
-                            )
+        yield scrapy.Request(
+            url = "https://www.fool.com/market-trends/filtered_articles_by_page/?page=1",
+            headers = self.headers,
+            cookies = self.cookies,
+            meta = {"page" : 1}
+        )
     
     def parse(self, response):
-        # decoded_response = brotli.decompress(response.body).decode('utf-8')
-        # decoded_json = json.loads(decoded_response)
-        
+        stop_crawl_flag = False
         response_json = json.loads(response.body)
         selector = Selector(text = response_json['html'])
-        article_links = selector.xpath("//div[@class='flex py-12px text-gray-1100']/a[@class='flex-shrink-0 w-1/3 mr-16px sm:w-auto']/@href").getall()
-        for article_link in article_links:
-            yield scrapy.Request(
-                url = 'https://www.fool.com' + article_link,
+        
+        articles = selector.xpath("//div[@class='flex py-12px text-gray-1100']")
+        for article in articles:
+            article_date_str = article.xpath("normalize-space(.//div[@class='text-sm text-gray-800 mb-2px md:mb-8px']/text())").get().replace(" by", "").strip()
+            article_date = datetime.strptime(article_date_str, "%b %d, %Y")
+            
+            if self.latest_published_at and self.latest_published_at > article_date:
+                stop_crawl_flag = True
+                
+            article_link = article.xpath("./a[@class='flex-shrink-0 w-1/3 mr-16px sm:w-auto']/@href").get()
+            yield response.follow(
+                url = "https://www.fool.com" + article_link,
                 headers = self.headers,
                 cookies = self.cookies,
                 callback = self.parse_article
+            )
+            
+        current_page = response.meta["page"]
+        if not stop_crawl_flag and current_page < self.max_page:
+            next_page = current_page + 1
+            yield scrapy.Request(
+                url = f"https://www.fool.com/market-trends/filtered_articles_by_page/?page={next_page}",
+                headers = self.headers,
+                cookies = self.cookies,
+                callback = self.parse,
+                meta = {"page" : next_page}
             )
         
     def parse_article(self, response):

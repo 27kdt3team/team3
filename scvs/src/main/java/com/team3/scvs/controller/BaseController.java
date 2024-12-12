@@ -50,9 +50,4 @@ public class BaseController {
         model.addAttribute("forex", krwUsdForex);
         return "index";
     }
-
-    @GetMapping("/login")
-    public String loginPage(Model model) {
-        return "/Account/login";
-    }
 }

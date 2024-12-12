@@ -26,39 +26,40 @@
             <div id="stock-graph" style="height: auto; min-width: auto;"></div>
         </div>
 
+        <!--마켓 정보 -->
         <div class="market-stats-wrapper">
             <h2>Market Stats</h2>
             <div class="market-stats" th:if="${marketinfo != null}">
                 <ul>
-                    <li>
+                    <li th:if="${marketinfo.open != null}">
                         <span>Open:</span>
                         <span th:text="${marketinfo.open}"></span>
                     </li>
-                    <li>
+                    <li th:if="${marketinfo.close != null}">
                         <span>Close:</span>
                         <span th:text="${marketinfo.close}"></span>
                     </li>
-                    <li>
+                    <li th:if="${marketinfo.volume != null}">
                         <span>Volume:</span>
                         <span th:text="${marketinfo.volume}"></span>
                     </li>
-                    <li>
+                    <li th:if="${marketinfo.dayLow != null and marketinfo.dayHigh != null}">
                         <span>Day Range:</span>
                         <span th:text="${marketinfo.dayLow} + ' - ' + ${marketinfo.dayHigh}"></span>
                     </li>
-                    <li>
+                    <li th:if="${marketinfo.returnOnEquity != null}">
                         <span>ROE:</span>
                         <span th:text="${marketinfo.returnOnEquity} + '%'"></span>
                     </li>
-                    <li>
+                    <li th:if="${marketinfo.enterpriseValue != null}">
                         <span>EV:</span>
                         <span th:text="${marketinfo.enterpriseValue}"></span>
                     </li>
-                    <li>
+                    <li th:if="${marketinfo.enterpriseToEBITDA != null}">
                         <span>EV/EBITDA:</span>
                         <span th:text="${marketinfo.enterpriseToEBITDA}"></span>
                     </li>
-                    <li>
+                    <li th:if="${marketinfo.priceToBook != null}">
                         <span>P/B Ratio:</span>
                         <span th:text="${marketinfo.priceToBook}"></span>
                     </li>
@@ -68,6 +69,7 @@
                 <p>마켓 정보가 없습니다</p>
             </div>
         </div>
+
 
         <div class="news"> <!-- 왼쪽 아래 뉴스 페이지 -->
             <section class="stock-news">
@@ -82,9 +84,8 @@
                             <p class="sentiment" th:text="${newsItem.sentiment}"></p>
                         </div>
                         <h4>
-                            <!-- 기사 제목을 클릭하면 뉴스 ID와 현재 페이지 값을 상세 조회 메서드로 넘겨주기
-                             나중에 상세 페이지 나오면 이부분 고치시면 됩니다!!!!!!!!!!!!!!!!!!!!!!!!!!-->
-                            <a th:href="@{|/stocknews/${newsItem.stockNewsId}|(page=${stockNews.number + 1})}"
+                            <!-- 기사 제목을 클릭하면 뉴스 ID와 현재 페이지 값을 상세 조회 메서드로 넘겨주기 -->
+                            <a th:href="@{|/stocknews/${newsItem.tickerId}/${newsItem.stockNewsId}|(page=${stockNews.number + 1})}"
                                th:text="${newsItem.title}"
                                class="news-title"></a>
                         </h4>
