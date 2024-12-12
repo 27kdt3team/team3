@@ -32,68 +32,33 @@ masterCheckbox.addEventListener('click', function() {
   toggleCheckboxes(masterCheckbox);
 });
 
-// 삭제 버튼 클릭 시 체크박스 선택 여부 확인
-deleteButton.addEventListener('click', function(event) {
+function collectAndSubmit() {
+    // 선택된 체크박스 값 수집
+    const selectedIds = Array.from(document.querySelectorAll('input[name="userIds"]:checked'))
+                            .map(checkbox => checkbox.value);
 
-  // 체크된 체크박스가 하나라도 있는지 확인
-  var isAnyChecked = Array.from(checkboxes).some(function(checkbox) {
-    return checkbox.checked;
-  });
-
-  if (!isAnyChecked) {
-    event.preventDefault(); // 폼 제출 막기
-  } else {
-    const confirmed = confirm("이 사용자의 계정을 삭제 처리하겠습니까?");
-
-        if (confirmed) {
-            alert("계정이 삭제되었습니다.");
-        } else {
-           event.preventDefault(); // 폼 제출 막기
-        }
-
-  }
-
-
-});
-
-function sortTable(columnIndex) {
-    // 첫 번째 열(체크박스 열)은 클릭해도 아무 작업을 하지 않음
-    if (columnIndex === 0) {
-        return;
+    if (selectedIds.length === 0) {
+    alert("삭제할 사용자를 선택하세요.");
+    return;
     }
 
-    const table = document.getElementById("userTable");
-    const rows = Array.from(table.rows).slice(1); // 헤더 제외한 행 가져오기
-    let ascending = table.dataset.sortOrder !== "asc";
+    const confirmed = confirm("이 사용자의 계정을 삭제 처리하겠습니까?");
 
-    // 첫 번째 열 제외: 화살표 초기화
-    const headers = Array.from(table.querySelectorAll("th .sort-icon")).slice(1); // 첫 번째 열 제외
-    headers.forEach((icon, index) => {
-        icon.textContent = index + 1 === columnIndex ? (ascending ? "▲" : "▼") : "▲"; // 클릭한 열만 업데이트
-    });
+    if (confirmed) {
+        alert("계정이 삭제되었습니다.");
+          // 숨겨진 필드에 선택된 값 추가
+          document.getElementById('userIds').value = selectedIds.join(',');
 
-    // 정렬 로직
-    rows.sort((rowA, rowB) => {
-        const cellA = rowA.cells[columnIndex]?.innerText.trim();
-        const cellB = rowB.cells[columnIndex]?.innerText.trim();
+          // 폼 제출
+          document.getElementById('deleteForm').submit();
+    } else {
+       return; // 폼 제출 막기
+    }
 
-        if (!isNaN(cellA) && !isNaN(cellB)) {
-            // 숫자 비교
-            return ascending ? Number(cellA) - Number(cellB) : Number(cellB) - Number(cellA);
-        } else {
-            // 문자열 비교
-            return ascending
-                ? cellA.localeCompare(cellB)
-                : cellB.localeCompare(cellA);
-        }
-    });
-
-    // 정렬된 행 다시 테이블에 추가
-    rows.forEach(row => table.tBodies[0].appendChild(row));
-
-    // 정렬 상태 저장
-    table.dataset.sortOrder = ascending ? "asc" : "desc";
 }
+
+
+
 
 
 
