@@ -91,14 +91,21 @@ public class PSAController {
     }
 
     @PostMapping("/PSA-add")
-    public String addPSA(@ModelAttribute PSADTO psaDTO) {
-        // 기존 savePSA 메서드를 호출하여 데이터 저장
+    public String addPSA(@RequestParam String title, @RequestParam String content, Model model) {
+        // 서버 측 검증: 제목과 내용이 비어 있거나 공백만 포함된 경우
+        if (title == null || title.trim().isEmpty() || content == null || content.trim().isEmpty()) {
+            model.addAttribute("error", "제목과 내용을 올바르게 입력해 주세요.");
+            return "PSA/PSA-add"; // 입력 폼으로 다시 이동
+        }
+
+        // 데이터 저장 로직
+        PSADTO psaDTO = new PSADTO();
+        psaDTO.setTitle(title.trim());
+        psaDTO.setContent(content.trim());
         psaService.savePSA(psaDTO);
 
-        // 저장 후 목록 화면으로 리다이렉트
-        return "redirect:/PSA-list";
+        return "redirect:/PSA-list"; // 저장 후 목록 페이지로 리다이렉트
     }
-
     /**
      * 공지 수정 화면
      */
@@ -115,7 +122,16 @@ public class PSAController {
     }
 
     @PostMapping("/PSA/update/{id}")
-    public String updatePSA(@PathVariable Long id, @RequestParam String title, @RequestParam String content) {
+    public String updatePSA(@PathVariable Long id, @RequestParam String title, @RequestParam String content, Model model) {
+
+        // 공백 검증 로직 추가
+        if (title.trim().isEmpty() || content.trim().isEmpty()) {
+            model.addAttribute("error", "제목과 내용을 올바르게 입력해 주세요."); // <추가됨>
+            PSADTO psadto = psaService.findPSAById(id); // 기존 데이터를 다시 불러오기
+            model.addAttribute("psa", psadto); // 기존 데이터 모델에 추가
+            return "PSA/PSA-update"; // 수정 화면으로 다시 이동
+        }
+
         psaService.updatePSA(id, title, content); // <변경됨> 서비스 계층에 변경된 DTO 데이터 전달
         return "redirect:/PSA-detail/" + id;
     }

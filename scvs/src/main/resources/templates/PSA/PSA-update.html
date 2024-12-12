@@ -12,6 +12,11 @@
     <div class="PSA-container">
         <h1 class="PSA-title">공지사항 수정</h1>
 
+        <!-- 에러 메시지 -->
+        <div th:if="${error}" class="error-message">
+            <p th:text="${error}"></p>
+        </div>
+
         <!-- 공지 수정 폼 -->
         <form th:action="@{/PSA/update/{id}(id=${psa.id})}" method="post" class="PSA-add-form">
             <!-- 제목 입력 -->
