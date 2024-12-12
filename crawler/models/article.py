@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Dict
 
 
 class Article:
@@ -48,7 +48,7 @@ class Article:
         )
         """
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict:
         return {
             "raw_news_id": self.raw_news_id,
             "country": self.country,
@@ -66,7 +66,7 @@ class Article:
 
     # dictionary로 객체 생성
     @classmethod
-    def from_dict(cls, data: dict) -> "Article":
+    def from_dict(cls, data: Dict) -> "Article":
         return cls(
             raw_news_id=data.get("raw_news_id"),
             country=data.get("country"),
