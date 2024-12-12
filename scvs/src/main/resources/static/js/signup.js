@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
             emailValidation.style.color = "red";
             isEmailValid = false;
             return;
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput)) { // 이메일형식 @ . 을 검사
+        } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(emailInput)) { // 이메일형식 @ . 을 검사
             emailValidation.textContent = "이메일 형식이 아닙니다.";
             emailValidation.style.color = "red";
             isEmailValid = false;
@@ -49,6 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const passwordInputElement = document.getElementById("password");     // password를 받아옴 나중에 제출할때 검증할때 사용
 
         let isPasswordValid = false; // 비밀번호 검증 상태 변수
+        updatePasswordCheckValidation();
 
         // 비밀번호 필수 항목 체크
         if (passwordInput.trim() === "") { // 입력값이 없으면 실행
@@ -82,20 +83,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const passwordCheckValidation = document.getElementById("Password-check-validation");  //입력란 밑 경고메세지
         const passwordCheckInputElement = document.getElementById("password-check");     // password-check를 받아옴 나중에 제출할때 검증할때 사용
 
-        let isPasswordCheckValid = false; // 비밀번호체크 검증 상태 변수
-
-        if (passwordInput === passwordCheckInput) {
-            passwordCheckValidation.textContent = "비밀번호가 일치합니다.";
-            passwordCheckValidation.style.color = "green";
-            isPasswordCheckValid = true;
-        } else {
-            passwordCheckValidation.textContent = "비밀번호가 일치하지 않습니다.";
-            passwordCheckValidation.style.color = "red";
-            isPasswordCheckValid = false;
-        }
-
-        // 비밀번호체크 검증 상태 변수 설정( 회원가입 제출시 비밀번호체크란 검증)
-        passwordCheckInputElement.dataset.isValid = isPasswordCheckValid;
+        passwordCheckInputElement.dataset.isValid = false; // 비밀번호체크 검증 상태 변수
+        updatePasswordCheckValidation();
     });
 
 
@@ -138,7 +127,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const isPasswordValid = document.getElementById("password").dataset.isValid === "true"; // 비밀번호 검증 상태 읽기
         const isPasswordCheckValid = document.getElementById("password-check").dataset.isValid === "true"; // 비밀번호체크 검증 상태 읽기
         const isNicknameValid = document.getElementById("nickname").dataset.isValid === "true"; // 닉네임 검증 상태 읽기
+        const passwordInput = document.getElementById("password").value; // 비밀번호 입력 값
+        const passwordValidation = document.getElementById("password-validation"); // 입력란 밑 경고메세지
 
+        const passwordCheckInput = document.getElementById("password-check").value; //비밀번호확인 입력값
+        const passwordCheckValidation = document.getElementById("Password-check-validation");  //입력란 밑 경고메세지
         if (!isEmailValid) {
             event.preventDefault(); // 제출 중단
             alert("아이디 중복검사를 진행해 주세요!");
@@ -147,11 +140,24 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!isPasswordValid) {
             event.preventDefault(); // 제출 중단
             alert("입력란 경고문을 확인해 주세요!");
+            // 비밀번호 필수 항목 체크
+            if (passwordInput.trim() === "") { // 입력값이 없으면 실행
+                passwordValidation.textContent = "필수 입력란 입니다.";
+                passwordValidation.style.color = "red";
+                isPasswordValid = false
+                return;
+            }
             return;
         }
         if (!isPasswordCheckValid) {
             event.preventDefault(); // 제출 중단
             alert("입력란 경고문을 확인해 주세요!");
+                if (passwordCheckInput === "") {
+                    passwordCheckValidation.textContent = "필수 입력란 입니다.";
+                    passwordCheckValidation.style.color = "red";
+                    isPasswordCheckValid = false; // 무효 상태로 설정
+                    return;
+                }
             return;
         }
         if(!isNicknameValid) {
@@ -243,6 +249,28 @@ async function checkNicknameDuplicate(nicknameInput) {
         nicknameValidation.textContent = "중복 확인 중 오류가 발생했습니다.";
         nicknameValidation.style.color = "red";
         return false; // 오류 발생 시 닉네임 유효하지 않음
+    }
+}
+
+// 비밀번호 확인 상태를 업데이트하는 함수
+function updatePasswordCheckValidation() {
+    const passwordInput = document.getElementById("password").value;
+    const passwordCheckInput = document.getElementById("password-check").value;
+    const passwordCheckValidation = document.getElementById("Password-check-validation");
+    const passwordCheckInputElement = document.getElementById("password-check"); // 비밀번호체크 검증 상태 읽기
+
+
+    if (passwordCheckInput.trim() === "") { // 입력값이 없으면 실행
+        passwordCheckValidation.textContent = "";
+        passwordCheckInputElement.dataset.isValid = false; // 무효 상태로 설정
+    }else if (passwordInput === passwordCheckInput) {
+        passwordCheckValidation.textContent = "비밀번호가 일치합니다.";
+        passwordCheckValidation.style.color = "green";
+        passwordCheckInputElement.dataset.isValid = true; // 유효 상태로 설정
+    } else {
+        passwordCheckValidation.textContent = "비밀번호가 일치하지 않습니다.";
+        passwordCheckValidation.style.color = "red";
+        passwordCheckInputElement.dataset.isValid = false; // 무효 상태로 설정
     }
 }
 
