@@ -113,7 +113,7 @@ public class UserController {
     // 회원탈퇴 뷰 호출
     @GetMapping("/accountdelsuccess")
     public String showAccountDelSuccessPage() {
-        return "user/accountdelsuccess";  // accountdelsuccess.html을 반환
+        return "User/accountdelsuccess";  // accountdelsuccess.html을 반환
     }
 
 }
