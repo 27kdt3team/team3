@@ -4,7 +4,7 @@
 
 <!-- head part -->
 <head th:replace="~{layouts/head :: head}">
-    <title>Domestic</title>
+    <title>kor</title>
     <!-- 구글 폰트 '나눔 고딕' 링크 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,7 +14,7 @@
 <body>
 <!-- css part -->
 <th:block layout:fragment="css">
-    <link rel="stylesheet" th:href="@{/css/kor.css}">
+    <link rel="stylesheet" th:href="@{/css/econNews.css}">
 </th:block>
 
 <!-- header part -->
@@ -22,10 +22,10 @@
 
 <!-- Main Body Contents -->
 <th:block layout:fragment = "MainBodyContents">
-    <main class="kor-container">
+    <main class="econ-news-container">
 
         <!-- 국내 경제 뉴스 리스트 -->
-        <section class="kor">
+        <section class="econ-news">
             <h2>국내 경제 뉴스</h2>
             <br>
 
@@ -71,7 +71,7 @@
             </div>
         </section>
 
-        <aside class="side-container">
+        <aside class="side">
 
             <!-- 환율 정보 -->
             <div class="rate">
@@ -89,7 +89,7 @@
             </div>
 
             <!-- 국내 지표 -->
-            <div class="indices-container">
+            <div class="indices">
                 <h3>국내 지표</h3>
 
                 <div th:each="index : ${indices}">

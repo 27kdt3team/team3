@@ -4,7 +4,7 @@
 
 <!-- head part -->
 <head th:replace="~{layouts/head :: head}">
-    <title>Domestic</title>
+    <title>korDetail</title>
     <!-- 구글 폰트 '나눔 고딕' 링크 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,7 +14,7 @@
 <body>
 <!-- css part -->
 <th:block layout:fragment="css">
-    <link rel="stylesheet" th:href="@{/css/korDetail.css}">
+    <link rel="stylesheet" th:href="@{/css/newsDetail.css}">
 </th:block>
 
 <!-- header part -->
@@ -22,7 +22,7 @@
 
 <!-- Main Body Contents -->
 <th:block layout:fragment = "MainBodyContents">
-    <main class="kor-detail-container">
+    <main class="news-detail-container">
 
         <!-- 언론사 -->
         <p class="source" th:text="${kor.source}"></p>

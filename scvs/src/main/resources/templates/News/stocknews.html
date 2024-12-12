@@ -4,7 +4,7 @@
 
 <!-- head part -->
 <head th:replace="~{layouts/head :: head}">
-    <title>Domestic</title>
+    <title>stocknews</title>
     <!-- 구글 폰트 '나눔 고딕' 링크 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,7 +14,7 @@
 <body>
 <!-- css part -->
 <th:block layout:fragment="css">
-    <link rel="stylesheet" th:href="@{/css/stocknews.css}">
+    <link rel="stylesheet" th:href="@{/css/newsDetail.css}">
 </th:block>
 
 <!-- header part -->
@@ -22,8 +22,10 @@
 
 <!-- Main Body Contents -->
 <th:block layout:fragment = "MainBodyContents">
-    <main class="stocknews-container">
+    <main class="news-detail-container">
 
+        <!-- 감정 평가 -->
+        <p class="sentiment" th:text="${stocknews.sentiment}" th:classappend="${stocknews.sentiment}"></p>
         <!-- 언론사 -->
         <p class="source" th:text="${stocknews.source}"></p>
         <!-- 기사 제목 -->
