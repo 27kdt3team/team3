@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("email-validation").textContent = "현재 이메일과 동일합니다. 중복 확인이 필요 없습니다.";
             emailValidation.style.color = "green";
             isEmailValid = true;
+            emailInputElement.dataset.isValid = isEmailValid;
             return;
         }
         // 이메일 필수 항목 체크
@@ -39,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
             emailValidation.style.color = "red";
             isEmailValid = false;
             return;
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput)) { // 이메일형식 @ . 을 검사
+        } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(emailInput)) { // 이메일형식 @ . 을 검사
             emailValidation.textContent = "이메일 형식이 아닙니다.";
             emailValidation.style.color = "red";
             isEmailValid = false;

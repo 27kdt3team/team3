@@ -25,6 +25,10 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping("/login")
+    public String loginPage(Model model) {
+        return "Account/login";
+    }
 
     // 회원가입 화면 호출
     @GetMapping("/signup")
