@@ -103,35 +103,35 @@
             <h2>Market Stats</h2>
             <div class="market-stats" th:if="${stocksinfo != null}">
                 <ul>
-                    <li>
+                    <li th:if="${stocksinfo.open != null}">
                         <span>Open:</span>
                         <span th:text="${stocksinfo.open}"></span>
                     </li>
-                    <li>
+                    <li th:if="${stocksinfo.close != null}">
                         <span>Close:</span>
                         <span th:text="${stocksinfo.close}"></span>
                     </li>
-                    <li>
+                    <li th:if="${stocksinfo.volume != null}">
                         <span>Volume:</span>
                         <span th:text="${stocksinfo.volume}"></span>
                     </li>
-                    <li>
+                    <li th:if="${stocksinfo.dayLow != null and stocksinfo.dayHigh != null}">
                         <span>Day Range:</span>
                         <span th:text="${stocksinfo.dayLow} + ' - ' + ${stocksinfo.dayHigh}"></span>
                     </li>
-                    <li>
+                    <li th:if="${stocksinfo.returnOnEquity != null}">
                         <span>ROE:</span>
                         <span th:text="${stocksinfo.returnOnEquity} + '%'"></span>
                     </li>
-                    <li>
+                    <li th:if="${stocksinfo.enterpriseValue != null}">
                         <span>EV:</span>
                         <span th:text="${stocksinfo.enterpriseValue}"></span>
                     </li>
-                    <li>
+                    <li th:if="${stocksinfo.enterpriseToEBITDA != null}">
                         <span>EV/EBITDA:</span>
                         <span th:text="${stocksinfo.enterpriseToEBITDA}"></span>
                     </li>
-                    <li>
+                    <li th:if="${stocksinfo.priceToBook != null}">
                         <span>P/B Ratio:</span>
                         <span th:text="${stocksinfo.priceToBook}"></span>
                     </li>
@@ -141,6 +141,7 @@
                 <p>마켓 정보가 없습니다</p>
             </div>
         </div>
+
 
         <!-- news -->
         <div class="news">
