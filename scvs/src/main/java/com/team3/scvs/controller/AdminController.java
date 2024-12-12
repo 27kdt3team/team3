@@ -2,7 +2,9 @@ package com.team3.scvs.controller;
 
 import com.team3.scvs.dto.UserDTO;
 import com.team3.scvs.service.AdminUserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -17,6 +19,7 @@ import java.util.List;
 
 
 
+@Slf4j
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -32,9 +35,20 @@ public class AdminController {
     public String getUserListPage(
             @RequestParam(value = "filterDropdown", defaultValue = "email") String filter,
             @RequestParam(value = "findInput", defaultValue = "") String input,
-            @PageableDefault(page = 0, size = 15, sort = "userId",direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam(value = "page", defaultValue = "0") int page, // 현재 페이지 번호
+            @RequestParam(value = "size", defaultValue = "15") int size, // 페이지 크기
+            @RequestParam(value = "sortBy", defaultValue = "userId") String sortBy, // 정렬 기준
+            @RequestParam(value = "direction", defaultValue = "DESC") String direction, // 정렬 방향
             Model model
     ){
+        // 정렬 방향 설정
+        Sort sort = direction.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        // Pageable 객체 생성
+        Pageable pageable = PageRequest.of(page, size, sort);
+
         Page<UserDTO> users = adminUserService.getFilteredUsers(filter, input, pageable); // 필터, 검색, 페이징을 통한 검색
 
         // 처음, 끝페이징
@@ -45,6 +59,8 @@ public class AdminController {
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
 
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("direction", direction);
         model.addAttribute("users", users);
         return  "Admin/userList";
     }
@@ -53,11 +69,21 @@ public class AdminController {
     // 유저리스트 검색해서 불러오기
     @PostMapping("/userList")
     public String getUserList(
-            @RequestParam("filterDropdown") String filter,
-            @RequestParam("findInput") String input,
-            @PageableDefault(page = 0, size = 15, sort = "userId",direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam("filterDropdown") String filter, // 검색 필터
+            @RequestParam("findInput") String input,       // 검색 입력값
+            @RequestParam(value = "page", defaultValue = "0") int page, // 현재 페이지 번호
+            @RequestParam(value = "size", defaultValue = "15") int size, // 페이지 크기
+            @RequestParam(value = "sortBy", defaultValue = "userId") String sortBy, // 정렬 기준
+            @RequestParam(value = "direction", defaultValue = "DESC") String direction, // 정렬 방향
             Model model
     ) {
+        // 정렬 방향 설정
+        Sort sort = direction.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        // Pageable 객체 생성
+        Pageable pageable = PageRequest.of(page, size, sort);
+
         int startPage;
         int endPage;
         Page<UserDTO> users = adminUserService.getFilteredUsers(filter, input, pageable); // 필터, 검색, 페이징을 통한 검색
@@ -77,6 +103,10 @@ public class AdminController {
         model.addAttribute("users", users);
         model.addAttribute("filterDropdown", filter);
         model.addAttribute("findInput", input);
+        model.addAttribute("page", page);
+        model.addAttribute("size", size);
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("direction", direction);
 
         // 결과를 보여줄 뷰로 이동
         return "Admin/userList"; // Thymeleaf 템플릿 경로
@@ -86,11 +116,20 @@ public class AdminController {
     @PostMapping("/deleteUserList")
     public String deleteUserList(
             @RequestParam(name = "userIds", required = false) List<Long> userIds,
-            @RequestParam("filterDropdown") String filter,
-            @RequestParam("findInput") String input,
-            @PageableDefault(page = 0, size = 15, sort = "userId",direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam("filterDropdown") String filter, // 검색 필터
+            @RequestParam("findInput") String input,       // 검색 입력값
+            @RequestParam(value = "page", defaultValue = "0") int page, // 현재 페이지 번호
+            @RequestParam(value = "size", defaultValue = "15") int size, // 페이지 크기
+            @RequestParam(value = "sortBy", defaultValue = "userId") String sortBy, // 정렬 기준
+            @RequestParam(value = "direction", defaultValue = "DESC") String direction, // 정렬 방향
             Model model
     ){
+        // 정렬 방향 설정
+        Sort sort = direction.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+        // Pageable 객체 생성
+        Pageable pageable = PageRequest.of(page, size, sort);
         // user삭제
         adminUserService.deleteUsers(userIds);
 
@@ -106,6 +145,10 @@ public class AdminController {
         model.addAttribute("users", users);
         model.addAttribute("filterDropdown", filter);
         model.addAttribute("findInput", input);
+        model.addAttribute("page", page);
+        model.addAttribute("size", size);
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("direction", direction);
         return "Admin/userList";
     }
 
