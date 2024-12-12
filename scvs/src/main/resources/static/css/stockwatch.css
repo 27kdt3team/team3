@@ -113,10 +113,26 @@
 
 .sentiment {
     padding: 3px;
-    color: #000;
+    color: #FFF;
     font-size: 12px;
     border: 1px solid #000;
     border-radius: 5px;
+}
+
+.positive {
+    background-color: #34C759;
+    border-color: #28a745;
+}
+
+
+.negative {
+    background-color:  #FF3B30;
+    border-color: #dc3545;
+}
+
+.neutral {
+    background-color: #8E8E93;
+    border-color: #6c757d;
 }
 
 /* 기사 제목 */
