@@ -24,8 +24,9 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-secret.json
-!example-secret.json
+secrets.json
+!example_secrets.json
+kis_token.json
 
 # Sample CSVs
 crawl_samples/

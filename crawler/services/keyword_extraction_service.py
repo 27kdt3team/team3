@@ -21,7 +21,7 @@ class KeywordExtractionService(BaseService):
 
         # 키워드 티커 정보를 KeywordExtractor에 주입
         ticker_repository = TickerRepository()
-        ticker_dict = ticker_repository.fetch_tickers() # 데이터베이스에서 주식 티커 정보 가져오기
+        ticker_dict = ticker_repository.fetch_ticker_dict() # 데이터베이스에서 주식 티커 정보 가져오기
         self.processor.get_tickers(ticker_dict)
 
         # 데이터베이스에서 아직 키우드 추출 안된 기사들을 가져오기
