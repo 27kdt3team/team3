@@ -95,7 +95,6 @@
                 </div>
 
                 <!-- 페이징 처리 -->
-                <!-- 페이징 처리 -->
                 <div class="pagination">
                     <!-- 첫번째 페이지 -->
                     <a th:href="@{/stockwatch(tickerId=${tickerId}, page=1)}" class="first-page"></a>
@@ -107,8 +106,8 @@
                     <span th:each="page: ${#numbers.sequence(startPage, endPage)}">
                         <!-- 현재 페이지는 링크 없이 숫자만으로 표시 -->
                         <span th:if="${page == stockNews.number + 1}" th:text="${page}" class="current-page"></span>
-                                        <!-- 현재 페이지 외의 페이지들은 숫자에 링크로 표시 -->
-                        <span th:unless="${page == stockNews.number + 1}">
+                        <!-- 현재 페이지 외의 페이지들은 숫자에 링크로 표시 -->
+                        <span th:unless="${page == stockNews.number + 1 || page == 0}">
                             <a th:href="@{/stockwatch(tickerId=${tickerId}, page=${page})}" th:text="${page}" class="page-link"></a>
                         </span>
                     </span>
@@ -117,7 +116,10 @@
                     <a th:href="${stockNews.last} ? '#' : @{/stockwatch(tickerId=${tickerId}, page=${stockNews.number + 2})}" class="next-page"></a>
 
                     <!-- 마지막 페이지 -->
-                    <a th:href="@{/stockwatch(tickerId=${tickerId}, page=${stockNews.totalPages})}" class="last-page"></a>
+                    <a th:href="${stockNews.totalPages > 0} ? @{/stockwatch(tickerId=${tickerId}, page=${stockNews.totalPages})} : @{/stockwatch(tickerId=${tickerId}, page=1)}"
+                       class="last-page">
+                    </a>
+
                 </div>
 
             </section>
