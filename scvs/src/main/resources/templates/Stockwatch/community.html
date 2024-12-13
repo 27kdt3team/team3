@@ -83,9 +83,9 @@
                                 </div>
                             </th:block>
 
-                            <th:block th:if="${userRole == 'ROLE_ADMIN'}">
+                            <th:block th:if="${comment.userId != userId && userRole == 'ROLE_ADMIN'}">
                                 <div class="comment-actions">
-                                    <!-- 삭제 버튼 -->
+                                    <!-- 삭제 버튼 (관리자용) -->
                                     <form action="/deleteComment" method="POST" style="display: inline;">
                                         <input type="hidden" name="communityCommentId" th:value="${comment.id}" />
                                         <input type="hidden" name="tickerId" th:value="${stockInfo.tickerId}"/>
