@@ -1,38 +1,31 @@
 (async () => {
-    const proxyUrl = "https://thingproxy.freeboard.io/fetch/";
-
-    // Thymeleaf로 전달된 `stockInfo.symbol`과 `stockInfo.company`를 동적으로 가져오기
-    const stockSymbolElement = document.querySelector('.symbol'); // Symbol을 포함한 요소
-    const marketElement = document.querySelector('.current-price span:last-child'); // market 텍스트 포함 요소
+    const proxyUrl = "http://27.96.130.59:9990/proxy/fetch";
+    const stockSymbolElement = document.querySelector('.symbol');
+    const marketElement = document.querySelector('.current-price span:last-child');
+    const companyNameElement = document.querySelector('.company-name');
 
     let stockSymbol = "";
 
     if (stockSymbolElement && marketElement) {
-        // Symbol과 Market 값을 가져오기
         stockSymbol = stockSymbolElement.textContent.trim();
         const market = marketElement.textContent.trim();
-
-        // Market 값에 따라 Symbol 수정
         if (market === '₩') {
-            stockSymbol += '.KS'; // KOR 시장이면 .KS 추가
+            stockSymbol += '.KS';
         }
     }
 
-    const companyName = document.querySelector('.company-name').textContent;
-
+    const companyName = companyNameElement.textContent;
     const apiUrl = `https://query2.finance.yahoo.com/v7/finance/chart/${stockSymbol}?interval=1wk&range=max`;
+
     try {
-        // Yahoo Finance 데이터 가져오기
-        const response = await fetch(proxyUrl + apiUrl);
-        console.log(response)
+        const response = await fetch(`${proxyUrl}?url=${encodeURIComponent(apiUrl)}`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const data = await response.json();
 
-        // 데이터 검증
+        const data = await response.json();
         if (!data || !data.chart || !data.chart.result) {
-            throw new Error("데이터 형식이 올바르지 않습니다.");
+            throw new Error("Invalid data format");
         }
 
         const timestamps = data.chart.result[0].timestamp;
@@ -43,16 +36,14 @@
         const close = indicators.close;
         const volume = indicators.volume;
 
-        const ohlc = [];
-        const volumeSeries = [];
-
-        for (let i = 0; i < timestamps.length; i++) {
-            const time = timestamps[i] * 1000; // Unix timestamp to milliseconds
-            ohlc.push([time, open[i], high[i], low[i], close[i]]);
-            volumeSeries.push([time, volume[i]]);
+        if (!open || !high || !low || !close || !volume) {
+            throw new Error("OHLC 데이터나 거래량 데이터가 누락되었습니다.");
         }
 
-        // 데이터 그룹화 단위
+        const ohlc = timestamps.map((time, i) => [time * 1000, open[i], high[i], low[i], close[i]]);
+        const volumeSeries = timestamps.map((time, i) => [time * 1000, volume[i]]);
+
+        // 데이터 그룹화 단위 정의
         const groupingUnits = [
             ["week", [1]], // 주 단위
             ["month", [1, 2, 3, 4, 6]] // 월 단위
@@ -63,11 +54,9 @@
             rangeSelector: {
                 selected: 4
             },
-
             title: {
                 text: `${companyName} 주식 차트`
             },
-
             yAxis: [
                 {
                     labels: {
@@ -97,15 +86,13 @@
                     lineWidth: 2
                 }
             ],
-
             tooltip: {
                 split: true
             },
-
             series: [
                 {
                     type: "candlestick",
-                    name: companyName, // 회사명 동적으로 설정
+                    name: companyName,
                     data: ohlc,
                     dataGrouping: {
                         units: groupingUnits
