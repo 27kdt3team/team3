@@ -33,6 +33,9 @@ public class CommunityController {
         // userId 가져오기
         Long userId = customUserDetailsService.getLoggedInUserId();
 
+        //userRole 가져오기
+        String userRole = customUserDetailsService.getLoggedInUserRole();
+
         // 주식 정보 가져오기
         CommunityStockInfoDTO stockInfo = communityService.getStockInfo(tickerId);
 
@@ -55,6 +58,7 @@ public class CommunityController {
 
         // 모델에 데이터 추가
         model.addAttribute("userId", userId);
+        model.addAttribute("userRole",userRole);
         model.addAttribute("stockInfo", stockInfo);
         model.addAttribute("voteInfo", voteInfo);
         model.addAttribute("commentList", commentList);
