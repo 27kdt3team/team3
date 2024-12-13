@@ -53,5 +53,13 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .map(user -> user.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("로그인된 사용자의 정보를 찾을 수 없습니다."));
     }
+    // 로그인된 사용자의 Role 가져오기
+    public String getLoggedInUserRole(){
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        return userRepository.findByEmail(username)
+                .map(user -> user.getUserrole())
+                .orElseThrow(() -> new IllegalArgumentException("로그인된 사용자의 정보를 찾을 수 없습니다."));
+    }
 }
 

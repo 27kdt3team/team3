@@ -137,12 +137,6 @@ public class CommunityService {
         // 댓글 조회
         CommunityCommentEntity comment = communityCommentRepository.findById(communityCommentId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
-
-        // 댓글 작성자와 로그인 사용자 일치 여부 확인
-        if (!comment.getUser().getUserId().equals(userId)) {
-            throw new SecurityException("본인이 작성한 댓글만 삭제할 수 있습니다.");
-        }
-
         // 댓글 삭제
         communityCommentRepository.delete(comment);
         return true; // 성공적으로 삭제되었음을 반환
