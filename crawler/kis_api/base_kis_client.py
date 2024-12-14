@@ -1,6 +1,7 @@
 import os
 import json
 import aiohttp
+from aiohttp import ClientSession
 from aiolimiter import AsyncLimiter
 from abc import ABC
 from dotenv import load_dotenv
@@ -22,17 +23,15 @@ class BaseKisClient(ABC):
         self.access_token = self.token_manager.get_token()
         self.logger = Logger(self.__class__.__name__)
         
-    async def make_request(self, url: str, headers: Dict[str, str], params: Dict[str, str]) -> json:
-        limiter = AsyncLimiter(max_rate=19, time_period=1)
+    async def make_request(self, session: ClientSession, limiter: AsyncLimiter, url: str, headers: Dict[str, str], params: Dict[str, str], identifier) -> json:
         async with limiter:
-            async with aiohttp.ClientSession() as session:
-                try:
-                    async with session.get(url=url, headers=headers, params=params) as response:
-                        response.raise_for_status()
-                        response_json = await response.json()
-                        return response_json
-                except aiohttp.ClientError as aio_ce:
-                    self.logger.log_error("Error requesting KIS API.")
-                    self.logger.log_error(f"URL: {url}")
-                    self.logger.log_error(aio_ce)
-    
+            try:
+                response = await session.get(url=url, headers=headers, params=params)
+                response_json = await response.json()
+                response_json["identifier"] = identifier
+                return response_json
+            except aiohttp.ClientError as aio_ce:
+                self.logger.log_error("Error requesting KIS API.")
+                self.logger.log_error(f"URL: {url}")
+                self.logger.log_error(aio_ce)
+            

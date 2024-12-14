@@ -1,3 +1,5 @@
+from twisted.internet import reactor
+
 from news_crawler.spider_manager import SpiderManager
 from services.translation_service import TranslationService
 from services.keyword_extraction_service import KeywordExtractionService
@@ -6,7 +8,6 @@ from repositories.news_process_log_repository import NewsProcessLogRepository
 from services.export_service import ExportService
 from enums.process import Process
 from logs.logger import Logger
-
 
 # 작업 Controller
 class ProcessManager:
@@ -18,7 +19,6 @@ class ProcessManager:
     # 크롤러 호출
     def crawl(self) -> None:
         self.logger.log_info("Crawling articles from the web.")
-
         spider_manager = SpiderManager()
         spider_manager.run_spiders()
 

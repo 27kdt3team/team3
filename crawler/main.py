@@ -5,7 +5,8 @@ from stock_manager import StockManager
 from logs.logger import Logger
 import threading
 
-class StockDataScheduler:
+
+class SCVsScheduler:
     def __init__(self):
         self.stock_data_lock = threading.Lock()
         executors = {
@@ -22,9 +23,9 @@ class StockDataScheduler:
             }
         )
         
+        self.stock_manager = StockManager()
         self.logger = Logger(self.__class__.__name__)
         
-
     # Acquire lock for stock data-related tasks
     def safe_stock_data_task_wrapper(self, task_method):
         with self.stock_data_lock:
@@ -36,21 +37,21 @@ class StockDataScheduler:
     def schedule_tasks(self):
         try:
             self.scheduler.add_job(
-                lambda: self.safe_stock_data_task_wrapper(StockManager.update_stock_quotes), 
+                lambda: self.safe_stock_data_task_wrapper(self.stock_manager.update_stock_quotes), 
                 'interval', 
                 minutes=1,
                 id='update_stock_quotes_job'
             )
 
             self.scheduler.add_job(
-                StockManager.upsert_indices, 
+                self.stock_manager.upsert_indices, 
                 'interval', 
                 minutes=1,
                 id='upsert_indices_job'
             )
 
             self.scheduler.add_job(
-                StockManager.upsert_forex, 
+                self.stock_manager.upsert_forex, 
                 'interval', 
                 minutes=1,
                 id='upsert_forex_job'
@@ -58,7 +59,7 @@ class StockDataScheduler:
             
             # Run quarterly (Every 3 months)
             self.scheduler.add_job(
-                lambda: self.safe_stock_data_task_wrapper(StockManager.upsert_stock_info), 
+                lambda: self.safe_stock_data_task_wrapper(self.stock_manager.upsert_stock_info), 
                 'cron',  # Use cron-style scheduling
                 month='1,4,7,10',  # January, April, July, October
                 day='1',  # First day of the specified months
@@ -81,7 +82,7 @@ class StockDataScheduler:
             self.logger.log_error(f"Unexpected error in scheduler: {e}")
 
 def main():
-    stock_data_scheduler = StockDataScheduler()
+    stock_data_scheduler = SCVsScheduler()
     stock_data_scheduler.start()
 
 if __name__ == "__main__":

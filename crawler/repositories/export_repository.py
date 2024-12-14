@@ -86,6 +86,7 @@ class ExportRepository(BaseRepository):
             self.execute_query(query=query, values=values, batch=True)
         except Error as sql_e:
             self.logger.log_error("Error inserting econ news(KOR/USA).")
+            self.logger.log_error(values)
             self.logger.log_error(sql_e)
 
     # 주식 뉴스를 데이터베이스에 입력
@@ -124,4 +125,5 @@ class ExportRepository(BaseRepository):
             self.execute_query(query=query, values=values, batch=True)
         except Error as sql_e:
             self.logger.log_error("Error inserting stock news(KOR/USA)")
+            self.logger.log_error(values)
             self.logger.log_error(sql_e)
