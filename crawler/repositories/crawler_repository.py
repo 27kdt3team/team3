@@ -6,14 +6,15 @@ from datetime import datetime
 
 class CrawlerRepository(BaseRepository):
 
-    def save_crawled_articles(self, item: List) -> None:
+    def save_crawled_articles(self, item: Dict) -> None:
         # 데이터베이스 연결이 안된 경우
         if not self.connection and not self.connection.is_connected(): 
             raise Error("Error connecting to Database. Check if connection is initialized")
 
         # 데이터베이스에 입력할 기사가 없을 경우
-        if not item: 
-            self.logger.log_warning("There are no records to insert.")
+        if not item.get("content"): 
+            self.logger.log_error("There is no article content to insert.")
+            return
 
         # INSERT IGNORE로 중복 데이터는 받지 않는다
         # link 칼럼에 이미 UNIQUE 제약 조건을 걸었다.

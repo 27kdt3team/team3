@@ -21,7 +21,7 @@ class TranslatorRepository(BaseRepository):
         WHERE
             npl.translated_at IS NULL
             AND npl.completed_at IS NULL
-            AND tl.process_status = 'SUCCESS'
+            AND npl.process_status = 'SUCCESS'
             AND rn.country = 'USA'
         """
 

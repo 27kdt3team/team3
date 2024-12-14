@@ -43,7 +43,7 @@ class NewsProcessLogRepository(BaseRepository):
                 ELSE completed_at
             END,
             process_status = %s,
-            log_msg = %s,
+            log_msg = %s
         WHERE
             raw_news_id = %s
         '''

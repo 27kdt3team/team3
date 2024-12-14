@@ -53,7 +53,7 @@ class MaeilSpider(scrapy.Spider):
             article_date = datetime.strptime(article_date_str, "%Y-%m-%d %H:%M:%S")
             
             if self.latest_published_at and self.latest_published_at > article_date:
-                stop-stop_crawl_flag = True
+                stop_crawl_flag = True
             
             article_link = article.xpath("./a[@class='news_item']/@href").get()
             yield response.follow(
