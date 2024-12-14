@@ -196,4 +196,12 @@ public class UserService {
         }
         return auth.getName();
     }
+
+    public Long getUserId(String userName){
+        UserEntity userEntity = userRepository.findByEmail(userName).orElse(null);
+        if(userEntity == null){
+            return -1L;
+        }
+        return userEntity.getUserId();
+    }
 }
