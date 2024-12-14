@@ -1,5 +1,3 @@
-from twisted.internet import reactor
-
 from news_crawler.spider_manager import SpiderManager
 from services.translation_service import TranslationService
 from services.keyword_extraction_service import KeywordExtractionService
@@ -8,19 +6,25 @@ from repositories.news_process_log_repository import NewsProcessLogRepository
 from services.export_service import ExportService
 from enums.process import Process
 from logs.logger import Logger
+from scrapy.crawler import CrawlerProcess
 
 # 작업 Controller
-class ProcessManager:
+class NewsProcessManager:
 
     def __init__(self) -> None:
         self.logger = Logger(self.__class__.__name__)
         self.log_repo = NewsProcessLogRepository()
-
+        self.spider_manager = SpiderManager()
+        
     # 크롤러 호출
     def crawl(self) -> None:
         self.logger.log_info("Crawling articles from the web.")
-        spider_manager = SpiderManager()
-        spider_manager.run_spiders()
+        # spider_manager = SpiderManager()
+        # spider_manager.run_spiders()
+        self.spider_manager.run_spiders()
+        
+    def get_crawler_process(self) -> CrawlerProcess:
+        return self.spider_manager.get_crawler_process()
 
     # Papago API로 영문 기사 한국어로 번역
     def translate(self) -> None:
@@ -52,6 +56,7 @@ class ProcessManager:
 
     # 모든 작업 실행
     def run(self) -> None:
+        print("RUNNING!")
         self.crawl()
         self.translate()
         self.extract_keywords()

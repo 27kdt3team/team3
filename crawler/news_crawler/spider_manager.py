@@ -32,7 +32,7 @@ class SpiderManager:
 
     def __init__(self):
         self.process = CrawlerProcess(self.crawler_settings)
-        self.repository = CrawlerRepository
+        self.repository = CrawlerRepository()
         
     def get_latest_published_dates(self) -> Dict[str, datetime]:
         latest_published_dates = self.repository.get_latest_published_dates_by_website()        
@@ -49,5 +49,6 @@ class SpiderManager:
         self.process.crawl(BusinessInsiderSpider, latest_published_at.get('Business Insider'))
         self.process.crawl(MotelyFoolSpider, latest_published_at.get('The Motley Fool'))
         self.process.crawl(ZacksSpider, latest_published_at.get('Zack\'s'))
-
-        self.process.start()
+        
+    def get_crawler_process(self) -> CrawlerProcess:
+        return self.process

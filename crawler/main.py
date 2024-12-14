@@ -1,89 +1,55 @@
-import multiprocessing
-from apscheduler.schedulers.blocking import BlockingScheduler
-from apscheduler.executors.pool import ThreadPoolExecutor
+from apscheduler.schedulers.twisted import TwistedScheduler
+from news_process_manager import NewsProcessManager
 from stock_manager import StockManager
-from logs.logger import Logger
-import threading
-
-
-class SCVsScheduler:
-    def __init__(self):
-        self.stock_data_lock = threading.Lock()
-        executors = {
-            'default': ThreadPoolExecutor(
-                max_workers=multiprocessing.cpu_count()
-            )
-        }
-        self.scheduler = BlockingScheduler(
-            executors=executors,
-            job_defaults={
-                'max_instances': 1,  # Ensure only one instance of each job
-                'misfire_grace_time': 60,  # 5-minute grace period
-                'coalesce': True  # Combine missed runs
-            }
-        )
-        
-        self.stock_manager = StockManager()
-        self.logger = Logger(self.__class__.__name__)
-        
-    # Acquire lock for stock data-related tasks
-    def safe_stock_data_task_wrapper(self, task_method):
-        with self.stock_data_lock:
-            try:
-                task_method()
-            except Exception as e:
-                self.logger.log_error(f"Error in stock data task: {e}")
-
-    def schedule_tasks(self):
-        try:
-            self.scheduler.add_job(
-                lambda: self.safe_stock_data_task_wrapper(self.stock_manager.update_stock_quotes), 
-                'interval', 
-                minutes=1,
-                id='update_stock_quotes_job'
-            )
-
-            self.scheduler.add_job(
-                self.stock_manager.upsert_indices, 
-                'interval', 
-                minutes=1,
-                id='upsert_indices_job'
-            )
-
-            self.scheduler.add_job(
-                self.stock_manager.upsert_forex, 
-                'interval', 
-                minutes=1,
-                id='upsert_forex_job'
-            )
-            
-            # Run quarterly (Every 3 months)
-            self.scheduler.add_job(
-                lambda: self.safe_stock_data_task_wrapper(self.stock_manager.upsert_stock_info), 
-                'cron',  # Use cron-style scheduling
-                month='1,4,7,10',  # January, April, July, October
-                day='1',  # First day of the specified months
-                hour='0',  # At midnight
-                id='upsert_stock_info_job'
-            )
-
-        except Exception as e:
-            self.logger.log_error(f"Error scheduling tasks: {e}")
-
-    def start(self):
-        try:
-            self.logger.log_info("Starting stock data scheduler")
-            self.schedule_tasks()
-            self.scheduler.start()
-        except (KeyboardInterrupt, SystemExit):
-            self.logger.log_info("Scheduler shutting down")
-            self.scheduler.shutdown()
-        except Exception as e:
-            self.logger.log_error(f"Unexpected error in scheduler: {e}")
 
 def main():
-    stock_data_scheduler = SCVsScheduler()
-    stock_data_scheduler.start()
-
+    scheduler = TwistedScheduler()
+    news_process_manager = NewsProcessManager()
+    stock_manager = StockManager()
+    
+    scheduler.add_job(
+        stock_manager.update_stock_quotes,
+        "interval",
+        minutes=1,
+        id="update_stock_quotes_job"
+    )
+    
+    scheduler.add_job(
+        stock_manager.upsert_forex,
+        "interval",
+        minutes=3,
+        id="upsert_forex_job"
+    )
+    
+    scheduler.add_job(
+        stock_manager.upsert_indices,
+        "interval",
+        minutes=2,
+        id="upsert_indices_job"    
+    )
+    
+    scheduler.add_job(
+        stock_manager.upsert_stock_info,
+        "cron",  
+        month="1,4,7,10",  # 1월, 4월, 7월, 10월에 실행
+        day="30",  # 달 30일째
+        hour="0",  # 자정 (00시)
+        id="upsert_stock_info_job"
+    )
+    
+    scheduler.add_job(
+        news_process_manager.run,
+        "interval",
+        minutes=30,
+        id="news_process_job"
+    )
+    
+    # 크롤러 엔진 제어를 가져온다
+    crawler_process = news_process_manager.get_crawler_process()
+    # 스케줄러 실행
+    scheduler.start()
+    # 크롤러 엔진 실행
+    crawler_process.start(False) 
+    
 if __name__ == "__main__":
     main()
