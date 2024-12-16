@@ -134,11 +134,7 @@ class SentimentAnalyzer:
                         idx = text.find("data:")
                         error_str = text[idx + len("data:") :].strip()
                         error_details = self.format_error(error_str)
-                        failed_reason = (
-                            "Status: "
-                            + error_details[0]
-                            + "\n Reason: "
-                            + error_details[1]
+                        failed_reason = ("Status: " + error_details[0] + "\n Reason: " + error_details[1]
                         )
 
                         result = {
