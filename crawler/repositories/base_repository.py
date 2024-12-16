@@ -14,7 +14,7 @@ class BaseRepository(ABC):
     BATCH_SIZE = 200 # batch 삽입/업데이트 제한 수
 
     # env 파일에서 환경변수를 가져온다
-    def __init__(self):
+    def __init__(self) -> None:
         load_dotenv()
         self.database = os.getenv("MYSQL_DATABASE")
         self.host = os.getenv("MYSQL_HOST")
