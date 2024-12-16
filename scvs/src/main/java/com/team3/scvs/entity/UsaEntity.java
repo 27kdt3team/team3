@@ -1,6 +1,7 @@
 package com.team3.scvs.entity;
 
 import jakarta.persistence.*;
+import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
 
