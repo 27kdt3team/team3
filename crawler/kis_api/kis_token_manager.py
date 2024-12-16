@@ -25,6 +25,7 @@ class KisTokenManager:
     def _load_token(self) -> bool:
         if not os.path.exists(self.token_json):
             self.logger.log_error("[kis_token.json] file does not exist.")
+            self.logger.log_error("Please create a file named: kis_token.json")
             return False
         
         try:
@@ -33,7 +34,7 @@ class KisTokenManager:
                 # 토큰 정보를 json파일에서 읽는다
                 token = data.get("access_token")
                 expiration = data.get("token_expiration")
-                if token == "" and expiration == "":
+                if not token and not expiration:
                     return False
                 
                 # 토큰 정보를 객체 변수로 저장
@@ -55,6 +56,7 @@ class KisTokenManager:
         except Exception as e:
             self.logger.log_error(f"Error saving token: {e}")
         
+    # 한국투자증권 API에 토큰 발급 요청을 한다.
     def _request_access_token(self) -> None:
         request_link = f"{self.BASE_URL}/oauth2/tokenP"
         
