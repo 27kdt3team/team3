@@ -1,5 +1,6 @@
 (async () => {
     const proxyUrl = "http://27.96.130.59:9990/proxy/fetch";
+    // localhost 사용시 const proxyUrl = "http://localhost:9990/proxy/fetch";로 주소를 바꿔주세요
     const stockSymbolElement = document.querySelector('.symbol');
     const marketElement = document.querySelector('.current-price span:last-child');
     const companyNameElement = document.querySelector('.company-name');
